@@ -434,8 +434,9 @@ agent_is_busy() {
     # Codex CLI: "Working", "Thinking", "Planning", "Sending"
     # Claude CLI: thinking spinner, tool execution
     # NOTE: Codex/Claude の「思考中」表示は時期やテーマで文言が変わることがある。
-    # 例えば: "thought for 5s", "↓ 1.1k tokens" のようなステータス行。
-    if echo "$pane_content" | grep -qiE '(Working|Thinking|Planning|Sending|task is in progress|esc to interrupt|Compacting conversation|thought for|tokens|思考中|考え中|計画中|送信中|処理中|実行中)'; then
+    # 例: "thought for 5s", "↓ 1.1k tokens", "70% context left", "esc to interrupt".
+    # 誤判定（busyでないのにbusy扱い）を避けるため、"tokens" 単体のような広すぎる語は使わない。
+    if echo "$pane_content" | grep -qiE '(Working|Thinking|Planning|Sending|task is in progress|esc to interrupt|Compacting conversation|thought for|↓[[:space:]]*[0-9.]+[kK]?[[:space:]]+tokens|[0-9.]+[kK][[:space:]]+tokens|思考中|考え中|計画中|送信中|処理中|実行中)'; then
         return 0  # busy
     fi
     return 1  # idle
