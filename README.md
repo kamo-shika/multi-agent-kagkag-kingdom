@@ -103,7 +103,7 @@ Shogun isn't locked to one vendor. The system supports 4 CLI tools, each with un
 | CLI | Key Strength | Default Model |
 |-----|-------------|---------------|
 | **Claude Code** | Battle-tested tmux integration, Memory MCP, dedicated file tools (Read/Write/Edit/Glob/Grep) | Claude Sonnet 4.5 |
-| **OpenAI Codex** | Sandbox execution, JSONL structured output, `codex exec` headless mode | gpt-5.3-codex |
+| **OpenAI Codex** | Sandbox execution, JSONL structured output, `codex exec` headless mode, **per-model `--model` flag** | gpt-5.3-codex / **gpt-5.3-codex-spark** |
 | **GitHub Copilot** | Built-in GitHub MCP, 4 specialized agents (Explore/Task/Plan/Code-review), `/delegate` to coding agent | Claude Sonnet 4.5 |
 | **Kimi Code** | Free tier available, strong multilingual support | Kimi k2 |
 
@@ -1506,6 +1506,14 @@ tmux respawn-pane -t shogun:0.0 -k 'claude --model opus --dangerously-skip-permi
 Even if you're not comfortable with keyboard shortcuts, you can switch, scroll, and resize panes using just the mouse.
 
 ---
+
+## What's New in v3.3.2 — GPT-5.3-Codex-Spark Support
+
+> **New model, same YAML.** Add `model: gpt-5.3-codex-spark` to any Codex agent in `settings.yaml`.
+
+- **Codex `--model` flag support** — `build_cli_command()` now passes `settings.yaml` model config to the Codex CLI via `--model`. Supports `gpt-5.3-codex-spark` and any future Codex models
+- **Separate rate limit** — Spark runs on its own rate limit quota, independent of GPT-5.3-Codex. Run both models in parallel across different Ashigaru to **double your effective throughput**
+- **Startup display** — `shutsujin_departure.sh` now shows the actual model name (e.g., `codex/gpt-5.3-codex-spark`) instead of the generic effort level
 
 ## What's New in v3.0 — Multi-CLI
 
