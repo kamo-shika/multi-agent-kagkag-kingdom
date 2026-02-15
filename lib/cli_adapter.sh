@@ -26,7 +26,7 @@ _cli_adapter_read_yaml() {
     local key_path="$1"
     local fallback="${2:-}"
     local result
-    result=$(python3 -c "
+    result=$("$CLI_ADAPTER_PROJECT_ROOT/.venv/bin/python3" -c "
 import yaml, sys
 try:
     with open('${CLI_ADAPTER_SETTINGS}') as f:
@@ -77,7 +77,7 @@ get_cli_type() {
     fi
 
     local result
-    result=$(python3 -c "
+    result=$("$CLI_ADAPTER_PROJECT_ROOT/.venv/bin/python3" -c "
 import yaml, sys
 try:
     with open('${CLI_ADAPTER_SETTINGS}') as f:

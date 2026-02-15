@@ -12,6 +12,7 @@
 setup_file() {
     export PROJECT_ROOT
     PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
+    export VENV_PYTHON="$PROJECT_ROOT/.venv/bin/python3"
 
     export WATCHER_SCRIPT="$PROJECT_ROOT/scripts/inbox_watcher.sh"
     export INBOX_WRITE_SCRIPT="$PROJECT_ROOT/scripts/inbox_write.sh"
@@ -20,7 +21,7 @@ setup_file() {
     [ -f "$WATCHER_SCRIPT" ] || return 1
     [ -f "$INBOX_WRITE_SCRIPT" ] || return 1
     [ -f "$ASHIGARU_INSTR" ] || return 1
-    python3 -c "import yaml" 2>/dev/null || return 1
+    "$VENV_PYTHON" -c "import yaml" 2>/dev/null || return 1
 }
 
 setup() {
@@ -108,7 +109,7 @@ YAML
     run bash -c "source '$TEST_HARNESS'; get_unread_info"
     [ "$status" -eq 0 ]
 
-    python3 - << 'PY' "$output" "$TEST_INBOX"
+    "$VENV_PYTHON" - << 'PY' "$output" "$TEST_INBOX"
 import json, sys, yaml
 payload = json.loads(sys.argv[1])
 inbox_path = sys.argv[2]
@@ -175,7 +176,7 @@ PY
     run bash "$INBOX_WRITE_SCRIPT" test_agent "compat-check" task_assigned karo
     [ "$status" -eq 0 ]
 
-    python3 - << 'PY' "$PROJECT_ROOT/queue/inbox/test_agent.yaml"
+    "$VENV_PYTHON" - << 'PY' "$PROJECT_ROOT/queue/inbox/test_agent.yaml"
 import sys, yaml
 p = sys.argv[1]
 with open(p) as f:

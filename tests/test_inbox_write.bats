@@ -17,12 +17,13 @@
 setup_file() {
     export PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
     export INBOX_WRITE_SCRIPT="$PROJECT_ROOT/scripts/inbox_write.sh"
+    export VENV_PYTHON="$PROJECT_ROOT/.venv/bin/python3"
 
     # スクリプト存在確認（前提条件）
     [ -f "$INBOX_WRITE_SCRIPT" ] || return 1
 
-    # python3 + PyYAML存在確認
-    python3 -c "import yaml" 2>/dev/null || return 1
+    # venv python3 + PyYAML存在確認
+    "$VENV_PYTHON" -c "import yaml" 2>/dev/null || return 1
 }
 
 setup() {
@@ -82,7 +83,7 @@ teardown() {
     [ -f "$TEST_INBOX_DIR/test_agent.yaml" ]
 
     # python3でYAML検証
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml, sys
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:
@@ -123,7 +124,7 @@ EOF
     [ "$status" -eq 0 ]
 
     # python3で検証
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:
@@ -149,7 +150,7 @@ EOF
     bash "$TEST_INBOX_WRITE" "test_agent" "メッセージB"
 
     # python3で検証
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:
@@ -175,7 +176,7 @@ EOF
     [ "$status" -eq 0 ]
 
     # python3で検証
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:
@@ -199,7 +200,7 @@ EOF
     [ "$status" -eq 0 ]
 
     # python3で検証
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:
@@ -220,7 +221,7 @@ EOF
 
 @test "T-008: overflow protection at 50 messages → oldest read messages removed" {
     # 既読メッセージ60件を事前に作成
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 messages = []
@@ -245,7 +246,7 @@ EOF
     [ "$status" -eq 0 ]
 
     # 検証: 合計50件以下、新規メッセージは存在
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:
@@ -267,7 +268,7 @@ EOF
 
 @test "T-009: overflow preserves unread → unread messages are NOT removed even when over 50" {
     # 未読20件 + 既読40件を事前に作成
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 messages = []
@@ -305,7 +306,7 @@ EOF
     [ "$status" -eq 0 ]
 
     # 検証: 未読21件が全て保持される
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:
@@ -348,7 +349,7 @@ SCRIPT_EOF
     wait
 
     # 検証: 8件全てが書き込まれていること
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:
@@ -380,7 +381,7 @@ EOF
     [ "$status" -eq 0 ]
 
     # 検証: 特殊文字が正しく保存・復元されること
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:
@@ -420,7 +421,7 @@ EOF
     [ -f "$TEST_INBOX_DIR/test_agent.yaml" ]
 
     # 内容検証
-    python3 <<EOF
+    "$VENV_PYTHON" <<EOF
 import yaml
 
 with open('$TEST_INBOX_DIR/test_agent.yaml') as f:

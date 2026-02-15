@@ -39,7 +39,7 @@ while [ $attempt -lt $max_attempts ]; do
         flock -w 5 200 || exit 1
 
         # Add message via python3 (unified YAML handling)
-        python3 -c "
+        "$SCRIPT_DIR/.venv/bin/python3" -c "
 import yaml, sys
 
 try:
