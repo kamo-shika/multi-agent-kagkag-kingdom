@@ -10,7 +10,7 @@
 
 [![GitHub Stars](https://img.shields.io/github/stars/yohey-w/multi-agent-shogun?style=social)](https://github.com/yohey-w/multi-agent-shogun)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![v3.4 Bloom→Agent Routing](https://img.shields.io/badge/v3.4-Bloom→Agent_Routing-ff6600?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPuKalTwvdGV4dD48L3N2Zz4=)](https://github.com/yohey-w/multi-agent-shogun)
+[![v3.5 Dynamic Model Routing](https://img.shields.io/badge/v3.5-Dynamic_Model_Routing-ff6600?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPuKalTwvdGV4dD48L3N2Zz4=)](https://github.com/yohey-w/multi-agent-shogun)
 [![Shell](https://img.shields.io/badge/Shell%2FBash-100%25-green)]()
 
 [English](README.md) | [日本語](README_ja.md)
@@ -103,9 +103,9 @@
 
 | CLI | 特徴 | デフォルトモデル |
 |-----|------|-----------------|
-| **Claude Code** | tmux統合の実績、Memory MCP、専用ファイルツール（Read/Write/Edit/Glob/Grep） | Claude Sonnet 4.5 |
+| **Claude Code** | tmux統合の実績、Memory MCP、専用ファイルツール（Read/Write/Edit/Glob/Grep） | Claude Sonnet 4.6 |
 | **OpenAI Codex** | サンドボックス実行、JSONL構造化出力、`codex exec` ヘッドレスモード | gpt-5.3-codex |
-| **GitHub Copilot** | GitHub MCP組込、4種の特化エージェント（Explore/Task/Plan/Code-review）、`/delegate` | Claude Sonnet 4.5 |
+| **GitHub Copilot** | GitHub MCP組込、4種の特化エージェント（Explore/Task/Plan/Code-review）、`/delegate` | Claude Sonnet 4.6 |
 | **Kimi Code** | 無料プランあり、多言語サポート | Kimi k2 |
 
 統一ビルドシステムが共有テンプレートからCLI固有の指示書を自動生成：
@@ -918,10 +918,10 @@ SayTaskは個人の生産性を担当（キャプチャ → スケジュール �
 |-------------|--------|----------|------|
 | 将軍 | Opus | **有効（high）** | 殿の参謀。`--shogun-no-thinking` で中継専用モードに |
 | 家老 | Sonnet | 有効 | タスク分配・簡易QC・ダッシュボード管理 |
-| 軍師 | Opus | 有効 | 深い分析・設計レビュー・アーキテクチャ評価 |
-| 足軽1-7 | Sonnet | 有効 | 実装：コード・リサーチ・ファイル操作 |
+| 軍師 | Sonnet 4.6 | 有効 | 深い分析・設計レビュー・アーキテクチャ評価 |
+| 足軽1-7 | Sonnet 4.6 | 有効 | 実装：コード・リサーチ・ファイル操作 |
 
-**認知的複雑さ**でタスクを分割するのがこのシステムの設計思想。足軽が実装（L1-L3）を担当し、軍師が深い推論（L4-L6）を担当する。モデルの動的切り替えは不要 — 最初から適切なエージェントに適切なタスクが届く。
+**認知的複雑さ**でのルーティングは2段階：**エージェントルーティング**（足軽はL1-L3、軍師はL4-L6）と **足軽内のモデルルーティング**（`capability_tiers` でBloomレベルに応じて最適モデルを選択。下記「動的モデルルーティング」参照）。
 
 ### Bloom's Taxonomy → エージェントルーティング
 
@@ -1573,15 +1573,27 @@ tmux respawn-pane -t shogun:0.0 -k 'claude --model opus --dangerously-skip-permi
 
 ---
 
-## v3.4の新機能 — Bloom→エージェントルーティング、E2Eテスト、Stop Hook
+## v3.5の新機能 — Dynamic Model Routing
 
-> **タスクは認知的複雑さに応じて適切なエージェントにルーティングされる。** モデル切り替えではなく、エージェントルーティングへ。
+> **タスクに最適なモデルへ — エージェント再起動なしで。** Sonnet 4.6がOpusとの差を1.2pp（SWE-bench 79.6% vs 80.8%）まで縮め、タスク単位のモデルルーティングがはじめて費用対効果の合う選択に。
 
-- **Bloom→エージェントルーティング** — 動的モデル切り替えをエージェントレベルのルーティングに置換。L1-L3タスク→足軽（Sonnet）、L4-L6タスク→軍師（Opus）。セッション中の `/model opus` 昇格は不要に — 家老が最初から適切なエージェントにルーティング
-- **軍師（Gunshi）がファーストクラスエージェントに** — ペイン8の戦略参謀。深い分析、設計レビュー、アーキテクチャ評価、複雑なQCを担当。足軽は実装に専念
-- **E2Eテストスイート（19テスト、7シナリオ）** — モックCLIフレームワークが分離されたtmuxセッションでエージェント動作をシミュレート。基本フロー、inbox配信、/clearリカバリ、エスカレーション、redo、並列タスク、blocked_by依存関係をカバー
+- **Bloom Dynamic Model Routing** — `capability_tiers` でモデルごとにBloom上限を定義。L1-L3→Spark（1000+ tok/s）、L4→Sonnet 4.6、L5→Sonnet 4.6 + extended thinking、L6→Opus（本当に新規な設計のみ）。エージェント再起動不要で切り替わる
+- **Sonnet 4.6が新標準** — SWE-bench 79.6%、Opus 4.6との差わずか1.2pp。軍師をOpus→Sonnet 4.6に降格。全足軽のデフォルトもSonnet 4.6に。YAML1行を変えるだけ、再起動不要
+- **`/shogun-model-list` スキル** — 全CLIツール × モデル × サブスクリプション × Bloom上限の参照テーブル。Sonnet 4.6とSparkの位置づけを更新
+- **`/shogun-bloom-config` スキル** — 対話式設定: 2つの質問に答えるだけで最適な `capability_tiers` YAMLを生成
+
+<details>
+<summary><b>v3.4の機能 — Bloom→エージェントルーティング、E2Eテスト、Stop Hook</b></summary>
+
+- **Bloom→エージェントルーティング** — 動的モデル切り替えをエージェントレベルのルーティングに置換。L1-L3→足軽、L4-L6→軍師。セッション中の `/model opus` 昇格は不要に
+- **軍師（Gunshi）がファーストクラスエージェントに** — ペイン8の戦略参謀。深い分析、設計レビュー、アーキテクチャ評価を担当
+- **E2Eテストスイート（19テスト、7シナリオ）** — モックCLIフレームワークが分離されたtmuxセッションでエージェント動作をシミュレート
 - **Stop hook inbox配信** — Claude Codeエージェントが `.claude/settings.json` のStop hookでターン終了時に自動的にinboxを確認。`send-keys` 割り込み問題を根絶
-- **モデルデフォルト更新** — 家老: Opus→Sonnet。全足軽: Sonnet（統一）。軍師: Opus（深い推論）
+- **モデルデフォルト更新** — 家老: Opus→Sonnet。軍師: Opus（深い推論）。全足軽: Sonnet（統一）
+- **Codex CLIスタートアッププロンプト** — `cli_adapter.sh` の `get_startup_prompt()` が初期 `[PROMPT]` 引数をCodex CLIに渡す
+- **YAMLスリム化ユーティリティ** — `scripts/slim_yaml.sh` が既読メッセージ・完了コマンドをアーカイブ
+
+</details>
 
 ## v3.3.2の新機能 — GPT-5.3-Codex-Spark対応
 

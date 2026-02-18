@@ -10,7 +10,7 @@ Run 10 AI coding agents in parallel — **Claude Code, OpenAI Codex, GitHub Copi
 
 [![GitHub Stars](https://img.shields.io/github/stars/yohey-w/multi-agent-shogun?style=social)](https://github.com/yohey-w/multi-agent-shogun)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![v3.4 Bloom→Agent Routing](https://img.shields.io/badge/v3.4-Bloom→Agent_Routing-ff6600?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPuKalTwvdGV4dD48L3N2Zz4=)](https://github.com/yohey-w/multi-agent-shogun)
+[![v3.5 Dynamic Model Routing](https://img.shields.io/badge/v3.5-Dynamic_Model_Routing-ff6600?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPuKalTwvdGV4dD48L3N2Zz4=)](https://github.com/yohey-w/multi-agent-shogun)
 [![Shell](https://img.shields.io/badge/Shell%2FBash-100%25-green)]()
 
 [English](README.md) | [日本語](README_ja.md)
@@ -103,9 +103,9 @@ Shogun isn't locked to one vendor. The system supports 4 CLI tools, each with un
 
 | CLI | Key Strength | Default Model |
 |-----|-------------|---------------|
-| **Claude Code** | Battle-tested tmux integration, Memory MCP, dedicated file tools (Read/Write/Edit/Glob/Grep) | Claude Sonnet 4.5 |
+| **Claude Code** | Battle-tested tmux integration, Memory MCP, dedicated file tools (Read/Write/Edit/Glob/Grep) | Claude Sonnet 4.6 |
 | **OpenAI Codex** | Sandbox execution, JSONL structured output, `codex exec` headless mode, **per-model `--model` flag** | gpt-5.3-codex / **gpt-5.3-codex-spark** |
-| **GitHub Copilot** | Built-in GitHub MCP, 4 specialized agents (Explore/Task/Plan/Code-review), `/delegate` to coding agent | Claude Sonnet 4.5 |
+| **GitHub Copilot** | Built-in GitHub MCP, 4 specialized agents (Explore/Task/Plan/Code-review), `/delegate` to coding agent | Claude Sonnet 4.6 |
 | **Kimi Code** | Free tier available, strong multilingual support | Kimi k2 |
 
 A unified instruction build system generates CLI-specific instruction files from shared templates:
@@ -946,10 +946,10 @@ SayTask handles personal productivity (capture → schedule → remind). The cmd
 |-------|--------------|----------|------|
 | Shogun | Opus | **Enabled (high)** | Strategic advisor to the Lord. Use `--shogun-no-thinking` for relay-only mode |
 | Karo | Sonnet | Enabled | Task distribution, simple QC, dashboard management |
-| Gunshi | Opus | Enabled | Deep analysis, design review, architecture evaluation |
-| Ashigaru 1–7 | Sonnet | Enabled | Implementation: code, research, file operations |
+| Gunshi | Sonnet 4.6 | Enabled | Deep analysis, design review, architecture evaluation |
+| Ashigaru 1–7 | Sonnet 4.6 | Enabled | Implementation: code, research, file operations |
 
-The system splits work by **cognitive complexity**, not model tier. Ashigaru handle implementation (L1–L3), while the Gunshi handles tasks requiring deep reasoning (L4–L6). This eliminates the need for dynamic model switching — the right agent gets the right task from the start.
+The system routes work by **cognitive complexity** at two levels: **Agent routing** (Ashigaru for L1–L3, Gunshi for L4–L6) and **Model routing within Ashigaru** via `capability_tiers` (see Dynamic Model Routing below).
 
 ### Bloom's Taxonomy → Agent Routing
 
@@ -1592,24 +1592,25 @@ Even if you're not comfortable with keyboard shortcuts, you can switch, scroll, 
 
 ---
 
-## What's New in v3.4 — Bloom→Agent Routing, E2E Tests, Stop Hook
+## What's New in v3.5 — Dynamic Model Routing
 
-> **Tasks are now routed by cognitive complexity to the right agent — not by switching models.** Plus comprehensive E2E test coverage and zero-interruption inbox delivery.
+> **Right model for the right task — without restarting any agent.** Sonnet 4.6 closes the gap with Opus to just 1.2pp on SWE-bench (79.6% vs 80.8%), making per-task model routing practical and cost-effective for the first time.
 
-- **Bloom → Agent routing** — Replaced dynamic model switching with agent-level routing. L1–L3 tasks go to Ashigaru (Sonnet), L4–L6 tasks go to Gunshi (Opus). No more mid-session `/model opus` promotions — the Karo routes to the right agent from the start
-- **Gunshi (軍師) as first-class agent** — Strategic advisor on pane 8. Handles deep analysis, design review, architecture evaluation, and complex QC. Ashigaru focus on implementation only
-- **E2E test suite (19 tests, 7 scenarios)** — Mock CLI framework simulates agent behavior in isolated tmux sessions. Covers: basic flow, inbox delivery, /clear recovery, escalation, redo, parallel tasks, and blocked_by dependencies
-- **Stop hook inbox delivery** — Claude Code agents automatically check inbox at turn end via `.claude/settings.json` Stop hook. Eliminates the `send-keys` interruption problem entirely for Claude Code agents
-- **Model defaults updated** — Karo: Opus → Sonnet (task distribution doesn't need Opus). All Ashigaru: Sonnet (uniform tier). Gunshi: Opus (deep reasoning)
+- **Bloom Dynamic Model Routing** — `capability_tiers` in `config/settings.yaml` maps each model to its Bloom ceiling. L1–L3 → Spark (1000+ tok/s), L4 → Sonnet 4.6, L5 → Sonnet 4.6 + extended thinking, L6 → Opus (genuinely novel design only). Routing happens without agent restarts — the system finds the right idle agent by model capability
+- **Sonnet 4.6 as the new standard** — SWE-bench 79.6%, only 1.2pp below Opus 4.6. Gunshi downgraded Opus → Sonnet 4.6. All Ashigaru default to Sonnet 4.6. One YAML line change, no restarts required
+- **`/shogun-model-list` skill** — Complete reference table: all CLI tools × models × subscriptions × Bloom max level. Updated for Sonnet 4.6 and Spark positioning
+- **`/shogun-bloom-config` skill** — Interactive configurator: answer 2 questions about your subscriptions → get ready-to-paste `capability_tiers` YAML
 
 <details>
-<summary><b>What was in v3.4</b></summary>
+<summary><b>What was in v3.4 — Bloom→Agent Routing, E2E Tests, Stop Hook</b></summary>
 
-- **Stop hook inbox delivery** — Claude Code agents automatically check inbox at turn end via `.claude/settings.json` Stop hook
-- **Escape escalation disabled for Claude Code** — Phase 2 escalation (Escape×2 + C-c) was interrupting active Claude Code turns. Now suppressed; Stop hook handles delivery instead
-- **Gunshi (軍師) role introduced** — New strategic advisor agent (pane 8). Replaces ashigaru8
+- **Bloom → Agent routing** — Replaced dynamic model switching with agent-level routing. L1–L3 tasks go to Ashigaru, L4–L6 tasks go to Gunshi. No more mid-session `/model opus` promotions
+- **Gunshi (軍師) as first-class agent** — Strategic advisor on pane 8. Handles deep analysis, design review, architecture evaluation, and complex QC
+- **E2E test suite (19 tests, 7 scenarios)** — Mock CLI framework simulates agent behavior in isolated tmux sessions
+- **Stop hook inbox delivery** — Claude Code agents automatically check inbox at turn end via `.claude/settings.json` Stop hook. Eliminates the `send-keys` interruption problem
+- **Model defaults updated** — Karo: Opus → Sonnet. Gunshi: Opus (deep reasoning). Ashigaru: Sonnet (uniform tier)
+- **Escape escalation disabled for Claude Code** — Phase 2 escalation was interrupting active Claude Code turns; Stop hook handles delivery instead
 - **Codex CLI startup prompt** — `get_startup_prompt()` in `cli_adapter.sh` passes initial `[PROMPT]` argument to Codex CLI launch
-- **Session Start identity protection** — Agents must complete Steps 1-3 before processing inbox
 - **YAML slimming utility** — `scripts/slim_yaml.sh` archives read messages and completed commands
 
 </details>
