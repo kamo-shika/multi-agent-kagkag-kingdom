@@ -498,6 +498,7 @@ send_cli_command() {
 
     # /clear needs extra wait time before follow-up
     if [[ "$actual_cmd" == "/clear" ]]; then
+        LAST_CLEAR_TS=$(date +%s)
         sleep 3
     else
         sleep 1
@@ -592,6 +593,10 @@ send_context_reset() {
     timeout 5 tmux send-keys -t "$PANE_TARGET" "$reset_cmd" 2>/dev/null || true
     sleep 0.3
     timeout 5 tmux send-keys -t "$PANE_TARGET" Enter 2>/dev/null || true
+    # Mark /clear timestamp so agent_is_busy() treats it as busy during processing
+    if [[ "$reset_cmd" == "/clear" ]]; then
+        LAST_CLEAR_TS=$(date +%s)
+    fi
 
     # Poll until agent becomes idle (prompt ready) instead of fixed sleep.
     # Max 15s (3 attempts × 5s). If still busy after 15s, proceed anyway.
@@ -641,6 +646,16 @@ agent_has_self_watch() {
 # Returns 0 (true) if agent is busy, 1 if idle.
 # Implementation: delegates to lib/agent_status.sh (shared library).
 agent_is_busy() {
+    # /clear cooldown: treat agent as busy for 30s after /clear was sent.
+    # Claude Code's /clear takes 10-30s (CLAUDE.md reload + context init).
+    # Without this, nudges sent during /clear processing queue up at the prompt
+    # and cause race conditions (inbox1 arrives before /clear completes).
+    local now_busy
+    now_busy=$(date +%s)
+    if [ "${LAST_CLEAR_TS:-0}" -gt 0 ] && [ "$((now_busy - LAST_CLEAR_TS))" -lt 30 ]; then
+        return 0  # busy — /clear still processing
+    fi
+
     if type agent_is_busy_check &>/dev/null; then
         agent_is_busy_check "$PANE_TARGET"
     else
