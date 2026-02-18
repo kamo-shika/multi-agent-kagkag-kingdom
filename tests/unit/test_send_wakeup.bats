@@ -700,6 +700,67 @@ PY
     echo "$output" | grep -q "OK"
 }
 
+# --- T-CODEX-013: auto-recovery skipped when task is cancelled ---
+
+@test "T-CODEX-013: enqueue_recovery_task_assigned skips if task YAML status is cancelled" {
+    run bash -c '
+        source "'"$TEST_HARNESS"'"
+        # Initialize inbox (required by enqueue_recovery_task_assigned)
+        echo "messages: []" > "$INBOX"
+        # Place task YAML with status: cancelled
+        mkdir -p "$(dirname "$INBOX")/../tasks"
+        cat > "$(dirname "$INBOX")/../tasks/test_agent.yaml" << "YAML"
+worker_id: test_agent
+task_id: subtask_test_cancelled
+status: cancelled
+YAML
+        r=$(enqueue_recovery_task_assigned)
+        # Should return SKIP_CANCELLED:cancelled
+        if [ "$r" = "SKIP_CANCELLED:cancelled" ]; then echo "OK"; else echo "FAIL:$r"; fi
+    '
+    [ "$status" -eq 0 ]
+    echo "$output" | grep -q "OK"
+}
+
+# --- T-CODEX-014: auto-recovery skipped when task is idle ---
+
+@test "T-CODEX-014: enqueue_recovery_task_assigned skips if task YAML status is idle" {
+    run bash -c '
+        source "'"$TEST_HARNESS"'"
+        echo "messages: []" > "$INBOX"
+        mkdir -p "$(dirname "$INBOX")/../tasks"
+        cat > "$(dirname "$INBOX")/../tasks/test_agent.yaml" << "YAML"
+worker_id: test_agent
+task_id: subtask_test_idle
+status: idle
+YAML
+        r=$(enqueue_recovery_task_assigned)
+        if [ "$r" = "SKIP_CANCELLED:idle" ]; then echo "OK"; else echo "FAIL:$r"; fi
+    '
+    [ "$status" -eq 0 ]
+    echo "$output" | grep -q "OK"
+}
+
+# --- T-CODEX-015: auto-recovery proceeds when task is assigned ---
+
+@test "T-CODEX-015: enqueue_recovery_task_assigned proceeds when task YAML status is assigned" {
+    run bash -c '
+        source "'"$TEST_HARNESS"'"
+        echo "messages: []" > "$INBOX"
+        mkdir -p "$(dirname "$INBOX")/../tasks"
+        cat > "$(dirname "$INBOX")/../tasks/test_agent.yaml" << "YAML"
+worker_id: test_agent
+task_id: subtask_test_assigned
+status: assigned
+YAML
+        r=$(enqueue_recovery_task_assigned)
+        # Should return a message ID (not SKIP_*)
+        if [[ "$r" != SKIP_* ]] && [[ "$r" != "ERROR" ]] && [[ -n "$r" ]]; then echo "OK"; else echo "FAIL:$r"; fi
+    '
+    [ "$status" -eq 0 ]
+    echo "$output" | grep -q "OK"
+}
+
 # --- T-COPILOT-001: copilot /clear → Ctrl-C + restart ---
 
 @test "T-COPILOT-001: send_cli_command sends Ctrl-C + copilot restart for copilot /clear" {

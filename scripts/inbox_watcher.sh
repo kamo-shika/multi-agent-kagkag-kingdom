@@ -286,6 +286,24 @@ try:
             print("SKIP_DUPLICATE")
             raise SystemExit(0)
 
+    # Task YAML status guard: skip auto-recovery if task is cancelled or idle.
+    # This prevents restarting a task that Karo intentionally cancelled via clear_command.
+    task_yaml_path = os.path.join(
+        os.path.dirname(os.path.dirname(inbox)), "tasks", f"{agent_id}.yaml"
+    )
+    if os.path.exists(task_yaml_path):
+        try:
+            with open(task_yaml_path, "r", encoding="utf-8") as tf:
+                task_data = yaml.safe_load(tf) or {}
+            task_status = str(task_data.get("status") or "").strip().strip("'\"")
+            if task_status in ("cancelled", "idle"):
+                print(f"SKIP_CANCELLED:{task_status}")
+                raise SystemExit(0)
+        except SystemExit:
+            raise
+        except Exception:
+            pass  # If task YAML is unreadable, proceed with auto-recovery as safety net
+
     now = datetime.datetime.now(datetime.timezone.utc).astimezone()
     msg = {
         "content": (
@@ -857,10 +875,17 @@ for s in data.get('specials', []):
 
     # /clear は Codex で /new へ変換される。再起動直後の取りこぼし防止として
     # 追加 task_assigned を自動投入し、次サイクルで確実に wake-up 可能にする。
+    # 案B+待機: Karo がタスク YAML を cancelled に更新するまでの猶予を確保してから
+    # status チェックを行い、cancelled/idle の場合はスキップする。
     if [ "$clear_seen" -eq 1 ]; then
+        # Wait for Karo to update task YAML status (cancellation race condition mitigation).
+        # send_cli_command already slept 3s for /clear; add 5s more = ~8s total before check.
+        sleep 5
         local recovery_id
         recovery_id=$(enqueue_recovery_task_assigned)
-        if [ -n "$recovery_id" ] && [ "$recovery_id" != "SKIP_DUPLICATE" ] && [ "$recovery_id" != "ERROR" ]; then
+        if [[ "$recovery_id" == SKIP_CANCELLED:* ]]; then
+            echo "[$(date)] [AUTO-RECOVERY] skipped for $AGENT_ID — task is ${recovery_id#SKIP_CANCELLED:} (not restarting)" >&2
+        elif [ -n "$recovery_id" ] && [ "$recovery_id" != "SKIP_DUPLICATE" ] && [ "$recovery_id" != "ERROR" ]; then
             echo "[$(date)] [AUTO-RECOVERY] queued task_assigned for $AGENT_ID ($recovery_id)" >&2
         fi
         info=$(get_unread_info)
