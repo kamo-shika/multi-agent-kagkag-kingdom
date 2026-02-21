@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# first_setup.sh - multi-agent-shogun 初回セットアップスクリプト
+# first_setup.sh - multi-agent-kagkag-kingdom 初回セットアップスクリプト
 # Ubuntu / WSL / Mac 用環境構築ツール
 # ============================================================
 # 実行方法:
@@ -50,7 +50,7 @@ HAS_ERROR=false
 
 echo ""
 echo "  ╔══════════════════════════════════════════════════════════════╗"
-echo "  ║  🏯 multi-agent-shogun インストーラー                         ║"
+echo "  ║  🏯 multi-agent-kagkag-kingdom インストーラー                         ║"
 echo "  ║     Initial Setup Script for Ubuntu / WSL                    ║"
 echo "  ╚══════════════════════════════════════════════════════════════╝"
 echo ""
@@ -564,11 +564,11 @@ log_step "STEP 7: 設定ファイル確認"
 if [ ! -f "$SCRIPT_DIR/config/settings.yaml" ]; then
     log_info "config/settings.yaml を作成中..."
     cat > "$SCRIPT_DIR/config/settings.yaml" << EOF
-# multi-agent-shogun 設定ファイル
+# multi-agent-kagkag-kingdom 設定ファイル
 
 # 言語設定
-# ja: 日本語（戦国風日本語のみ、併記なし）
-# en: 英語（戦国風日本語 + 英訳併記）
+# ja: 日本語（KagKag Kingdom風のみ、併記なし）
+# en: 英語（KagKag Kingdom風 + 英訳併記）
 # その他の言語コード（es, zh, ko, fr, de 等）も対応
 language: ja
 
@@ -579,7 +579,7 @@ shell: bash
 
 # スキル設定
 skill:
-  # スキル保存先（スキル名に shogun- プレフィックスを付けて保存）
+  # スキル保存先（スキル名に king- プレフィックスを付けて保存）
   save_path: "~/.claude/skills/"
 
   # ローカルスキル保存先（このプロジェクト専用）
@@ -637,13 +637,13 @@ fi
 RESULTS+=("設定ファイル: OK")
 
 # ============================================================
-# STEP 8: 足軽用タスク・レポートファイル初期化
+# STEP 8: 市民用タスク・レポートファイル初期化
 # ============================================================
 log_step "STEP 8: キューファイル初期化"
 
-# 足軽数を settings.yaml から動的に取得（設定がなければデフォルト7）
+# 市民数を settings.yaml から動的に取得（設定がなければデフォルト7）
 _SETUP_VENV_PYTHON="$SCRIPT_DIR/.venv/bin/python3"
-_SETUP_ASHIGARU_COUNT=$(
+_SETUP_CITIZEN_COUNT=$(
     if [[ -x "$_SETUP_VENV_PYTHON" ]]; then
         "$_SETUP_VENV_PYTHON" -c "
 import yaml
@@ -651,7 +651,7 @@ try:
     with open('$SCRIPT_DIR/config/settings.yaml') as f:
         cfg = yaml.safe_load(f) or {}
     agents = cfg.get('cli', {}).get('agents', {})
-    count = len([k for k in agents if k.startswith('ashigaru')])
+    count = len([k for k in agents if k.startswith('citizen')])
     print(count if count > 0 else 7)
 except Exception:
     print(7)
@@ -660,14 +660,14 @@ except Exception:
         echo 7
     fi
 )
-_SETUP_ASHIGARU_COUNT=${_SETUP_ASHIGARU_COUNT:-7}
+_SETUP_CITIZEN_COUNT=${_SETUP_CITIZEN_COUNT:-7}
 
-# 足軽用タスクファイル作成
-for i in $(seq 1 "$_SETUP_ASHIGARU_COUNT"); do
-    TASK_FILE="$SCRIPT_DIR/queue/tasks/ashigaru${i}.yaml"
+# 市民用タスクファイル作成
+for i in $(seq 1 "$_SETUP_CITIZEN_COUNT"); do
+    TASK_FILE="$SCRIPT_DIR/queue/tasks/citizen${i}.yaml"
     if [ ! -f "$TASK_FILE" ]; then
         cat > "$TASK_FILE" << EOF
-# 足軽${i}専用タスクファイル
+# 市民${i}専用タスクファイル
 task:
   task_id: null
   parent_cmd: null
@@ -678,14 +678,14 @@ task:
 EOF
     fi
 done
-log_info "足軽タスクファイル (1-${_SETUP_ASHIGARU_COUNT}) を確認/作成しました"
+log_info "市民タスクファイル (1-${_SETUP_CITIZEN_COUNT}) を確認/作成しました"
 
-# 足軽用レポートファイル作成
-for i in $(seq 1 "$_SETUP_ASHIGARU_COUNT"); do
-    REPORT_FILE="$SCRIPT_DIR/queue/reports/ashigaru${i}_report.yaml"
+# 市民用レポートファイル作成
+for i in $(seq 1 "$_SETUP_CITIZEN_COUNT"); do
+    REPORT_FILE="$SCRIPT_DIR/queue/reports/citizen${i}_report.yaml"
     if [ ! -f "$REPORT_FILE" ]; then
         cat > "$REPORT_FILE" << EOF
-worker_id: ashigaru${i}
+worker_id: citizen${i}
 task_id: null
 timestamp: ""
 status: idle
@@ -693,7 +693,7 @@ result: null
 EOF
     fi
 done
-log_info "足軽レポートファイル (1-${_SETUP_ASHIGARU_COUNT}) を確認/作成しました"
+log_info "市民レポートファイル (1-${_SETUP_CITIZEN_COUNT}) を確認/作成しました"
 
 RESULTS+=("キューファイル: OK")
 
@@ -704,7 +704,7 @@ log_step "STEP 9: 実行権限設定"
 
 SCRIPTS=(
     "setup.sh"
-    "shutsujin_departure.sh"
+    "departure.sh"
     "first_setup.sh"
 )
 
@@ -728,8 +728,8 @@ BASHRC_FILE="$HOME/.bashrc"
 # css/csm を関数として定義（destroy-unattached で自動掃除）
 # - 複数端末から接続しても画面サイズが干渉しない
 # - SSH切断・アプリ終了時に一時セッションが自動消滅
-# - 本体セッション (shogun/multiagent) は絶対に消えない
-CSS_FUNC='css() { local s="shogun-$$"; local cols=$(tput cols 2>/dev/null || echo 80); tmux new-session -d -t shogun -s "$s" 2>/dev/null && tmux set-option -t "$s" destroy-unattached on 2>/dev/null; if [ "$cols" -lt 80 ]; then tmux new-window -t "$s" -n mobile 2>/dev/null; tmux attach-session -t "$s:mobile" 2>/dev/null || tmux attach-session -t shogun; else tmux attach-session -t "$s" 2>/dev/null || tmux attach-session -t shogun; fi; }'
+# - 本体セッション (king/multiagent) は絶対に消えない
+CSS_FUNC='css() { local s="king-$$"; local cols=$(tput cols 2>/dev/null || echo 80); tmux new-session -d -t king -s "$s" 2>/dev/null && tmux set-option -t "$s" destroy-unattached on 2>/dev/null; if [ "$cols" -lt 80 ]; then tmux new-window -t "$s" -n mobile 2>/dev/null; tmux attach-session -t "$s:mobile" 2>/dev/null || tmux attach-session -t king; else tmux attach-session -t "$s" 2>/dev/null || tmux attach-session -t king; fi; }'
 CSM_FUNC='csm() { local s="multi-$$"; local cols=$(tput cols 2>/dev/null || echo 80); tmux new-session -d -t multiagent -s "$s" 2>/dev/null && tmux set-option -t "$s" destroy-unattached on 2>/dev/null; if [ "$cols" -lt 80 ]; then tmux new-window -t "$s" -n mobile 2>/dev/null; tmux attach-session -t "$s:mobile" 2>/dev/null || tmux attach-session -t multiagent; else tmux attach-session -t "$s" 2>/dev/null || tmux attach-session -t multiagent; fi; }'
 
 ALIAS_ADDED=false
@@ -747,12 +747,12 @@ if [ -f "$BASHRC_FILE" ]; then
 
     # css 関数
     if ! grep -q "^css()" "$BASHRC_FILE" 2>/dev/null; then
-        if ! grep -q "multi-agent-shogun aliases" "$BASHRC_FILE" 2>/dev/null; then
+        if ! grep -q "multi-agent-kagkag-kingdom aliases" "$BASHRC_FILE" 2>/dev/null; then
             echo "" >> "$BASHRC_FILE"
-            echo "# multi-agent-shogun aliases (added by first_setup.sh)" >> "$BASHRC_FILE"
+            echo "# multi-agent-kagkag-kingdom aliases (added by first_setup.sh)" >> "$BASHRC_FILE"
         fi
         echo "$CSS_FUNC" >> "$BASHRC_FILE"
-        log_info "css 関数を追加しました（将軍ウィンドウ — 自動掃除付き）"
+        log_info "css 関数を追加しました（キングウィンドウ — 自動掃除付き）"
         ALIAS_ADDED=true
     else
         # 関数は存在する → 最新版に更新
@@ -765,7 +765,7 @@ if [ -f "$BASHRC_FILE" ]; then
     # csm 関数
     if ! grep -q "^csm()" "$BASHRC_FILE" 2>/dev/null; then
         echo "$CSM_FUNC" >> "$BASHRC_FILE"
-        log_info "csm 関数を追加しました（家老・足軽ウィンドウ — 自動掃除付き）"
+        log_info "csm 関数を追加しました（大臣・市民ウィンドウ — 自動掃除付き）"
         ALIAS_ADDED=true
     else
         sed -i '/^csm()/d' "$BASHRC_FILE"
@@ -855,7 +855,7 @@ if command -v claude &> /dev/null; then
     else
         log_info "Memory MCP を設定中..."
         if claude mcp add memory \
-            -e MEMORY_FILE_PATH="$SCRIPT_DIR/memory/shogun_memory.jsonl" \
+            -e MEMORY_FILE_PATH="$SCRIPT_DIR/memory/kingdom_memory.jsonl" \
             -- npx -y @modelcontextprotocol/server-memory 2>/dev/null; then
             log_success "Memory MCP 設定完了"
             RESULTS+=("Memory MCP: 設定完了")
@@ -928,20 +928,20 @@ echo ""
 echo "  ────────────────────────────────────────────────────────────────"
 echo ""
 echo "  出陣（全エージェント起動）:"
-echo "     ./shutsujin_departure.sh"
+echo "     ./departure.sh"
 echo ""
 echo "  オプション:"
-echo "     ./shutsujin_departure.sh -s            # セットアップのみ（Claude手動起動）"
-echo "     ./shutsujin_departure.sh -t            # Windows Terminalタブ展開"
-echo "     ./shutsujin_departure.sh -shell bash   # bash用プロンプトで起動"
-echo "     ./shutsujin_departure.sh -shell zsh    # zsh用プロンプトで起動"
+echo "     ./departure.sh -s            # セットアップのみ（Claude手動起動）"
+echo "     ./departure.sh -t            # Windows Terminalタブ展開"
+echo "     ./departure.sh -shell bash   # bash用プロンプトで起動"
+echo "     ./departure.sh -shell zsh    # zsh用プロンプトで起動"
 echo ""
 echo "  ※ シェル設定は config/settings.yaml の shell: でも変更可能です"
 echo ""
 echo "  詳細は README.md を参照してください。"
 echo ""
 echo "  ════════════════════════════════════════════════════════════════"
-echo "   天下布武！ (Tenka Fubu!)"
+echo "   KagKag Kingdom！ (KagKag Kingdom!)"
 echo "  ════════════════════════════════════════════════════════════════"
 echo ""
 

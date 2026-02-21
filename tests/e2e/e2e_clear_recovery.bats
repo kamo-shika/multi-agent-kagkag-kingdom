@@ -46,26 +46,26 @@ setup() {
 # ═══════════════════════════════════════════════════════════════
 
 @test "E2E-003-A: /clear with assigned task triggers auto-recovery" {
-    # 1. Place task YAML for ashigaru1 (status: assigned)
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru1_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru1.yaml"
+    # 1. Place task YAML for citizen1 (status: assigned)
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen1_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen1.yaml"
 
-    # 2. Send /clear to ashigaru1 (not inbox nudge — direct /clear)
-    local ashigaru1_pane
-    ashigaru1_pane=$(pane_target 1)
-    send_to_pane "$ashigaru1_pane" "/clear"
+    # 2. Send /clear to citizen1 (not inbox nudge — direct /clear)
+    local citizen1_pane
+    citizen1_pane=$(pane_target 1)
+    send_to_pane "$citizen1_pane" "/clear"
 
     # 3. Wait for task to complete (handle_clear detects assigned task)
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru1.yaml" "task.status" "done" 30
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen1.yaml" "task.status" "done" 30
     assert_success
 
     # 4. Verify report was written
-    run wait_for_file "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" 10
+    run wait_for_file "$E2E_QUEUE/queue/reports/citizen1_report.yaml" 10
     assert_success
 
     # 5. Verify report content
-    assert_yaml_field "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" "status" "done"
-    assert_yaml_field "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" "task_id" "subtask_test_001a"
+    assert_yaml_field "$E2E_QUEUE/queue/reports/citizen1_report.yaml" "status" "done"
+    assert_yaml_field "$E2E_QUEUE/queue/reports/citizen1_report.yaml" "task_id" "subtask_test_001a"
 }
 
 # ═══════════════════════════════════════════════════════════════
@@ -73,22 +73,22 @@ setup() {
 # ═══════════════════════════════════════════════════════════════
 
 @test "E2E-003-B: /clear without assigned task does not crash" {
-    # 1. No task YAML placed — ashigaru1 has nothing to do
+    # 1. No task YAML placed — citizen1 has nothing to do
 
     # 2. Send /clear
-    local ashigaru1_pane
-    ashigaru1_pane=$(pane_target 1)
-    send_to_pane "$ashigaru1_pane" "/clear"
+    local citizen1_pane
+    citizen1_pane=$(pane_target 1)
+    send_to_pane "$citizen1_pane" "/clear"
 
     # 3. Wait for mock to process /clear
     sleep 3
 
     # 4. No report should be created (no task was processed)
-    [ ! -f "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" ]
+    [ ! -f "$E2E_QUEUE/queue/reports/citizen1_report.yaml" ]
 
     # 5. Verify mock is still alive — send test input, check it's processed
-    send_to_pane "$ashigaru1_pane" "health_check"
-    run wait_for_pane_text "$ashigaru1_pane" "Processed input: health_check" 10
+    send_to_pane "$citizen1_pane" "health_check"
+    run wait_for_pane_text "$citizen1_pane" "Processed input: health_check" 10
     assert_success
 }
 
@@ -98,27 +98,27 @@ setup() {
 # Simulates: agent gets /clear → recovers → then new task arrives normally
 
 @test "E2E-003-C: /clear recovery then normal task processing works" {
-    local ashigaru1_pane
-    ashigaru1_pane=$(pane_target 1)
+    local citizen1_pane
+    citizen1_pane=$(pane_target 1)
 
     # 1. Send /clear first (no task)
-    send_to_pane "$ashigaru1_pane" "/clear"
+    send_to_pane "$citizen1_pane" "/clear"
     sleep 3
 
     # 2. Now place task and send normal inbox nudge
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru1_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru1.yaml"
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen1_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen1.yaml"
 
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "karo"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "minister"
 
-    send_to_pane "$ashigaru1_pane" "inbox1"
+    send_to_pane "$citizen1_pane" "inbox1"
 
     # 3. Task should complete normally
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru1.yaml" "task.status" "done" 30
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen1.yaml" "task.status" "done" 30
     assert_success
 
     # 4. Report should exist
-    run wait_for_file "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" 10
+    run wait_for_file "$E2E_QUEUE/queue/reports/citizen1_report.yaml" 10
     assert_success
 }

@@ -149,7 +149,7 @@ JSON
 JSON
     run_listener
     [ -s "$INBOX_LOG" ]
-    grep -q "shogun" "$INBOX_LOG"
+    grep -q "king" "$INBOX_LOG"
 }
 
 # ═══════════════════════════════════════════════════════════════

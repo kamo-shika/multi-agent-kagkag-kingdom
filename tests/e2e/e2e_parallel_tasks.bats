@@ -2,13 +2,13 @@
 # ═══════════════════════════════════════════════════════════════
 # E2E-006: Parallel Tasks Test
 # ═══════════════════════════════════════════════════════════════
-# Validates that multiple ashigaru can process tasks simultaneously:
-#   1. Two tasks assigned to ashigaru1 and ashigaru2
+# Validates that multiple citizen can process tasks simultaneously:
+#   1. Two tasks assigned to citizen1 and citizen2
 #   2. Both receive inbox nudges
 #   3. Both complete independently
 #   4. Both reports are written
 #
-# Uses 3-pane setup (karo + ashigaru1 + ashigaru2).
+# Uses 3-pane setup (minister + citizen1 + citizen2).
 # ═══════════════════════════════════════════════════════════════
 
 # bats file_tags=e2e
@@ -42,45 +42,45 @@ setup() {
 }
 
 # ═══════════════════════════════════════════════════════════════
-# E2E-006-A: Two ashigaru process tasks in parallel
+# E2E-006-A: Two citizen process tasks in parallel
 # ═══════════════════════════════════════════════════════════════
 
-@test "E2E-006-A: ashigaru1 and ashigaru2 complete tasks in parallel" {
-    # 1. Place tasks for both ashigaru
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru1_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru1.yaml"
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru2_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru2.yaml"
+@test "E2E-006-A: citizen1 and citizen2 complete tasks in parallel" {
+    # 1. Place tasks for both citizen
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen1_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen1.yaml"
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen2_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen2.yaml"
 
     # 2. Send task_assigned to both inboxes
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "karo"
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru2" \
-        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "karo"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "minister"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen2" \
+        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "minister"
 
     # 3. Nudge both simultaneously
-    local ashigaru1_pane ashigaru2_pane
-    ashigaru1_pane=$(pane_target 1)
-    ashigaru2_pane=$(pane_target 2)
+    local citizen1_pane citizen2_pane
+    citizen1_pane=$(pane_target 1)
+    citizen2_pane=$(pane_target 2)
 
-    send_to_pane "$ashigaru1_pane" "inbox1"
-    send_to_pane "$ashigaru2_pane" "inbox1"
+    send_to_pane "$citizen1_pane" "inbox1"
+    send_to_pane "$citizen2_pane" "inbox1"
 
     # 4. Both should complete
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru1.yaml" "task.status" "done" 30
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen1.yaml" "task.status" "done" 30
     assert_success
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru2.yaml" "task.status" "done" 30
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen2.yaml" "task.status" "done" 30
     assert_success
 
     # 5. Both reports should exist
-    run wait_for_file "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" 10
+    run wait_for_file "$E2E_QUEUE/queue/reports/citizen1_report.yaml" 10
     assert_success
-    run wait_for_file "$E2E_QUEUE/queue/reports/ashigaru2_report.yaml" 10
+    run wait_for_file "$E2E_QUEUE/queue/reports/citizen2_report.yaml" 10
     assert_success
 
     # 6. Reports should have correct agent IDs
-    assert_yaml_field "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" "worker_id" "ashigaru1"
-    assert_yaml_field "$E2E_QUEUE/queue/reports/ashigaru2_report.yaml" "worker_id" "ashigaru2"
+    assert_yaml_field "$E2E_QUEUE/queue/reports/citizen1_report.yaml" "worker_id" "citizen1"
+    assert_yaml_field "$E2E_QUEUE/queue/reports/citizen2_report.yaml" "worker_id" "citizen2"
 }
 
 # ═══════════════════════════════════════════════════════════════
@@ -89,40 +89,40 @@ setup() {
 
 @test "E2E-006-B: parallel tasks maintain inbox isolation" {
     # 1. Place tasks and send notifications
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru1_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru1.yaml"
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru2_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru2.yaml"
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen1_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen1.yaml"
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen2_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen2.yaml"
 
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "karo"
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru2" \
-        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "karo"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "minister"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen2" \
+        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "minister"
 
-    local ashigaru1_pane ashigaru2_pane
-    ashigaru1_pane=$(pane_target 1)
-    ashigaru2_pane=$(pane_target 2)
+    local citizen1_pane citizen2_pane
+    citizen1_pane=$(pane_target 1)
+    citizen2_pane=$(pane_target 2)
 
-    send_to_pane "$ashigaru1_pane" "inbox1"
-    send_to_pane "$ashigaru2_pane" "inbox1"
+    send_to_pane "$citizen1_pane" "inbox1"
+    send_to_pane "$citizen2_pane" "inbox1"
 
     # 2. Wait for both to complete
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru1.yaml" "task.status" "done" 30
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen1.yaml" "task.status" "done" 30
     assert_success
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru2.yaml" "task.status" "done" 30
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen2.yaml" "task.status" "done" 30
     assert_success
 
-    # 3. Each inbox should have its own messages (task_assigned from karo + no cross-contamination)
-    # ashigaru1's inbox should NOT have ashigaru2's messages
+    # 3. Each inbox should have its own messages (task_assigned from minister + no cross-contamination)
+    # citizen1's inbox should NOT have citizen2's messages
     run python3 -c "
 import yaml
-with open('$E2E_QUEUE/queue/inbox/ashigaru1.yaml') as f:
+with open('$E2E_QUEUE/queue/inbox/citizen1.yaml') as f:
     data = yaml.safe_load(f) or {}
 msgs = data.get('messages', [])
-# All messages in ashigaru1's inbox should be addressed to ashigaru1 context
-# (no ashigaru2 task_assigned should appear here)
+# All messages in citizen1's inbox should be addressed to citizen1 context
+# (no citizen2 task_assigned should appear here)
 for m in msgs:
-    if m.get('type') == 'task_assigned' and 'ashigaru2' in str(m.get('content', '')):
+    if m.get('type') == 'task_assigned' and 'citizen2' in str(m.get('content', '')):
         print('CROSS-CONTAMINATION DETECTED')
         exit(1)
 "

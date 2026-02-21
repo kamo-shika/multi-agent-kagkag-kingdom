@@ -1,7 +1,7 @@
 #!/bin/bash
 # ═══════════════════════════════════════════════════════════════
 # ntfy Input Listener
-# Streams messages from ntfy topic, writes to inbox YAML, wakes shogun.
+# Streams messages from ntfy topic, writes to inbox YAML, wakes king.
 # NOT polling — uses ntfy's streaming endpoint (long-lived HTTP connection).
 # FR-066: ntfy認証対応 (Bearer token / Basic auth)
 # ═══════════════════════════════════════════════════════════════
@@ -162,8 +162,8 @@ while true; do
         # Auto-reply acknowledgement
         bash "$SCRIPT_DIR/scripts/ntfy.sh" "📱受信: $MSG"
 
-        # Wake shogun via inbox (ntfy処理は将軍が直接受信)
-        bash "$SCRIPT_DIR/scripts/inbox_write.sh" shogun \
+        # Wake king via inbox (ntfy処理は将軍が直接受信)
+        bash "$SCRIPT_DIR/scripts/inbox_write.sh" king \
             "ntfyから新しいメッセージ受信。queue/ntfy_inbox.yaml を確認し処理せよ。" \
             ntfy_received ntfy_listener
     done

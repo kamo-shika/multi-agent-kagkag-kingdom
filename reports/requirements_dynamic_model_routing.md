@@ -311,7 +311,7 @@ history:
 - [ ] capability_tiers未定義 → 全関数がデフォルト値を返し、既存動作に変化なし
 - [ ] bloom_routing未定義 → off扱い、軍師分析なし
 - [ ] Phase 1コード追加後、既存テスト（test_cli_adapter.bats）が全PASS
-- [ ] settings.yaml に capability_tiers を追加しても、追加しなくても shutsujin が正常起動
+- [ ] settings.yaml に capability_tiers を追加しても、追加しなくても startup が正常起動
 
 ---
 

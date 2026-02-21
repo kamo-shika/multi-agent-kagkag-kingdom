@@ -41,10 +41,10 @@ CODEX_CONTEXT_CRIT=10
 CODEX_LIMIT_HITS_WARN=3
 
 # ─── Agent list (dynamic from settings.yaml) ───
-_ashigaru_ids_str=$(get_ashigaru_ids 2>/dev/null || echo "ashigaru1 ashigaru2 ashigaru3 ashigaru4 ashigaru5 ashigaru6 ashigaru7")
-ALL_AGENTS=("shogun" "karo")
-for _aid in $_ashigaru_ids_str; do ALL_AGENTS+=("$_aid"); done
-ALL_AGENTS+=("gunshi")
+_citizen_ids_str=$(get_citizen_ids 2>/dev/null || echo "citizen1 citizen2 citizen3 citizen4 citizen5 citizen6 citizen7")
+ALL_AGENTS=("king" "minister")
+for _aid in $_citizen_ids_str; do ALL_AGENTS+=("$_aid"); done
+ALL_AGENTS+=("priest")
 
 # ═══════════════════════════════════════════════════════
 # Phase 1: Scan all tmux panes for metadata
@@ -53,8 +53,8 @@ declare -A AGENT_CLI AGENT_MODEL AGENT_PANE
 
 for agent in "${ALL_AGENTS[@]}"; do
     # Determine pane target using @agent_id tmux option (dynamic, no hardcoded pane indices)
-    if [[ "$agent" == "shogun" ]]; then
-        pane_target="shogun:main"
+    if [[ "$agent" == "king" ]]; then
+        pane_target="king:main"
     else
         pane_target=$(tmux list-panes -a -F '#{session_name}:#{window_index}.#{pane_index} #{@agent_id}' 2>/dev/null \
             | awk -v a="$agent" '$2 == a {print $1}' | head -1)
@@ -360,7 +360,7 @@ if [[ ${#CODEX_AGENTS[@]} -gt 0 ]]; then
 
     # Shared model
     codex_model="${AGENT_MODEL[${CODEX_AGENTS[0]}]}"
-    printf "  Agents: ashigaru1-%d (%s)\n" "${#CODEX_AGENTS[@]}" "$codex_model"
+    printf "  Agents: citizen1-%d (%s)\n" "${#CODEX_AGENTS[@]}" "$codex_model"
 
     # Context display
     if [[ "$LANG_MODE" == "en" ]]; then
@@ -372,7 +372,7 @@ if [[ ${#CODEX_AGENTS[@]} -gt 0 ]]; then
     count=0
     for agent in "${CODEX_AGENTS[@]}"; do
         ctx="${CODEX_CONTEXT[$agent]}"
-        num="${agent#ashigaru}"  # extract number
+        num="${agent#citizen}"  # extract number
         # Add warning markers
         marker=""
         if [[ "$ctx" != "?" ]]; then

@@ -38,8 +38,8 @@
 #   T-CODEX-012: auto-recovery task_assignedは重複投入しない
 #   T-SHOGUN-001: session_has_client — returns 0 when client attached
 #   T-SHOGUN-002: session_has_client — returns 1 when no client
-#   T-SHOGUN-003: send_wakeup — shogun + active + attached → display-message only
-#   T-SHOGUN-004: send_wakeup — shogun + active + detached → send-keys fallthrough
+#   T-SHOGUN-003: send_wakeup — king + active + attached → display-message only
+#   T-SHOGUN-004: send_wakeup — king + active + detached → send-keys fallthrough
 #   T-COPILOT-001: send_cli_command — copilot /clear → Ctrl-C + restart
 #   T-COPILOT-002: send_cli_command — copilot /model → skip
 
@@ -620,7 +620,7 @@ MOCK
         cat > "$INBOX" << "YAML"
 messages:
   - id: msg_clear
-    from: karo
+    from: minister
     timestamp: "2026-02-10T14:00:00+09:00"
     type: clear_command
     content: redo
@@ -815,14 +815,14 @@ YAML
     [ "$status" -ne 0 ]
 }
 
-# --- T-SHOGUN-003: shogun + active pane + client attached → display-message only ---
+# --- T-SHOGUN-003: king + active pane + client attached → display-message only ---
 
-@test "T-SHOGUN-003: send_wakeup shogun + active + attached uses display-message only" {
+@test "T-SHOGUN-003: send_wakeup king + active + attached uses display-message only" {
     run bash -c '
         MOCK_PANE_ACTIVE="1"
         MOCK_LIST_CLIENTS="/dev/pts/1: mock_session [200x50 xterm-256color]"
         source "'"$TEST_HARNESS"'"
-        AGENT_ID="shogun"
+        AGENT_ID="king"
         send_wakeup 2
     '
     [ "$status" -eq 0 ]
@@ -834,14 +834,14 @@ YAML
     ! grep -q "send-keys.*inbox" "$MOCK_LOG"
 }
 
-# --- T-SHOGUN-004: shogun + active pane + no client → send-keys fallthrough ---
+# --- T-SHOGUN-004: king + active pane + no client → send-keys fallthrough ---
 
-@test "T-SHOGUN-004: send_wakeup shogun + active + detached falls through to send-keys" {
+@test "T-SHOGUN-004: send_wakeup king + active + detached falls through to send-keys" {
     run bash -c '
         MOCK_PANE_ACTIVE="1"
         MOCK_LIST_CLIENTS=""
         source "'"$TEST_HARNESS"'"
-        AGENT_ID="shogun"
+        AGENT_ID="king"
         send_wakeup 2
     '
     [ "$status" -eq 0 ]

@@ -7,12 +7,12 @@ display_mode: silent
 cli:
   default: claude
   agents:
-    karo:
+    minister:
       type: claude
       model: sonnet
-    ashigaru1:
+    citizen1:
       type: codex
-    ashigaru2:
+    citizen2:
       type: claude
       model: sonnet
   validation:

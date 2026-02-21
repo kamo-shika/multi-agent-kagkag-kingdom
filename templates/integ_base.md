@@ -33,10 +33,10 @@ When a contradiction is found:
 
 ### Step 3: Escalate Only If Unresolvable
 
-If primary sources cannot resolve the contradiction → report to karo with details.
-Karo escalates to shogun → lord if needed.
+If primary sources cannot resolve the contradiction → report to minister with details.
+Minister escalates to king → lord if needed.
 
-## Karo's Responsibility
+## Minister's Responsibility
 
 When assigning integration tasks, the task YAML **MUST** include:
 
@@ -66,4 +66,4 @@ Choose the appropriate template based on integration type:
 | Code integration | `templates/integ_code.md` | Medium — CI/test-driven |
 | Analysis integration | `templates/integ_analysis.md` | High — framework alignment |
 
-Karo determines the type and includes the appropriate template reference in the task YAML.
+Minister determines the type and includes the appropriate template reference in the task YAML.

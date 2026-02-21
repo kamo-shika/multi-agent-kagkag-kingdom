@@ -14,10 +14,10 @@ setup() {
 cli:
   default: claude
   agents:
-    ashigaru1:
+    citizen1:
       type: codex
       model: gpt-5.3-codex-spark
-    ashigaru2:
+    citizen2:
       type: claude
       model: claude-sonnet-4-5-20250929
 capability_tiers:
@@ -40,7 +40,7 @@ YAML
 cli:
   default: claude
   agents:
-    ashigaru1:
+    citizen1:
       type: codex
       model: gpt-5.3-codex-spark
 YAML
@@ -165,7 +165,7 @@ capability_tiers:
     cost_group: claude_max
 YAML
 
-    # Phase 3 テスト用: gunshi_analysis.yaml フィクスチャ
+    # Phase 3 テスト用: priest_analysis.yaml フィクスチャ
 
     # 正常な分析YAML（全フィールド定義）
     cat > "${TEST_TMP}/analysis_valid.yaml" << 'YAML'
@@ -225,31 +225,31 @@ YAML
 cli:
   default: claude
   agents:
-    karo:
+    minister:
       type: claude
       model: claude-sonnet-4-5-20250929
-    ashigaru1:
+    citizen1:
       type: codex
       model: gpt-5.3-codex-spark
-    ashigaru2:
+    citizen2:
       type: codex
       model: gpt-5.3-codex-spark
-    ashigaru3:
+    citizen3:
       type: codex
       model: gpt-5.3-codex-spark
-    ashigaru4:
+    citizen4:
       type: claude
       model: claude-sonnet-4-6
-    ashigaru5:
+    citizen5:
       type: claude
       model: claude-sonnet-4-6
-    ashigaru6:
+    citizen6:
       type: claude
       model: claude-opus-4-6
-    ashigaru7:
+    citizen7:
       type: claude
       model: claude-opus-4-6
-    gunshi:
+    priest:
       type: claude
       model: opus
 capability_tiers:
@@ -265,18 +265,18 @@ capability_tiers:
 bloom_routing: "manual"
 YAML
 
-    # find_agent_for_model テスト用: 全足軽Spark
+    # find_agent_for_model テスト用: 全市民Spark
     cat > "${TEST_TMP}/settings_all_spark.yaml" << 'YAML'
 cli:
   default: codex
   agents:
-    ashigaru1:
+    citizen1:
       type: codex
       model: gpt-5.3-codex-spark
-    ashigaru2:
+    citizen2:
       type: codex
       model: gpt-5.3-codex-spark
-    ashigaru3:
+    citizen3:
       type: codex
       model: gpt-5.3-codex-spark
 capability_tiers:
@@ -480,13 +480,13 @@ load_adapter_with() {
 @test "TC-DMR-040: NFR-01 既存get_cli_type回帰なし" {
     load_adapter_with "${TEST_TMP}/settings_no_tiers.yaml"
     # 既存関数がcapability_tiers追加後も正常動作
-    result=$(get_cli_type "ashigaru1")
+    result=$(get_cli_type "citizen1")
     [ "$result" = "codex" ]
 }
 
 @test "TC-DMR-041: NFR-01 既存get_agent_model回帰なし" {
     load_adapter_with "${TEST_TMP}/settings_no_tiers.yaml"
-    result=$(get_agent_model "ashigaru1")
+    result=$(get_agent_model "citizen1")
     [ "$result" = "gpt-5.3-codex-spark" ]
 }
 
@@ -545,7 +545,7 @@ load_adapter_with() {
 }
 
 # =============================================================================
-# Phase 2: TC-DMR-100〜142 — Karo manual model_switch
+# Phase 2: TC-DMR-100〜142 — Minister manual model_switch
 # =============================================================================
 
 # --- TC-DMR-100〜103: FR-05 model_switch判定 ---
@@ -588,7 +588,7 @@ load_adapter_with() {
     [[ "$result" == *"same_cost_group"* ]]
 }
 
-@test "TC-DMR-111: FR-06 CLI跨ぎ — bloom=5, codex足軽" {
+@test "TC-DMR-111: FR-06 CLI跨ぎ — bloom=5, codex市民" {
     load_adapter_with "${TEST_TMP}/settings_with_tiers.yaml"
     # bloom=5, current=spark(chatgpt_pro) → 推奨=sonnet(claude_max) = cross_cost_group
     result=$(get_switch_recommendation "gpt-5.3-codex-spark" 5)
@@ -631,14 +631,14 @@ load_adapter_with() {
 
 # --- TC-DMR-130〜131: NFR-03 CLI互換性 ---
 
-@test "TC-DMR-130: NFR-03 model_switchはClaude足軽のみ有効" {
+@test "TC-DMR-130: NFR-03 model_switchはClaude市民のみ有効" {
     load_adapter_with "${TEST_TMP}/settings_with_tiers.yaml"
-    # codex足軽: switchは可能だがCLI跨ぎ注意
+    # codex市民: switchは可能だがCLI跨ぎ注意
     result=$(can_model_switch "codex")
     [ "$result" = "limited" ]
 }
 
-@test "TC-DMR-131: NFR-03 Claude足軽はfull switch可能" {
+@test "TC-DMR-131: NFR-03 Claude市民はfull switch可能" {
     load_adapter_with "${TEST_TMP}/settings_with_tiers.yaml"
     result=$(can_model_switch "claude")
     [ "$result" = "full" ]
@@ -667,35 +667,35 @@ load_adapter_with() {
 }
 
 # =============================================================================
-# Phase 3: TC-DMR-200〜224 — Gunshi Bloom analysis layer
+# Phase 3: TC-DMR-200〜224 — Priest Bloom analysis layer
 # =============================================================================
 
-# --- TC-DMR-200〜203: FR-07 gunshi_analysis.yaml スキーマ ---
+# --- TC-DMR-200〜203: FR-07 priest_analysis.yaml スキーマ ---
 
 @test "TC-DMR-200: FR-07 正常YAML — 全フィールド定義" {
     load_adapter_with "${TEST_TMP}/settings_with_tiers.yaml"
-    run validate_gunshi_analysis "${TEST_TMP}/analysis_valid.yaml"
+    run validate_priest_analysis "${TEST_TMP}/analysis_valid.yaml"
     [ "$status" -eq 0 ]
     [ "$output" = "valid" ]
 }
 
 @test "TC-DMR-201: FR-07 #48フィールド省略 — パースエラーなし" {
     load_adapter_with "${TEST_TMP}/settings_with_tiers.yaml"
-    run validate_gunshi_analysis "${TEST_TMP}/analysis_no48.yaml"
+    run validate_priest_analysis "${TEST_TMP}/analysis_no48.yaml"
     [ "$status" -eq 0 ]
     [ "$output" = "valid" ]
 }
 
 @test "TC-DMR-202: FR-07 bloom_level範囲外(0,7) — バリデーションエラー" {
     load_adapter_with "${TEST_TMP}/settings_with_tiers.yaml"
-    run validate_gunshi_analysis "${TEST_TMP}/analysis_bad_bloom.yaml"
+    run validate_priest_analysis "${TEST_TMP}/analysis_bad_bloom.yaml"
     [ "$status" -eq 1 ]
     [[ "$output" == *"bloom_level"* ]]
 }
 
 @test "TC-DMR-203: FR-07 confidence範囲外(-1, 2.0) — バリデーションエラー" {
     load_adapter_with "${TEST_TMP}/settings_with_tiers.yaml"
-    run validate_gunshi_analysis "${TEST_TMP}/analysis_bad_confidence.yaml"
+    run validate_priest_analysis "${TEST_TMP}/analysis_bad_confidence.yaml"
     [ "$status" -eq 1 ]
     [[ "$output" == *"confidence"* ]]
 }
@@ -737,7 +737,7 @@ load_adapter_with() {
 
 @test "TC-DMR-214: FR-08 should_trigger_bloom_analysis fallback引数" {
     load_adapter_with "${TEST_TMP}/settings_bloom_auto.yaml"
-    # gunshi_available=no → fallback to Phase 2
+    # priest_available=no → fallback to Phase 2
     result=$(should_trigger_bloom_analysis "auto" "false" "no")
     [ "$result" = "fallback" ]
 }
@@ -921,30 +921,30 @@ print(len(doc.get('history', [])))
 #       pane_target が空 → 最初の候補を即返す動作になる（設計どおり）。
 #       tmux統合はE2Eテストで検証する。
 
-@test "TC-FAM-001: 完全一致の足軽が存在 → ashigaru1 を返す（Spark）" {
+@test "TC-FAM-001: 完全一致の市民が存在 → citizen1 を返す（Spark）" {
     load_adapter_with "${TEST_TMP}/settings_mixed_cli.yaml"
     result=$(find_agent_for_model "gpt-5.3-codex-spark")
-    [ "$result" = "ashigaru1" ]
+    [ "$result" = "citizen1" ]
 }
 
-@test "TC-FAM-002: Sonnet足軽が存在 → ashigaru4 を返す" {
+@test "TC-FAM-002: Sonnet市民が存在 → citizen4 を返す" {
     load_adapter_with "${TEST_TMP}/settings_mixed_cli.yaml"
     result=$(find_agent_for_model "claude-sonnet-4-6")
-    [ "$result" = "ashigaru4" ]
+    [ "$result" = "citizen4" ]
 }
 
-@test "TC-FAM-003: Opus足軽が存在 → ashigaru6 を返す" {
+@test "TC-FAM-003: Opus市民が存在 → citizen6 を返す" {
     load_adapter_with "${TEST_TMP}/settings_mixed_cli.yaml"
     result=$(find_agent_for_model "claude-opus-4-6")
-    [ "$result" = "ashigaru6" ]
+    [ "$result" = "citizen6" ]
 }
 
-@test "TC-FAM-004: 対応モデルの足軽がない + 他の足軽が存在 → フォールバック（いずれかの足軽）" {
+@test "TC-FAM-004: 対応モデルの市民がない + 他の市民が存在 → フォールバック（いずれかの市民）" {
     load_adapter_with "${TEST_TMP}/settings_mixed_cli.yaml"
     result=$(find_agent_for_model "gpt-5.1-codex-max")
-    # 完全一致なし → フォールバックとして番号最小の足軽を返す
+    # 完全一致なし → フォールバックとして番号最小の市民を返す
     [ -n "$result" ]
-    [[ "$result" =~ ^ashigaru[0-9]+$ ]]
+    [[ "$result" =~ ^citizen[0-9]+$ ]]
 }
 
 @test "TC-FAM-005: 引数なし → exit code 1" {
@@ -959,24 +959,24 @@ print(len(doc.get('history', [])))
     [ "$status" -eq 1 ]
 }
 
-@test "TC-FAM-007: 複数の同モデル足軽 → 番号最小を返す（ashigaru1）" {
+@test "TC-FAM-007: 複数の同モデル市民 → 番号最小を返す（citizen1）" {
     load_adapter_with "${TEST_TMP}/settings_all_spark.yaml"
     result=$(find_agent_for_model "gpt-5.3-codex-spark")
-    [ "$result" = "ashigaru1" ]
+    [ "$result" = "citizen1" ]
 }
 
 @test "TC-FAM-008: capability_tiersなし設定でも動作する（後方互換）" {
     load_adapter_with "${TEST_TMP}/settings_no_tiers.yaml"
-    # no_tiersでもagents定義がある場合はSpark足軽を探して返す
+    # no_tiersでもagents定義がある場合はSpark市民を探して返す
     result=$(find_agent_for_model "gpt-5.3-codex-spark")
-    [ "$result" = "ashigaru1" ]
+    [ "$result" = "citizen1" ]
 }
 
-@test "TC-FAM-009: 足軽のみ対象（karo, gunshiは除外される）" {
+@test "TC-FAM-009: 市民のみ対象（minister, priestは除外される）" {
     load_adapter_with "${TEST_TMP}/settings_mixed_cli.yaml"
-    # karo, gunshiのモデルを指定 → ashiguruの中に一致なし → フォールバックor先頭
+    # minister, priestのモデルを指定 → citizenの中に一致なし → フォールバックor先頭
     result=$(find_agent_for_model "claude-sonnet-4-5-20250929")
-    # karo (claude-sonnet-4-5-20250929) は候補に入らない
-    # 他のashiguruにもこのモデルがないのでフォールバック
-    [[ "$result" =~ ^ashigaru[0-9]+$ ]]
+    # minister (claude-sonnet-4-5-20250929) は候補に入らない
+    # 他のcitizenにもこのモデルがないのでフォールバック
+    [[ "$result" =~ ^citizen[0-9]+$ ]]
 }

@@ -8,14 +8,14 @@
 # Environment variables:
 #   MOCK_CLI_TYPE          — claude | codex (default: claude)
 #   MOCK_PROCESSING_DELAY  — seconds to simulate processing (default: 2)
-#   MOCK_AGENT_ID          — agent identifier (e.g., karo, ashigaru1)
+#   MOCK_AGENT_ID          — agent identifier (e.g., minister, citizen1)
 #   MOCK_PROJECT_ROOT      — project root with queue/ directory
 #
 # State machine:
 #   IDLE → (input received) → BUSY → (processing done) → IDLE
 #
 # Usage:
-#   MOCK_AGENT_ID=ashigaru1 MOCK_CLI_TYPE=claude MOCK_PROJECT_ROOT=/tmp/e2e mock_cli.sh
+#   MOCK_AGENT_ID=citizen1 MOCK_CLI_TYPE=claude MOCK_PROJECT_ROOT=/tmp/e2e mock_cli.sh
 # ═══════════════════════════════════════════════════════════════
 
 set -euo pipefail
@@ -102,9 +102,9 @@ process_task() {
     fi
     if [ -f "$inbox_write_script" ]; then
         # Determine report target based on role
-        local report_target="karo"
-        if [ "$MOCK_AGENT_ID" = "karo" ]; then
-            report_target="shogun"
+        local report_target="minister"
+        if [ "$MOCK_AGENT_ID" = "minister" ]; then
+            report_target="king"
         fi
         SCRIPT_DIR="$MOCK_PROJECT_ROOT" bash "$inbox_write_script" "$report_target" \
             "${MOCK_AGENT_ID}号、任務完了。報告YAML確認されたし。" \
@@ -159,8 +159,8 @@ except:
 
     if echo "$msg_types" | grep -q "cmd_new"; then
         echo "[mock] cmd_new detected"
-        if [ "$MOCK_AGENT_ID" = "karo" ]; then
-            karo_decompose_cmd
+        if [ "$MOCK_AGENT_ID" = "minister" ]; then
+            minister_decompose_cmd
         fi
     fi
 
@@ -185,13 +185,13 @@ handle_clear() {
     show_prompt "$MOCK_CLI_TYPE"
 }
 
-# ─── Karo-specific: decompose cmd into subtasks ───
-# When karo receives a cmd_new, it reads shogun_to_karo.yaml,
-# creates task YAMLs for ashigaru, and sends inbox notifications.
-karo_decompose_cmd() {
-    local cmd_file="$MOCK_PROJECT_ROOT/queue/shogun_to_karo.yaml"
+# ─── Minister-specific: decompose cmd into subtasks ───
+# When minister receives a cmd_new, it reads king_to_minister.yaml,
+# creates task YAMLs for citizen, and sends inbox notifications.
+minister_decompose_cmd() {
+    local cmd_file="$MOCK_PROJECT_ROOT/queue/king_to_minister.yaml"
     if [ ! -f "$cmd_file" ]; then
-        echo "[mock/karo] No cmd file found"
+        echo "[mock/minister] No cmd file found"
         return 1
     fi
 
@@ -202,11 +202,11 @@ karo_decompose_cmd() {
     cmd_id=$(yaml_read "$cmd_file" "id") || cmd_id=$(yaml_read "$cmd_file" "commands.0.id") || cmd_id="cmd_unknown"
     cmd_description=$(yaml_read "$cmd_file" "description") || cmd_description=$(yaml_read "$cmd_file" "commands.0.description") || cmd_description="Unknown task"
 
-    echo "[mock/karo] Decomposing cmd: $cmd_id"
+    echo "[mock/minister] Decomposing cmd: $cmd_id"
     sleep "$MOCK_PROCESSING_DELAY"
 
-    # Create subtask for ashigaru1
-    local subtask_file="$MOCK_PROJECT_ROOT/queue/tasks/ashigaru1.yaml"
+    # Create subtask for citizen1
+    local subtask_file="$MOCK_PROJECT_ROOT/queue/tasks/citizen1.yaml"
     local subtask_id="subtask_${cmd_id}_a"
     cat > "$subtask_file" <<EOF
 task:
@@ -214,23 +214,23 @@ task:
   parent_cmd: "$cmd_id"
   type: implementation
   description: |
-    Subtask decomposed from $cmd_id by karo mock.
+    Subtask decomposed from $cmd_id by minister mock.
     Original: $cmd_description
   status: assigned
   timestamp: "$(date '+%Y-%m-%dT%H:%M:%S')"
 EOF
 
-    echo "[mock/karo] Created subtask: $subtask_id for ashigaru1"
+    echo "[mock/minister] Created subtask: $subtask_id for citizen1"
 
-    # Send task_assigned to ashigaru1 via inbox_write
+    # Send task_assigned to citizen1 via inbox_write
     local inbox_write_script="$MOCK_PROJECT_ROOT/scripts/inbox_write.sh"
     if [ ! -f "$inbox_write_script" ]; then
         inbox_write_script="$MOCK_SCRIPT_DIR/../../scripts/inbox_write.sh"
     fi
     if [ -f "$inbox_write_script" ]; then
-        bash "$inbox_write_script" "ashigaru1" \
-            "タスクYAMLを読んで作業開始せよ。" "task_assigned" "karo" 2>/dev/null || true
-        echo "[mock/karo] Sent task_assigned to ashigaru1"
+        bash "$inbox_write_script" "citizen1" \
+            "タスクYAMLを読んで作業開始せよ。" "task_assigned" "minister" 2>/dev/null || true
+        echo "[mock/minister] Sent task_assigned to citizen1"
     fi
 
     STATE="idle"
@@ -291,9 +291,9 @@ while IFS= read -r input || true; do
             show_prompt "$MOCK_CLI_TYPE"
             ;;
         cmd_new*)
-            # Karo-specific: decompose cmd
-            if [ "$MOCK_AGENT_ID" = "karo" ]; then
-                karo_decompose_cmd
+            # Minister-specific: decompose cmd
+            if [ "$MOCK_AGENT_ID" = "minister" ]; then
+                minister_decompose_cmd
             fi
             show_prompt "$MOCK_CLI_TYPE"
             ;;

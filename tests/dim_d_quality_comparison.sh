@@ -3,7 +3,7 @@
 # Usage: bash tests/dim_d_quality_comparison.sh
 #
 # 同一L5タスクを Bloom非対応モデル(Haiku 4.5) と 対応モデル(Sonnet 4.6) に実行させ、
-# Gunshi(Opus 4.6)が品質を採点して差を証明する。
+# Priest(Opus 4.6)が品質を採点して差を証明する。
 #
 # 合格基準:
 #   Sonnet 4.6 の score >= 70 (L5基準: 3案+根拠つき推奨)
@@ -49,17 +49,17 @@ print(f"claude CLI: {claude_cmd}")
 # ─────────────────────────────────────────────
 # L5タスク定義
 # ─────────────────────────────────────────────
-L5_TASK = """マルチエージェントシステムで「アイドル足軽への動的タスク割り当て」を実装したい。
+L5_TASK = """マルチエージェントシステムで「アイドル市民への動的タスク割り当て」を実装したい。
 以下の3案を比較し、最善案を根拠とともに推奨せよ。
 
-【案A】ポーリング方式: 家老が1秒ごとに全足軽のステータスファイルを確認し、
+【案A】ポーリング方式: 大臣が1秒ごとに全市民のステータスファイルを確認し、
        アイドルを検出したらタスクを送信する。
 
-【案B】イベント駆動方式: 足軽がタスク完了時にinbox_writeで「完了通知」を送り、
-       家老は通知を受けてから次のタスクを送信する。
+【案B】イベント駆動方式: 市民がタスク完了時にinbox_writeで「完了通知」を送り、
+       大臣は通知を受けてから次のタスクを送信する。
 
 【案C】優先キュー方式: タスクにBloomレベルを付与し、対応モデルを持つ
-       アイドル足軽の中から最低コストの足軽を選んで割り当てる。
+       アイドル市民の中から最低コストの市民を選んで割り当てる。
 
 各案について: (1)実装コスト, (2)レスポンス速度, (3)拡張性, (4)障害耐性 を評価し、
 最善案を選んでその理由を論じよ。"""
@@ -103,7 +103,7 @@ def evaluate(response, model_label, timeout=90):
     if not response:
         return {"score": 0, "error": "no response"}
     prompt = EVALUATOR_PROMPT_TEMPLATE + response[:3000]
-    print(f"\n[Gunshi/Opus評価] {model_label}の回答を採点中...", flush=True)
+    print(f"\n[Priest/Opus評価] {model_label}の回答を採点中...", flush=True)
     raw = run_model('claude-opus-4-6', prompt, timeout=timeout)
     if not raw:
         return {"score": 0, "error": "evaluator failed"}
@@ -131,7 +131,7 @@ sonnet_response = run_model('claude-sonnet-4-6', L5_TASK)
 if sonnet_response:
     print(f"  出力 ({len(sonnet_response)} chars): {sonnet_response[:200]}...")
 
-print("\n── Step 3/3: Gunshi (Opus 4.6) が両者を採点 ──")
+print("\n── Step 3/3: Priest (Opus 4.6) が両者を採点 ──")
 haiku_eval  = evaluate(haiku_response,  "Haiku 4.5")
 sonnet_eval = evaluate(sonnet_response, "Sonnet 4.6")
 

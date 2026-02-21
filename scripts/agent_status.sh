@@ -154,8 +154,8 @@ if [[ -x "$PYTHON" ]]; then
     PYTHON_AVAILABLE=true
 fi
 
-# Agent definitions (from shutsujin_departure.sh)
-AGENTS=("karo" "ashigaru1" "ashigaru2" "ashigaru3" "ashigaru4" "ashigaru5" "ashigaru6" "ashigaru7" "gunshi")
+# Agent definitions (from departure.sh)
+AGENTS=("minister" "citizen1" "citizen2" "citizen3" "citizen4" "citizen5" "citizen6" "citizen7" "priest")
 
 # pane-base-index
 PANE_BASE=$(tmux show-options -gv pane-base-index 2>/dev/null || echo 0)

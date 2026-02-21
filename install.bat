@@ -1,10 +1,10 @@
 @echo off
 chcp 65001 >nul 2>&1
-title multi-agent-shogun Installer
+title multi-agent-kagkag-kingdom Installer
 
 echo.
 echo   +============================================================+
-echo   ^|  [SHOGUN] multi-agent-shogun - WSL Installer                ^|
+echo   ^|  [KAGKAG] multi-agent-kagkag-kingdom - WSL Installer                ^|
 echo   ^|           WSL2 + Ubuntu セットアップ                       ^|
 echo   +============================================================+
 echo.
@@ -126,11 +126,11 @@ echo   ^|                                                            ^|
 echo   ^|  First time only / 初回のみ:                               ^|
 echo   ^|    1. Set username and password when prompted              ^|
 echo   ^|       ユーザー名とパスワードを設定                        ^|
-echo   ^|    2. cd /mnt/c/tools/feature-shogun                      ^|
+echo   ^|    2. cd /mnt/c/tools/multi-agent-kagkag-kingdom                      ^|
 echo   ^|    3. ./first_setup.sh                                    ^|
 echo   ^|                                                            ^|
 echo   ^|  Every time you use / 使うたびに:                          ^|
-echo   ^|    cd /mnt/c/tools/feature-shogun                          ^|
+echo   ^|    cd /mnt/c/tools/multi-agent-kagkag-kingdom                          ^|
 echo   ^|    ./shutsujin_departure.sh                                ^|
 echo   ^|                                                            ^|
 echo   +------------------------------------------------------------+

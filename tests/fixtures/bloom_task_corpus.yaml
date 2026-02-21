@@ -76,7 +76,7 @@ bloom_tasks:
       config/settings.yaml の bloom_routing を "off" から "auto" に変えると
       現在の実装では何が起きるか（または起きないか）を説明せよ。
     expected_output_type: explanation
-    verifiable_condition: "explanation states: currently nothing happens, karo.md not wired, Phase 2-4 not integrated"
+    verifiable_condition: "explanation states: currently nothing happens, minister.md not wired, Phase 2-4 not integrated"
     difficulty: medium
     notes: "現状の実装理解を確認。「変えても動かない」が正解。"
 
@@ -142,11 +142,11 @@ bloom_tasks:
     bloom_level: 4
     category: analyze
     description: |
-      現在の instructions/karo.md を分析し、bloom_routing が "auto" に設定されても
+      現在の instructions/minister.md を分析し、bloom_routing が "auto" に設定されても
       動的モデルルーティングが機能しない理由を特定せよ。
       具体的に: どの関数呼び出しが欠けているか、どのファイルに追加が必要か。
     expected_output_type: gap_analysis
-    verifiable_condition: "identifies: get_recommended_model() not called, find_agent_for_model() missing, karo.md task distribution step"
+    verifiable_condition: "identifies: get_recommended_model() not called, find_agent_for_model() missing, minister.md task distribution step"
     difficulty: medium
     notes: "設計ギャップの分析。L4の典型的タスク。"
 
@@ -186,8 +186,8 @@ bloom_tasks:
     bloom_level: 5
     category: evaluate
     description: |
-      VPS での Bloom routing テスト用に ashigaru1-3=Codex-Spark, ashigaru4-5=Sonnet,
-      ashigaru6-7=Opus の混合CLI設定を提案しているが、この設計の妥当性を評価せよ。
+      VPS での Bloom routing テスト用に citizen1-3=Codex-Spark, citizen4-5=Sonnet,
+      citizen6-7=Opus の混合CLI設定を提案しているが、この設計の妥当性を評価せよ。
       以下の観点を含めること:
       (1) 各Bloomレベルに対するカバレッジ (2) 並列処理能力 (3) コスト効率
       (4) 改善案があれば提案せよ
@@ -250,9 +250,9 @@ bloom_tasks:
     bloom_level: 6
     category: create
     description: |
-      multi-agent-shogun に「タスク→Bloom自動分類→最適モデル選択→実行→品質評価→
+      multi-agent-king に「タスク→Bloom自動分類→最適モデル選択→実行→品質評価→
       選定基準更新」の自律改善ループを追加するとしたら、
-      既存の karo.md / gunshi.md / cli_adapter.sh の拡張として
+      既存の minister.md / priest.md / cli_adapter.sh の拡張として
       どのようなアーキテクチャが最も適切か設計せよ。
       特に: (1) 各コンポーネントの責務分担 (2) フィードバックデータの永続化
       (3) ループが悪化方向に学習しないためのガードレール設計を含めること。

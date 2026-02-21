@@ -10,14 +10,14 @@ bash scripts/inbox_write.sh <target_agent> "<message>" <type> <from>
 
 Examples:
 ```bash
-# Shogun → Karo
-bash scripts/inbox_write.sh karo "cmd_048を書いた。実行せよ。" cmd_new shogun
+# King → Minister
+bash scripts/inbox_write.sh minister "cmd_048を書いた。実行せよ。" cmd_new king
 
-# Ashigaru → Karo
-bash scripts/inbox_write.sh karo "足軽5号、任務完了。報告YAML確認されたし。" report_received ashigaru5
+# Citizen → Minister
+bash scripts/inbox_write.sh minister "市民5号、任務完了。報告YAML確認されたし。" report_received citizen5
 
-# Karo → Ashigaru
-bash scripts/inbox_write.sh ashigaru3 "タスクYAMLを読んで作業開始せよ。" task_assigned karo
+# Minister → Citizen
+bash scripts/inbox_write.sh citizen3 "タスクYAMLを読んで作業開始せよ。" task_assigned minister
 ```
 
 Delivery is handled by `inbox_watcher.sh` (infrastructure layer).
@@ -34,9 +34,9 @@ Two layers:
 The nudge is minimal: `inboxN` (e.g. `inbox3` = 3 unread). That's it.
 **Agent reads the inbox file itself.** Message content never travels through tmux — only a short wake-up signal.
 
-Safety note (shogun):
-- If the Shogun pane is active (the Lord is typing), `inbox_watcher.sh` must not inject keystrokes. It should use tmux `display-message` only.
-- Escalation keystrokes (`Escape×2`, `/clear`, `C-u`) must be suppressed for shogun to avoid clobbering human input.
+Safety note (king):
+- If the King pane is active (the Lord is typing), `inbox_watcher.sh` must not inject keystrokes. It should use tmux `display-message` only.
+- Escalation keystrokes (`Escape×2`, `/clear`, `C-u`) must be suppressed for king to avoid clobbering human input.
 
 Special cases (CLI commands sent via `tmux send-keys`):
 - `type: clear_command` → sends `/clear` + Enter via send-keys
@@ -61,10 +61,10 @@ Read-cost controls:
 | Elapsed | Action | Trigger |
 |---------|--------|---------|
 | 0〜2 min | Standard pty nudge | Normal delivery |
-| 2〜4 min | Escape×2 + nudge | Cursor position bug workaround |
+| 2〜4 min | Escape×2 + nudge | Cursor position bug worministerund |
 | 4 min+ | `/clear` sent (max once per 5 min) | Force session reset + YAML re-read |
 
-## Inbox Processing Protocol (karo/ashigaru/gunshi)
+## Inbox Processing Protocol (minister/citizen/priest)
 
 When you receive `inboxN` (e.g. `inbox3`):
 1. `Read queue/inbox/{your_id}.yaml`
@@ -85,10 +85,10 @@ you will be stuck idle until the escalation sends `/clear` (~4 min).
 
 ## Redo Protocol
 
-When Karo determines a task needs to be redone:
+When Minister determines a task needs to be redone:
 
-1. Karo writes new task YAML with new task_id (e.g., `subtask_097d` → `subtask_097d2`), adds `redo_of` field
-2. Karo sends `clear_command` type inbox message (NOT `task_assigned`)
+1. Minister writes new task YAML with new task_id (e.g., `subtask_097d` → `subtask_097d2`), adds `redo_of` field
+2. Minister sends `clear_command` type inbox message (NOT `task_assigned`)
 3. inbox_watcher delivers `/clear` to the agent → session reset
 4. Agent recovers via Session Start procedure, reads new task YAML, starts fresh
 
@@ -98,9 +98,9 @@ Race condition is eliminated: `/clear` wipes old context. Agent re-reads YAML wi
 
 | Direction | Method | Reason |
 |-----------|--------|--------|
-| Ashigaru/Gunshi → Karo | Report YAML + inbox_write | File-based notification |
-| Karo → Shogun/Lord | dashboard.md update only | **inbox to shogun FORBIDDEN** — prevents interrupting Lord's input |
-| Karo → Gunshi | YAML + inbox_write | Strategic task delegation |
+| Citizen/Priest → Minister | Report YAML + inbox_write | File-based notification |
+| Minister → King/Lord | dashboard.md update only | **inbox to king FORBIDDEN** — prevents interrupting Lord's input |
+| Minister → Priest | YAML + inbox_write | Strategic task delegation |
 | Top → Down | YAML + inbox_write | Standard wake-up |
 
 ## File Operation Rule
@@ -119,10 +119,10 @@ bash scripts/inbox_write.sh <target> "<message>" <type> <from>
 
 ### Report Notification Protocol
 
-After writing report YAML, notify Karo:
+After writing report YAML, notify Minister:
 
 ```bash
-bash scripts/inbox_write.sh karo "足軽{N}号、任務完了でござる。報告書を確認されよ。" report_received ashigaru{N}
+bash scripts/inbox_write.sh minister "市民{N}号、任務完了でござる。報告書を確認されよ。" report_received citizen{N}
 ```
 
 That's it. No state checking, no retry, no delivery verification.

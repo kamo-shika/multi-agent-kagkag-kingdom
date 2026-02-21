@@ -3,7 +3,7 @@
 YAML Slimming Utility
 
 Removes completed/archived items from YAML queue files to maintain performance.
-- For Karo: Archives done/cancelled commands from shogun_to_karo.yaml
+- For Karo: Archives done/cancelled commands from king_to_minister.yaml
 - For all agents: Archives read: true messages from inbox files
 """
 
@@ -41,17 +41,17 @@ def get_timestamp():
     return datetime.now().strftime('%Y%m%d%H%M%S')
 
 
-def slim_shogun_to_karo():
-    """Archive done/cancelled commands from shogun_to_karo.yaml."""
+def slim_king_to_minister():
+    """Archive done/cancelled commands from king_to_minister.yaml."""
     queue_dir = Path(__file__).resolve().parent.parent / 'queue'
     archive_dir = queue_dir / 'archive'
-    shogun_file = queue_dir / 'shogun_to_karo.yaml'
+    king_file = queue_dir / 'king_to_minister.yaml'
 
-    if not shogun_file.exists():
-        print(f"Warning: {shogun_file} not found", file=sys.stderr)
+    if not king_file.exists():
+        print(f"Warning: {king_file} not found", file=sys.stderr)
         return True
 
-    data = load_yaml(shogun_file)
+    data = load_yaml(king_file)
     # Support both 'commands' and 'queue' keys for backwards compatibility
     key = 'commands' if 'commands' in data else 'queue'
     if not data or key not in data:
@@ -79,7 +79,7 @@ def slim_shogun_to_karo():
 
     # Write archived commands to timestamped file
     archive_timestamp = get_timestamp()
-    archive_file = archive_dir / f'shogun_to_karo_{archive_timestamp}.yaml'
+    archive_file = archive_dir / f'king_to_minister_{archive_timestamp}.yaml'
 
     archive_data = {key: archived}
     if not save_yaml(archive_file, archive_data):
@@ -87,8 +87,8 @@ def slim_shogun_to_karo():
 
     # Update main file with active commands only
     data[key] = active
-    if not save_yaml(shogun_file, data):
-        print(f"Error: Failed to update {shogun_file}, but archive was created", file=sys.stderr)
+    if not save_yaml(king_file, data):
+        print(f"Error: Failed to update {king_file}, but archive was created", file=sys.stderr)
         return False
 
     print(f"Archived {len(archived)} commands to {archive_file.name}", file=sys.stderr)
@@ -160,9 +160,9 @@ def main():
     archive_dir = Path(__file__).resolve().parent.parent / 'queue' / 'archive'
     archive_dir.mkdir(parents=True, exist_ok=True)
 
-    # Process shogun_to_karo if this is Karo
-    if agent_id == 'karo':
-        if not slim_shogun_to_karo():
+    # Process king_to_minister if this is Karo
+    if agent_id == 'minister':
+        if not slim_king_to_minister():
             sys.exit(1)
 
     # Process inbox for all agents

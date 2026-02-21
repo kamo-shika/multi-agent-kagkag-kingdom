@@ -77,28 +77,28 @@ EOFYAML
 }
 
 # Build Claude Code instruction files
-build_instruction_file "claude" "shogun" "shogun.md"
-build_instruction_file "claude" "karo" "karo.md"
-build_instruction_file "claude" "ashigaru" "ashigaru.md"
-build_instruction_file "claude" "gunshi" "gunshi.md"
+build_instruction_file "claude" "king" "king.md"
+build_instruction_file "claude" "minister" "minister.md"
+build_instruction_file "claude" "citizen" "citizen.md"
+build_instruction_file "claude" "priest" "priest.md"
 
 # Build Codex instruction files
-build_instruction_file "codex" "shogun" "codex-shogun.md"
-build_instruction_file "codex" "karo" "codex-karo.md"
-build_instruction_file "codex" "ashigaru" "codex-ashigaru.md"
-build_instruction_file "codex" "gunshi" "codex-gunshi.md"
+build_instruction_file "codex" "king" "codex-king.md"
+build_instruction_file "codex" "minister" "codex-minister.md"
+build_instruction_file "codex" "citizen" "codex-citizen.md"
+build_instruction_file "codex" "priest" "codex-priest.md"
 
 # Build Copilot instruction files
-build_instruction_file "copilot" "shogun" "copilot-shogun.md"
-build_instruction_file "copilot" "karo" "copilot-karo.md"
-build_instruction_file "copilot" "ashigaru" "copilot-ashigaru.md"
-build_instruction_file "copilot" "gunshi" "copilot-gunshi.md"
+build_instruction_file "copilot" "king" "copilot-king.md"
+build_instruction_file "copilot" "minister" "copilot-minister.md"
+build_instruction_file "copilot" "citizen" "copilot-citizen.md"
+build_instruction_file "copilot" "priest" "copilot-priest.md"
 
 # Build Kimi K2 instruction files
-build_instruction_file "kimi" "shogun" "kimi-shogun.md"
-build_instruction_file "kimi" "karo" "kimi-karo.md"
-build_instruction_file "kimi" "ashigaru" "kimi-ashigaru.md"
-build_instruction_file "kimi" "gunshi" "kimi-gunshi.md"
+build_instruction_file "kimi" "king" "kimi-king.md"
+build_instruction_file "kimi" "minister" "kimi-minister.md"
+build_instruction_file "kimi" "citizen" "kimi-citizen.md"
+build_instruction_file "kimi" "priest" "kimi-priest.md"
 
 # ============================================================
 # AGENTS.md generation (Codex auto-load file)
@@ -120,10 +120,10 @@ generate_agents_md() {
     sed \
         -e 's|CLAUDE\.md|AGENTS.md|g' \
         -e 's|CLAUDE\.local\.md|AGENTS.override.md|g' \
-        -e 's|instructions/shogun\.md|instructions/generated/codex-shogun.md|g' \
-        -e 's|instructions/karo\.md|instructions/generated/codex-karo.md|g' \
-        -e 's|instructions/ashigaru\.md|instructions/generated/codex-ashigaru.md|g' \
-        -e 's|instructions/gunshi\.md|instructions/generated/codex-gunshi.md|g' \
+        -e 's|instructions/king\.md|instructions/generated/codex-king.md|g' \
+        -e 's|instructions/minister\.md|instructions/generated/codex-minister.md|g' \
+        -e 's|instructions/citizen\.md|instructions/generated/codex-citizen.md|g' \
+        -e 's|instructions/priest\.md|instructions/generated/codex-priest.md|g' \
         -e 's|~/.claude/|~/.codex/|g' \
         -e 's|\.claude\.json|.codex/config.toml|g' \
         -e 's|\.mcp\.json|config.toml (mcp_servers section)|g' \
@@ -156,10 +156,10 @@ generate_copilot_instructions() {
     sed \
         -e 's|CLAUDE\.md|copilot-instructions.md|g' \
         -e 's|CLAUDE\.local\.md|copilot-instructions.local.md|g' \
-        -e 's|instructions/shogun\.md|instructions/generated/copilot-shogun.md|g' \
-        -e 's|instructions/karo\.md|instructions/generated/copilot-karo.md|g' \
-        -e 's|instructions/ashigaru\.md|instructions/generated/copilot-ashigaru.md|g' \
-        -e 's|instructions/gunshi\.md|instructions/generated/copilot-gunshi.md|g' \
+        -e 's|instructions/king\.md|instructions/generated/copilot-king.md|g' \
+        -e 's|instructions/minister\.md|instructions/generated/copilot-minister.md|g' \
+        -e 's|instructions/citizen\.md|instructions/generated/copilot-citizen.md|g' \
+        -e 's|instructions/priest\.md|instructions/generated/copilot-priest.md|g' \
         -e 's|~/.claude/|~/.copilot/|g' \
         -e 's|\.claude\.json|.copilot/config.json|g' \
         -e 's|\.mcp\.json|.copilot/mcp-config.json|g' \
@@ -194,10 +194,10 @@ generate_kimi_instructions() {
     sed \
         -e 's|CLAUDE\.md|agents/default/system.md|g' \
         -e 's|CLAUDE\.local\.md|agents/default/system.local.md|g' \
-        -e 's|instructions/shogun\.md|instructions/generated/kimi-shogun.md|g' \
-        -e 's|instructions/karo\.md|instructions/generated/kimi-karo.md|g' \
-        -e 's|instructions/ashigaru\.md|instructions/generated/kimi-ashigaru.md|g' \
-        -e 's|instructions/gunshi\.md|instructions/generated/kimi-gunshi.md|g' \
+        -e 's|instructions/king\.md|instructions/generated/kimi-king.md|g' \
+        -e 's|instructions/minister\.md|instructions/generated/kimi-minister.md|g' \
+        -e 's|instructions/citizen\.md|instructions/generated/kimi-citizen.md|g' \
+        -e 's|instructions/priest\.md|instructions/generated/kimi-priest.md|g' \
         -e 's|~/.claude/|~/.kimi/|g' \
         -e 's|\.claude\.json|.kimi/config.json|g' \
         -e 's|\.mcp\.json|.kimi/mcp.json|g' \
@@ -210,8 +210,8 @@ generate_kimi_instructions() {
     cat > "$agent_yaml_path" <<'EOFYAML'
 # Kimi K2 Agent Configuration
 # Auto-generated by build_instructions.sh — do not edit manually
-name: multi-agent-shogun
-description: "Kimi K2 CLI agent for multi-agent-shogun system"
+name: multi-agent-kagkag-kingdom
+description: "Kimi K2 CLI agent for multi-agent-kagkag-kingdom system"
 model: moonshot-k2.5
 system_prompt_file: system.md
 tools:

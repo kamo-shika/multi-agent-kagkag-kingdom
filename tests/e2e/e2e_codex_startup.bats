@@ -57,48 +57,48 @@ dump_watcher_log() {
 # ═══════════════════════════════════════════════════════════════
 
 @test "E2E-008-A: Codex startup prompt triggers task processing via inbox_watcher" {
-    local ashigaru1_pane
-    ashigaru1_pane=$(pane_target 1)
+    local citizen1_pane
+    citizen1_pane=$(pane_target 1)
 
     # 1. Respawn pane with codex mock (clean restart)
-    tmux respawn-pane -k -t "$ashigaru1_pane" \
-        "MOCK_CLI_TYPE=codex MOCK_AGENT_ID=ashigaru1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
+    tmux respawn-pane -k -t "$citizen1_pane" \
+        "MOCK_CLI_TYPE=codex MOCK_AGENT_ID=citizen1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
     sleep 2
-    tmux set-option -p -t "$ashigaru1_pane" @agent_cli "codex"
+    tmux set-option -p -t "$citizen1_pane" @agent_cli "codex"
 
     # 2. Place assigned task YAML
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru1_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru1.yaml"
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen1_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen1.yaml"
 
     # 3. Send task_assigned message via inbox_write
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "karo"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "minister"
 
     # 4. Start inbox_watcher with codex CLI type
     local watcher_pid log_file
-    watcher_pid=$(start_inbox_watcher "ashigaru1" 1 "codex")
-    log_file="/tmp/e2e_inbox_watcher_ashigaru1_$$.log"
+    watcher_pid=$(start_inbox_watcher "citizen1" 1 "codex")
+    log_file="/tmp/e2e_inbox_watcher_citizen1_$$.log"
 
     # 5. Wait for task to complete
     #    Flow: watcher detects unread → sends /new → polls idle (5s) → sends startup prompt → mock processes
     #    Expected time: ~10-15s
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru1.yaml" "task.status" "done" 45
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen1.yaml" "task.status" "done" 45
     if [ "$status" -ne 0 ]; then
-        dump_pane_for_debug "$ashigaru1_pane" "ashigaru1-codex"
+        dump_pane_for_debug "$citizen1_pane" "citizen1-codex"
         dump_watcher_log "$log_file"
     fi
     assert_success
 
     # 6. Verify report was written
-    run wait_for_file "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" 10
+    run wait_for_file "$E2E_QUEUE/queue/reports/citizen1_report.yaml" 10
     assert_success
 
     # 7. Verify report content
-    assert_yaml_field "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" "status" "done"
-    assert_yaml_field "$E2E_QUEUE/queue/reports/ashigaru1_report.yaml" "task_id" "subtask_test_001a"
+    assert_yaml_field "$E2E_QUEUE/queue/reports/citizen1_report.yaml" "status" "done"
+    assert_yaml_field "$E2E_QUEUE/queue/reports/citizen1_report.yaml" "task_id" "subtask_test_001a"
 
     # 8. Verify startup prompt appeared in pane output (scrollback search)
-    run wait_for_pane_text "$ashigaru1_pane" "Startup prompt received" 10
+    run wait_for_pane_text "$citizen1_pane" "Startup prompt received" 10
     if [ "$status" -ne 0 ]; then
         dump_watcher_log "$log_file"
     fi
@@ -114,37 +114,37 @@ dump_watcher_log() {
 # ═══════════════════════════════════════════════════════════════
 
 @test "E2E-008-B: Codex watcher log shows startup prompt sent and nudge skipped" {
-    local ashigaru1_pane
-    ashigaru1_pane=$(pane_target 1)
+    local citizen1_pane
+    citizen1_pane=$(pane_target 1)
 
     # 1. Respawn pane with codex mock
-    tmux respawn-pane -k -t "$ashigaru1_pane" \
-        "MOCK_CLI_TYPE=codex MOCK_AGENT_ID=ashigaru1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
+    tmux respawn-pane -k -t "$citizen1_pane" \
+        "MOCK_CLI_TYPE=codex MOCK_AGENT_ID=citizen1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
     sleep 2
-    tmux set-option -p -t "$ashigaru1_pane" @agent_cli "codex"
+    tmux set-option -p -t "$citizen1_pane" @agent_cli "codex"
 
     # 2. Place task and send inbox message
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru1_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru1.yaml"
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen1_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen1.yaml"
 
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "karo"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "minister"
 
     # 3. Start watcher (codex CLI type)
     local watcher_pid log_file
-    watcher_pid=$(start_inbox_watcher "ashigaru1" 1 "codex")
-    log_file="/tmp/e2e_inbox_watcher_ashigaru1_$$.log"
+    watcher_pid=$(start_inbox_watcher "citizen1" 1 "codex")
+    log_file="/tmp/e2e_inbox_watcher_citizen1_$$.log"
 
     # 4. Wait for processing
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru1.yaml" "task.status" "done" 45
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen1.yaml" "task.status" "done" 45
     if [ "$status" -ne 0 ]; then
-        dump_pane_for_debug "$ashigaru1_pane" "ashigaru1-codex-B"
+        dump_pane_for_debug "$citizen1_pane" "citizen1-codex-B"
         dump_watcher_log "$log_file"
     fi
     assert_success
 
     # 5. Check watcher log for startup prompt delivery
-    run grep "Sending startup prompt to ashigaru1" "$log_file"
+    run grep "Sending startup prompt to citizen1" "$log_file"
     if [ "$status" -ne 0 ]; then
         dump_watcher_log "$log_file"
     fi
@@ -168,31 +168,31 @@ dump_watcher_log() {
 # ═══════════════════════════════════════════════════════════════
 
 @test "E2E-008-C: Claude agent does not receive startup prompt after /clear" {
-    local ashigaru1_pane
-    ashigaru1_pane=$(pane_target 1)
+    local citizen1_pane
+    citizen1_pane=$(pane_target 1)
 
     # 1. Respawn pane with claude mock
-    tmux respawn-pane -k -t "$ashigaru1_pane" \
-        "MOCK_CLI_TYPE=claude MOCK_AGENT_ID=ashigaru1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
+    tmux respawn-pane -k -t "$citizen1_pane" \
+        "MOCK_CLI_TYPE=claude MOCK_AGENT_ID=citizen1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
     sleep 2
-    tmux set-option -p -t "$ashigaru1_pane" @agent_cli "claude"
+    tmux set-option -p -t "$citizen1_pane" @agent_cli "claude"
 
     # 2. Place task and send inbox message
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru1_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru1.yaml"
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen1_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen1.yaml"
 
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "karo"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "タスクYAMLを読んで作業開始せよ。" "task_assigned" "minister"
 
     # 3. Start watcher (claude CLI type)
     local watcher_pid log_file
-    watcher_pid=$(start_inbox_watcher "ashigaru1" 1 "claude")
-    log_file="/tmp/e2e_inbox_watcher_ashigaru1_$$.log"
+    watcher_pid=$(start_inbox_watcher "citizen1" 1 "claude")
+    log_file="/tmp/e2e_inbox_watcher_citizen1_$$.log"
 
     # 4. Wait for task to complete (claude uses /clear → auto-recovery via mock handle_clear)
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru1.yaml" "task.status" "done" 45
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen1.yaml" "task.status" "done" 45
     if [ "$status" -ne 0 ]; then
-        dump_pane_for_debug "$ashigaru1_pane" "ashigaru1-claude-C"
+        dump_pane_for_debug "$citizen1_pane" "citizen1-claude-C"
         dump_watcher_log "$log_file"
     fi
     assert_success
@@ -218,32 +218,32 @@ dump_watcher_log() {
 # wiping the startup prompt each time.
 
 @test "E2E-008-D: Codex clear_command sends /new exactly once, not multiple times" {
-    local ashigaru1_pane
-    ashigaru1_pane=$(pane_target 1)
+    local citizen1_pane
+    citizen1_pane=$(pane_target 1)
 
     # 1. Respawn pane with codex mock
-    tmux respawn-pane -k -t "$ashigaru1_pane" \
-        "MOCK_CLI_TYPE=codex MOCK_AGENT_ID=ashigaru1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
+    tmux respawn-pane -k -t "$citizen1_pane" \
+        "MOCK_CLI_TYPE=codex MOCK_AGENT_ID=citizen1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
     sleep 2
-    tmux set-option -p -t "$ashigaru1_pane" @agent_cli "codex"
+    tmux set-option -p -t "$citizen1_pane" @agent_cli "codex"
 
     # 2. Place assigned task YAML
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru1_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru1.yaml"
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen1_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen1.yaml"
 
-    # 3. Send clear_command via inbox_write (simulates karo sending /clear)
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "/clear" "clear_command" "karo"
+    # 3. Send clear_command via inbox_write (simulates minister sending /clear)
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "/clear" "clear_command" "minister"
 
     # 4. Start inbox_watcher with codex CLI type
     local watcher_pid log_file
-    watcher_pid=$(start_inbox_watcher "ashigaru1" 1 "codex")
-    log_file="/tmp/e2e_inbox_watcher_ashigaru1_$$.log"
+    watcher_pid=$(start_inbox_watcher "citizen1" 1 "codex")
+    log_file="/tmp/e2e_inbox_watcher_citizen1_$$.log"
 
     # 5. Wait for task to complete
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru1.yaml" "task.status" "done" 60
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen1.yaml" "task.status" "done" 60
     if [ "$status" -ne 0 ]; then
-        dump_pane_for_debug "$ashigaru1_pane" "ashigaru1-codex-D"
+        dump_pane_for_debug "$citizen1_pane" "citizen1-codex-D"
         dump_watcher_log "$log_file"
     fi
     assert_success
@@ -259,7 +259,7 @@ dump_watcher_log() {
 
     # 7. Verify startup prompt was sent exactly once
     local startup_count
-    startup_count=$(grep -c "Sending startup prompt to ashigaru1" "$log_file" 2>/dev/null || true)
+    startup_count=$(grep -c "Sending startup prompt to citizen1" "$log_file" 2>/dev/null || true)
     if [ "$startup_count" -ne 1 ]; then
         echo "Expected 1 startup prompt, got $startup_count" >&2
         dump_watcher_log "$log_file"
@@ -285,36 +285,36 @@ dump_watcher_log() {
 # ═══════════════════════════════════════════════════════════════
 
 @test "E2E-008-E: Multiple rapid clear_commands to Codex result in single /new" {
-    local ashigaru1_pane
-    ashigaru1_pane=$(pane_target 1)
+    local citizen1_pane
+    citizen1_pane=$(pane_target 1)
 
     # 1. Respawn pane with codex mock
-    tmux respawn-pane -k -t "$ashigaru1_pane" \
-        "MOCK_CLI_TYPE=codex MOCK_AGENT_ID=ashigaru1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
+    tmux respawn-pane -k -t "$citizen1_pane" \
+        "MOCK_CLI_TYPE=codex MOCK_AGENT_ID=citizen1 MOCK_PROCESSING_DELAY=1 MOCK_PROJECT_ROOT=$E2E_QUEUE bash $PROJECT_ROOT/tests/e2e/mock_cli.sh"
     sleep 2
-    tmux set-option -p -t "$ashigaru1_pane" @agent_cli "codex"
+    tmux set-option -p -t "$citizen1_pane" @agent_cli "codex"
 
     # 2. Place assigned task YAML
-    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_ashigaru1_basic.yaml" \
-       "$E2E_QUEUE/queue/tasks/ashigaru1.yaml"
+    cp "$PROJECT_ROOT/tests/e2e/fixtures/task_citizen1_basic.yaml" \
+       "$E2E_QUEUE/queue/tasks/citizen1.yaml"
 
-    # 3. Send THREE clear_commands in rapid succession (simulates karo bug)
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "/clear" "clear_command" "karo"
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "/clear" "clear_command" "karo"
-    bash "$E2E_QUEUE/scripts/inbox_write.sh" "ashigaru1" \
-        "/clear" "clear_command" "karo"
+    # 3. Send THREE clear_commands in rapid succession (simulates minister bug)
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "/clear" "clear_command" "minister"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "/clear" "clear_command" "minister"
+    bash "$E2E_QUEUE/scripts/inbox_write.sh" "citizen1" \
+        "/clear" "clear_command" "minister"
 
     # 4. Start inbox_watcher with codex CLI type
     local watcher_pid log_file
-    watcher_pid=$(start_inbox_watcher "ashigaru1" 1 "codex")
-    log_file="/tmp/e2e_inbox_watcher_ashigaru1_$$.log"
+    watcher_pid=$(start_inbox_watcher "citizen1" 1 "codex")
+    log_file="/tmp/e2e_inbox_watcher_citizen1_$$.log"
 
     # 5. Wait for task to complete
-    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/ashigaru1.yaml" "task.status" "done" 60
+    run wait_for_yaml_value "$E2E_QUEUE/queue/tasks/citizen1.yaml" "task.status" "done" 60
     if [ "$status" -ne 0 ]; then
-        dump_pane_for_debug "$ashigaru1_pane" "ashigaru1-codex-E"
+        dump_pane_for_debug "$citizen1_pane" "citizen1-codex-E"
         dump_watcher_log "$log_file"
     fi
     assert_success

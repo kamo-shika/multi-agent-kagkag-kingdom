@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # bloom_classification_accuracy.sh — Dim B: Bloom分類精度テスト
-# Usage: bash tests/bloom_classification_accuracy.sh [--corpus path] [--output path] [--agent ashigaru_id]
+# Usage: bash tests/bloom_classification_accuracy.sh [--corpus path] [--output path] [--agent citizen_id]
 #
-# bloom_task_corpus.yaml の各タスクをGunshiに送り、
+# bloom_task_corpus.yaml の各タスクをPriestに送り、
 # 分類されたBloomレベルを expected_bloom と比較して精度を測定する。
 #
 # 合格基準:
@@ -14,8 +14,8 @@ set -euo pipefail
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CORPUS="${1:-${PROJECT_ROOT}/tests/fixtures/bloom_task_corpus.yaml}"
 OUTPUT="${PROJECT_ROOT}/queue/reports/bloom_accuracy_report.yaml"
-GUNSHI_TASK_FILE="${PROJECT_ROOT}/queue/tasks/gunshi.yaml"
-GUNSHI_REPORT="${PROJECT_ROOT}/queue/reports/gunshi_bloom_test.yaml"
+GUNSHI_TASK_FILE="${PROJECT_ROOT}/queue/tasks/priest.yaml"
+GUNSHI_REPORT="${PROJECT_ROOT}/queue/reports/priest_bloom_test.yaml"
 
 # 引数パース
 while [[ $# -gt 0 ]]; do
@@ -46,8 +46,8 @@ from datetime import datetime
 corpus_path = "${CORPUS}"
 output_path = "${OUTPUT}"
 project_root = "${PROJECT_ROOT}"
-gunshi_task_file = "${GUNSHI_TASK_FILE}"
-gunshi_report_file = "${GUNSHI_REPORT}"
+priest_task_file = "${GUNSHI_TASK_FILE}"
+priest_report_file = "${GUNSHI_REPORT}"
 
 with open(corpus_path) as f:
     corpus = yaml.safe_load(f)
@@ -70,7 +70,7 @@ for task in tasks:
 
     print(f"[{task_id}] expected=L{expected} | {description[:60]}...")
 
-    # Gunshiへのタスクを書く
+    # Priestへのタスクを書く
     task_yaml = {
         'task': {
             'task_id': f'bloom_test_{task_id}',
@@ -86,17 +86,17 @@ for task in tasks:
         }
     }
 
-    with open(gunshi_task_file, 'w') as f:
+    with open(priest_task_file, 'w') as f:
         yaml.dump(task_yaml, f, allow_unicode=True)
 
-    # Gunshiへinbox_write（テスト実行中はシミュレート）
+    # Priestへinbox_write（テスト実行中はシミュレート）
     # 実際のVPS E2Eではここでinbox_writeを呼んで回答待ちになる
     # このスクリプトは「バッチ判定」モード: direct CLIコールでシミュレート
 
-    # *** VPS実行時: 以下のコメントアウトを外してGunshiに実際に問い合わせる ***
-    # inbox_cmd = f"bash {project_root}/scripts/inbox_write.sh gunshi 'bloom_test_{task_id} の判定を実施せよ' task_assigned karo"
+    # *** VPS実行時: 以下のコメントアウトを外してPriestに実際に問い合わせる ***
+    # inbox_cmd = f"bash {project_root}/scripts/inbox_write.sh priest 'bloom_test_{task_id} の判定を実施せよ' task_assigned minister"
     # subprocess.run(inbox_cmd, shell=True, cwd=project_root)
-    # got = wait_for_gunshi_response(task_id)  # 実装が必要
+    # got = wait_for_priest_response(task_id)  # 実装が必要
 
     # *** ローカル検証モード: Claudeに直接問い合わせる（claude CLIが必要）***
     # claude CLIのパスを動的に解決（PATH未設定環境対応）

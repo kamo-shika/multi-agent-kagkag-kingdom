@@ -2,7 +2,7 @@
 # ═══════════════════════════════════════════════════════════════
 # inbox_watcher.sh — メールボックス監視＆起動シグナル配信
 # Usage: bash scripts/inbox_watcher.sh <agent_id> <pane_target> [cli_type]
-# Example: bash scripts/inbox_watcher.sh karo multiagent:0.0 claude
+# Example: bash scripts/inbox_watcher.sh minister multiagent:0.0 claude
 #
 # 設計思想:
 #   メッセージ本体はファイル（inbox YAML）に書く = 確実
@@ -426,10 +426,10 @@ send_cli_command() {
     local effective_cli
     effective_cli=$(get_effective_cli_type)
 
-    # Safety: never inject CLI commands into the shogun pane.
+    # Safety: never inject CLI commands into the king pane.
     # Shogun is controlled by the Lord; keystroke injection can clobber human input.
-    if [ "$AGENT_ID" = "shogun" ]; then
-        echo "[$(date)] [SKIP] shogun: suppressing CLI command injection ($cmd)" >&2
+    if [ "$AGENT_ID" = "king" ]; then
+        echo "[$(date)] [SKIP] king: suppressing CLI command injection ($cmd)" >&2
         return 0
     fi
 
@@ -553,9 +553,9 @@ send_context_reset() {
     local effective_cli
     effective_cli=$(get_effective_cli_type)
 
-    # Safety: never inject CLI commands into the shogun pane.
-    if [ "$AGENT_ID" = "shogun" ]; then
-        echo "[$(date)] [SKIP] shogun: suppressing context reset" >&2
+    # Safety: never inject CLI commands into the king pane.
+    if [ "$AGENT_ID" = "king" ]; then
+        echo "[$(date)] [SKIP] king: suppressing context reset" >&2
         return 0
     fi
 
@@ -676,7 +676,7 @@ pane_is_active() {
 # Function: session_has_client
 # Description: Checks if the tmux session containing PANE_TARGET has at least
 #   one client attached. Used to avoid suppressing send-keys when no human is
-#   watching (e.g. single-pane shogun session where pane_is_active is always true).
+#   watching (e.g. single-pane king session where pane_is_active is always true).
 # Arguments: none (uses global PANE_TARGET)
 # Returns: 0 if at least one client is attached, 1 otherwise
 session_has_client() {
@@ -725,8 +725,8 @@ send_wakeup() {
     # Shogun: if the pane is focused AND a human is attached, never inject keys
     # (it can clobber the Lord's input). Show a tmux message instead.
     # If session is detached, no human is watching — safe to send-keys normally.
-    if [ "$AGENT_ID" = "shogun" ] && pane_is_active && session_has_client; then
-        echo "[$(date)] [DISPLAY] shogun pane is active + attached — showing nudge: inbox${unread_count}" >&2
+    if [ "$AGENT_ID" = "king" ] && pane_is_active && session_has_client; then
+        echo "[$(date)] [DISPLAY] king pane is active + attached — showing nudge: inbox${unread_count}" >&2
         timeout 2 tmux display-message -t "$PANE_TARGET" -d 5000 "inbox${unread_count}" 2>/dev/null || true
         return 0
     fi
@@ -767,9 +767,9 @@ send_wakeup_with_escape() {
     effective_cli=$(get_effective_cli_type)
     local c_ctrl_state="skipped"
 
-    # Safety: never send Escape escalation to shogun. It can wipe the Lord's input.
-    if [ "$AGENT_ID" = "shogun" ]; then
-        echo "[$(date)] [SKIP] shogun: suppressing Escape escalation; sending plain nudge" >&2
+    # Safety: never send Escape escalation to king. It can wipe the Lord's input.
+    if [ "$AGENT_ID" = "king" ]; then
+        echo "[$(date)] [SKIP] king: suppressing Escape escalation; sending plain nudge" >&2
         send_wakeup "$unread_count"
         return 0
     fi
@@ -846,7 +846,7 @@ process_unread() {
         NEW_CONTEXT_SENT=0
         if ! agent_is_busy; then
             # Shogun: only clear input when pane is not active (Lord is away)
-            if [ "$AGENT_ID" = "shogun" ] && pane_is_active; then
+            if [ "$AGENT_ID" = "king" ] && pane_is_active; then
                 : # Lord may be typing — skip C-u
             else
                 timeout 2 tmux send-keys -t "$PANE_TARGET" C-u 2>/dev/null || true
@@ -941,7 +941,7 @@ for s in data.get('specials', []):
         # Send /new or /clear once when task_assigned is first detected,
         # to clear stale context from the previous task.
         # Skip if: (1) already sent this batch, (2) clear_command already handled above,
-        #          (3) agent is shogun (human-controlled).
+        #          (3) agent is king (human-controlled).
         if [ "$has_task_assigned" = "1" ] && [ "$NEW_CONTEXT_SENT" -eq 0 ] && [ "$clear_seen" -eq 0 ]; then
             send_context_reset
             NEW_CONTEXT_SENT=1
@@ -1019,7 +1019,7 @@ for s in data.get('specials', []):
         # Only send C-u when agent is idle — during Working it would be disruptive.
         if ! agent_is_busy; then
             # Shogun: only clear input when pane is not active (Lord is away)
-            if [ "$AGENT_ID" = "shogun" ] && pane_is_active; then
+            if [ "$AGENT_ID" = "king" ] && pane_is_active; then
                 : # Lord may be typing — skip C-u
             else
                 timeout 2 tmux send-keys -t "$PANE_TARGET" C-u 2>/dev/null || true

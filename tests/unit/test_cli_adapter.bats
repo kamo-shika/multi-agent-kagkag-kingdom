@@ -29,31 +29,31 @@ YAML
 cli:
   default: claude
   agents:
-    shogun:
+    king:
       type: claude
       model: opus
-    karo:
+    minister:
       type: claude
       model: opus
-    ashigaru1:
+    citizen1:
       type: claude
       model: sonnet
-    ashigaru2:
+    citizen2:
       type: claude
       model: sonnet
-    ashigaru3:
+    citizen3:
       type: claude
       model: sonnet
-    ashigaru4:
+    citizen4:
       type: claude
       model: sonnet
-    ashigaru5:
+    citizen5:
       type: codex
-    ashigaru6:
+    citizen6:
       type: codex
-    ashigaru7:
+    citizen7:
       type: copilot
-    ashigaru8:
+    citizen8:
       type: copilot
 YAML
 
@@ -62,8 +62,8 @@ YAML
 cli:
   default: claude
   agents:
-    ashigaru5: codex
-    ashigaru7: copilot
+    citizen5: codex
+    citizen7: copilot
 YAML
 
     # 不正CLI名
@@ -71,7 +71,7 @@ YAML
 cli:
   default: claudee
   agents:
-    ashigaru1: invalid_cli
+    citizen1: invalid_cli
 YAML
 
     # codexデフォルト
@@ -96,14 +96,14 @@ YAML
 cli:
   default: claude
   agents:
-    ashigaru1:
+    citizen1:
       type: claude
       model: haiku
-    ashigaru5:
+    citizen5:
       type: codex
       model: gpt-5
 models:
-  karo: sonnet
+  minister: sonnet
 YAML
 
     # kimi CLI settings
@@ -111,10 +111,10 @@ YAML
 cli:
   default: claude
   agents:
-    ashigaru3:
+    citizen3:
       type: kimi
       model: k2.5
-    ashigaru4:
+    citizen4:
       type: kimi
 YAML
 
@@ -144,73 +144,73 @@ load_adapter_with() {
 
 @test "get_cli_type: cliセクションなし → claude (後方互換)" {
     load_adapter_with "${TEST_TMP}/settings_none.yaml"
-    result=$(get_cli_type "shogun")
+    result=$(get_cli_type "king")
     [ "$result" = "claude" ]
 }
 
 @test "get_cli_type: claude only設定 → claude" {
     load_adapter_with "${TEST_TMP}/settings_claude_only.yaml"
-    result=$(get_cli_type "ashigaru1")
+    result=$(get_cli_type "citizen1")
     [ "$result" = "claude" ]
 }
 
-@test "get_cli_type: mixed設定 shogun → claude" {
+@test "get_cli_type: mixed設定 king → claude" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(get_cli_type "shogun")
+    result=$(get_cli_type "king")
     [ "$result" = "claude" ]
 }
 
-@test "get_cli_type: mixed設定 ashigaru5 → codex" {
+@test "get_cli_type: mixed設定 citizen5 → codex" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(get_cli_type "ashigaru5")
+    result=$(get_cli_type "citizen5")
     [ "$result" = "codex" ]
 }
 
-@test "get_cli_type: mixed設定 ashigaru7 → copilot" {
+@test "get_cli_type: mixed設定 citizen7 → copilot" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(get_cli_type "ashigaru7")
+    result=$(get_cli_type "citizen7")
     [ "$result" = "copilot" ]
 }
 
-@test "get_cli_type: mixed設定 ashigaru1 → claude (個別設定)" {
+@test "get_cli_type: mixed設定 citizen1 → claude (個別設定)" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(get_cli_type "ashigaru1")
+    result=$(get_cli_type "citizen1")
     [ "$result" = "claude" ]
 }
 
-@test "get_cli_type: 文字列形式 ashigaru5 → codex" {
+@test "get_cli_type: 文字列形式 citizen5 → codex" {
     load_adapter_with "${TEST_TMP}/settings_string_agents.yaml"
-    result=$(get_cli_type "ashigaru5")
+    result=$(get_cli_type "citizen5")
     [ "$result" = "codex" ]
 }
 
-@test "get_cli_type: 文字列形式 ashigaru7 → copilot" {
+@test "get_cli_type: 文字列形式 citizen7 → copilot" {
     load_adapter_with "${TEST_TMP}/settings_string_agents.yaml"
-    result=$(get_cli_type "ashigaru7")
+    result=$(get_cli_type "citizen7")
     [ "$result" = "copilot" ]
 }
 
-@test "get_cli_type: kimi設定 ashigaru3 → kimi" {
+@test "get_cli_type: kimi設定 citizen3 → kimi" {
     load_adapter_with "${TEST_TMP}/settings_kimi.yaml"
-    result=$(get_cli_type "ashigaru3")
+    result=$(get_cli_type "citizen3")
     [ "$result" = "kimi" ]
 }
 
-@test "get_cli_type: kimi設定 ashigaru4 → kimi (モデル指定なし)" {
+@test "get_cli_type: kimi設定 citizen4 → kimi (モデル指定なし)" {
     load_adapter_with "${TEST_TMP}/settings_kimi.yaml"
-    result=$(get_cli_type "ashigaru4")
+    result=$(get_cli_type "citizen4")
     [ "$result" = "kimi" ]
 }
 
 @test "get_cli_type: kimiデフォルト設定 → kimi" {
     load_adapter_with "${TEST_TMP}/settings_kimi_default.yaml"
-    result=$(get_cli_type "ashigaru1")
+    result=$(get_cli_type "citizen1")
     [ "$result" = "kimi" ]
 }
 
 @test "get_cli_type: 未定義agent → default継承" {
     load_adapter_with "${TEST_TMP}/settings_codex_default.yaml"
-    result=$(get_cli_type "ashigaru3")
+    result=$(get_cli_type "citizen3")
     [ "$result" = "codex" ]
 }
 
@@ -220,49 +220,49 @@ load_adapter_with() {
     [ "$result" = "claude" ]
 }
 
-# --- 全ashigaru パターン ---
+# --- 全citizen パターン ---
 
-@test "get_cli_type: mixed設定 ashigaru1-8全パターン" {
+@test "get_cli_type: mixed設定 citizen1-8全パターン" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    [ "$(get_cli_type ashigaru1)" = "claude" ]
-    [ "$(get_cli_type ashigaru2)" = "claude" ]
-    [ "$(get_cli_type ashigaru3)" = "claude" ]
-    [ "$(get_cli_type ashigaru4)" = "claude" ]
-    [ "$(get_cli_type ashigaru5)" = "codex" ]
-    [ "$(get_cli_type ashigaru6)" = "codex" ]
-    [ "$(get_cli_type ashigaru7)" = "copilot" ]
-    [ "$(get_cli_type ashigaru8)" = "copilot" ]
+    [ "$(get_cli_type citizen1)" = "claude" ]
+    [ "$(get_cli_type citizen2)" = "claude" ]
+    [ "$(get_cli_type citizen3)" = "claude" ]
+    [ "$(get_cli_type citizen4)" = "claude" ]
+    [ "$(get_cli_type citizen5)" = "codex" ]
+    [ "$(get_cli_type citizen6)" = "codex" ]
+    [ "$(get_cli_type citizen7)" = "copilot" ]
+    [ "$(get_cli_type citizen8)" = "copilot" ]
 }
 
 # --- エラー系 ---
 
 @test "get_cli_type: 不正CLI名 → claude フォールバック" {
     load_adapter_with "${TEST_TMP}/settings_invalid_cli.yaml"
-    result=$(get_cli_type "ashigaru1")
+    result=$(get_cli_type "citizen1")
     [ "$result" = "claude" ]
 }
 
 @test "get_cli_type: 不正default → claude フォールバック" {
     load_adapter_with "${TEST_TMP}/settings_invalid_cli.yaml"
-    result=$(get_cli_type "karo")
+    result=$(get_cli_type "minister")
     [ "$result" = "claude" ]
 }
 
 @test "get_cli_type: 空YAMLファイル → claude" {
     load_adapter_with "${TEST_TMP}/settings_empty.yaml"
-    result=$(get_cli_type "shogun")
+    result=$(get_cli_type "king")
     [ "$result" = "claude" ]
 }
 
 @test "get_cli_type: YAML構文エラー → claude" {
     load_adapter_with "${TEST_TMP}/settings_broken.yaml"
-    result=$(get_cli_type "ashigaru1")
+    result=$(get_cli_type "citizen1")
     [ "$result" = "claude" ]
 }
 
 @test "get_cli_type: 存在しないファイル → claude" {
     load_adapter_with "/nonexistent/path/settings.yaml"
-    result=$(get_cli_type "shogun")
+    result=$(get_cli_type "king")
     [ "$result" = "claude" ]
 }
 
@@ -272,43 +272,43 @@ load_adapter_with() {
 
 @test "build_cli_command: claude + model → claude --model opus --dangerously-skip-permissions" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(build_cli_command "shogun")
+    result=$(build_cli_command "king")
     [ "$result" = "claude --model opus --dangerously-skip-permissions" ]
 }
 
 @test "build_cli_command: codex + default model → codex --model sonnet ..." {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(build_cli_command "ashigaru5")
+    result=$(build_cli_command "citizen5")
     [ "$result" = "codex --model sonnet --dangerously-bypass-approvals-and-sandbox --no-alt-screen" ]
 }
 
 @test "build_cli_command: copilot → copilot --yolo" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(build_cli_command "ashigaru7")
+    result=$(build_cli_command "citizen7")
     [ "$result" = "copilot --yolo" ]
 }
 
 @test "build_cli_command: kimi + model → kimi --yolo --model k2.5" {
     load_adapter_with "${TEST_TMP}/settings_kimi.yaml"
-    result=$(build_cli_command "ashigaru3")
+    result=$(build_cli_command "citizen3")
     [ "$result" = "kimi --yolo --model k2.5" ]
 }
 
 @test "build_cli_command: kimi (モデル指定なし) → kimi --yolo --model k2.5" {
     load_adapter_with "${TEST_TMP}/settings_kimi.yaml"
-    result=$(build_cli_command "ashigaru4")
+    result=$(build_cli_command "citizen4")
     [ "$result" = "kimi --yolo --model k2.5" ]
 }
 
 @test "build_cli_command: cliセクションなし → claude フォールバック" {
     load_adapter_with "${TEST_TMP}/settings_none.yaml"
-    result=$(build_cli_command "ashigaru1")
+    result=$(build_cli_command "citizen1")
     [[ "$result" == claude*--dangerously-skip-permissions ]]
 }
 
 @test "build_cli_command: settings読取失敗 → claude フォールバック" {
     load_adapter_with "/nonexistent/settings.yaml"
-    result=$(build_cli_command "ashigaru1")
+    result=$(build_cli_command "citizen1")
     [[ "$result" == claude*--dangerously-skip-permissions ]]
 }
 
@@ -316,78 +316,78 @@ load_adapter_with() {
 # get_instruction_file テスト
 # =============================================================================
 
-@test "get_instruction_file: shogun + claude → instructions/shogun.md" {
+@test "get_instruction_file: king + claude → instructions/king.md" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(get_instruction_file "shogun")
-    [ "$result" = "instructions/shogun.md" ]
+    result=$(get_instruction_file "king")
+    [ "$result" = "instructions/king.md" ]
 }
 
-@test "get_instruction_file: karo + claude → instructions/karo.md" {
+@test "get_instruction_file: minister + claude → instructions/minister.md" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(get_instruction_file "karo")
-    [ "$result" = "instructions/karo.md" ]
+    result=$(get_instruction_file "minister")
+    [ "$result" = "instructions/minister.md" ]
 }
 
-@test "get_instruction_file: ashigaru1 + claude → instructions/ashigaru.md" {
+@test "get_instruction_file: citizen1 + claude → instructions/citizen.md" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(get_instruction_file "ashigaru1")
-    [ "$result" = "instructions/ashigaru.md" ]
+    result=$(get_instruction_file "citizen1")
+    [ "$result" = "instructions/citizen.md" ]
 }
 
-@test "get_instruction_file: ashigaru5 + codex → instructions/codex-ashigaru.md" {
+@test "get_instruction_file: citizen5 + codex → instructions/codex-citizen.md" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(get_instruction_file "ashigaru5")
-    [ "$result" = "instructions/codex-ashigaru.md" ]
+    result=$(get_instruction_file "citizen5")
+    [ "$result" = "instructions/codex-citizen.md" ]
 }
 
-@test "get_instruction_file: ashigaru7 + copilot → .github/copilot-instructions-ashigaru.md" {
+@test "get_instruction_file: citizen7 + copilot → .github/copilot-instructions-citizen.md" {
     load_adapter_with "${TEST_TMP}/settings_mixed.yaml"
-    result=$(get_instruction_file "ashigaru7")
-    [ "$result" = ".github/copilot-instructions-ashigaru.md" ]
+    result=$(get_instruction_file "citizen7")
+    [ "$result" = ".github/copilot-instructions-citizen.md" ]
 }
 
-@test "get_instruction_file: ashigaru3 + kimi → instructions/generated/kimi-ashigaru.md" {
+@test "get_instruction_file: citizen3 + kimi → instructions/generated/kimi-citizen.md" {
     load_adapter_with "${TEST_TMP}/settings_kimi.yaml"
-    result=$(get_instruction_file "ashigaru3")
-    [ "$result" = "instructions/generated/kimi-ashigaru.md" ]
+    result=$(get_instruction_file "citizen3")
+    [ "$result" = "instructions/generated/kimi-citizen.md" ]
 }
 
-@test "get_instruction_file: shogun + kimi → instructions/generated/kimi-shogun.md" {
+@test "get_instruction_file: king + kimi → instructions/generated/kimi-king.md" {
     load_adapter_with "${TEST_TMP}/settings_kimi_default.yaml"
-    result=$(get_instruction_file "shogun")
-    [ "$result" = "instructions/generated/kimi-shogun.md" ]
+    result=$(get_instruction_file "king")
+    [ "$result" = "instructions/generated/kimi-king.md" ]
 }
 
 @test "get_instruction_file: cli_type引数で明示指定 (codex)" {
     load_adapter_with "${TEST_TMP}/settings_none.yaml"
-    result=$(get_instruction_file "shogun" "codex")
-    [ "$result" = "instructions/codex-shogun.md" ]
+    result=$(get_instruction_file "king" "codex")
+    [ "$result" = "instructions/codex-king.md" ]
 }
 
 @test "get_instruction_file: cli_type引数で明示指定 (copilot)" {
     load_adapter_with "${TEST_TMP}/settings_none.yaml"
-    result=$(get_instruction_file "karo" "copilot")
-    [ "$result" = ".github/copilot-instructions-karo.md" ]
+    result=$(get_instruction_file "minister" "copilot")
+    [ "$result" = ".github/copilot-instructions-minister.md" ]
 }
 
 @test "get_instruction_file: 全CLI × 全role組み合わせ" {
     load_adapter_with "${TEST_TMP}/settings_none.yaml"
     # claude
-    [ "$(get_instruction_file shogun claude)" = "instructions/shogun.md" ]
-    [ "$(get_instruction_file karo claude)" = "instructions/karo.md" ]
-    [ "$(get_instruction_file ashigaru1 claude)" = "instructions/ashigaru.md" ]
+    [ "$(get_instruction_file king claude)" = "instructions/king.md" ]
+    [ "$(get_instruction_file minister claude)" = "instructions/minister.md" ]
+    [ "$(get_instruction_file citizen1 claude)" = "instructions/citizen.md" ]
     # codex
-    [ "$(get_instruction_file shogun codex)" = "instructions/codex-shogun.md" ]
-    [ "$(get_instruction_file karo codex)" = "instructions/codex-karo.md" ]
-    [ "$(get_instruction_file ashigaru3 codex)" = "instructions/codex-ashigaru.md" ]
+    [ "$(get_instruction_file king codex)" = "instructions/codex-king.md" ]
+    [ "$(get_instruction_file minister codex)" = "instructions/codex-minister.md" ]
+    [ "$(get_instruction_file citizen3 codex)" = "instructions/codex-citizen.md" ]
     # copilot
-    [ "$(get_instruction_file shogun copilot)" = ".github/copilot-instructions-shogun.md" ]
-    [ "$(get_instruction_file karo copilot)" = ".github/copilot-instructions-karo.md" ]
-    [ "$(get_instruction_file ashigaru5 copilot)" = ".github/copilot-instructions-ashigaru.md" ]
+    [ "$(get_instruction_file king copilot)" = ".github/copilot-instructions-king.md" ]
+    [ "$(get_instruction_file minister copilot)" = ".github/copilot-instructions-minister.md" ]
+    [ "$(get_instruction_file citizen5 copilot)" = ".github/copilot-instructions-citizen.md" ]
     # kimi
-    [ "$(get_instruction_file shogun kimi)" = "instructions/generated/kimi-shogun.md" ]
-    [ "$(get_instruction_file karo kimi)" = "instructions/generated/kimi-karo.md" ]
-    [ "$(get_instruction_file ashigaru7 kimi)" = "instructions/generated/kimi-ashigaru.md" ]
+    [ "$(get_instruction_file king kimi)" = "instructions/generated/kimi-king.md" ]
+    [ "$(get_instruction_file minister kimi)" = "instructions/generated/kimi-minister.md" ]
+    [ "$(get_instruction_file citizen7 kimi)" = "instructions/generated/kimi-citizen.md" ]
 }
 
 @test "get_instruction_file: 不明なagent_id → 空文字 + return 1" {
@@ -476,45 +476,45 @@ load_adapter_with() {
 # get_agent_model テスト
 # =============================================================================
 
-@test "get_agent_model: cliセクションなし shogun → opus (デフォルト)" {
+@test "get_agent_model: cliセクションなし king → opus (デフォルト)" {
     load_adapter_with "${TEST_TMP}/settings_none.yaml"
-    result=$(get_agent_model "shogun")
+    result=$(get_agent_model "king")
     [ "$result" = "opus" ]
 }
 
-@test "get_agent_model: cliセクションなし karo → sonnet (デフォルト)" {
+@test "get_agent_model: cliセクションなし minister → sonnet (デフォルト)" {
     load_adapter_with "${TEST_TMP}/settings_none.yaml"
-    result=$(get_agent_model "karo")
+    result=$(get_agent_model "minister")
     [ "$result" = "sonnet" ]
 }
 
-@test "get_agent_model: cliセクションなし ashigaru1 → sonnet (デフォルト)" {
+@test "get_agent_model: cliセクションなし citizen1 → sonnet (デフォルト)" {
     load_adapter_with "${TEST_TMP}/settings_none.yaml"
-    result=$(get_agent_model "ashigaru1")
+    result=$(get_agent_model "citizen1")
     [ "$result" = "sonnet" ]
 }
 
-@test "get_agent_model: cliセクションなし ashigaru5 → sonnet (デフォルト)" {
+@test "get_agent_model: cliセクションなし citizen5 → sonnet (デフォルト)" {
     load_adapter_with "${TEST_TMP}/settings_none.yaml"
-    result=$(get_agent_model "ashigaru5")
+    result=$(get_agent_model "citizen5")
     [ "$result" = "sonnet" ]
 }
 
-@test "get_agent_model: YAML指定 ashigaru1 → haiku (オーバーライド)" {
+@test "get_agent_model: YAML指定 citizen1 → haiku (オーバーライド)" {
     load_adapter_with "${TEST_TMP}/settings_with_models.yaml"
-    result=$(get_agent_model "ashigaru1")
+    result=$(get_agent_model "citizen1")
     [ "$result" = "haiku" ]
 }
 
-@test "get_agent_model: modelsセクションから取得 karo → sonnet" {
+@test "get_agent_model: modelsセクションから取得 minister → sonnet" {
     load_adapter_with "${TEST_TMP}/settings_with_models.yaml"
-    result=$(get_agent_model "karo")
+    result=$(get_agent_model "minister")
     [ "$result" = "sonnet" ]
 }
 
-@test "get_agent_model: codexエージェントのmodel ashigaru5 → gpt-5" {
+@test "get_agent_model: codexエージェントのmodel citizen5 → gpt-5" {
     load_adapter_with "${TEST_TMP}/settings_with_models.yaml"
-    result=$(get_agent_model "ashigaru5")
+    result=$(get_agent_model "citizen5")
     [ "$result" = "gpt-5" ]
 }
 
@@ -524,26 +524,26 @@ load_adapter_with() {
     [ "$result" = "sonnet" ]
 }
 
-@test "get_agent_model: kimi CLI ashigaru3 → k2.5 (YAML指定)" {
+@test "get_agent_model: kimi CLI citizen3 → k2.5 (YAML指定)" {
     load_adapter_with "${TEST_TMP}/settings_kimi.yaml"
-    result=$(get_agent_model "ashigaru3")
+    result=$(get_agent_model "citizen3")
     [ "$result" = "k2.5" ]
 }
 
-@test "get_agent_model: kimi CLI ashigaru4 → k2.5 (デフォルト)" {
+@test "get_agent_model: kimi CLI citizen4 → k2.5 (デフォルト)" {
     load_adapter_with "${TEST_TMP}/settings_kimi.yaml"
-    result=$(get_agent_model "ashigaru4")
+    result=$(get_agent_model "citizen4")
     [ "$result" = "k2.5" ]
 }
 
-@test "get_agent_model: kimi CLI shogun → k2.5 (デフォルト)" {
+@test "get_agent_model: kimi CLI king → k2.5 (デフォルト)" {
     load_adapter_with "${TEST_TMP}/settings_kimi_default.yaml"
-    result=$(get_agent_model "shogun")
+    result=$(get_agent_model "king")
     [ "$result" = "k2.5" ]
 }
 
-@test "get_agent_model: kimi CLI karo → k2.5 (デフォルト)" {
+@test "get_agent_model: kimi CLI minister → k2.5 (デフォルト)" {
     load_adapter_with "${TEST_TMP}/settings_kimi_default.yaml"
-    result=$(get_agent_model "karo")
+    result=$(get_agent_model "minister")
     [ "$result" = "k2.5" ]
 }

@@ -170,10 +170,10 @@ get_instruction_file() {
     local role
 
     case "$agent_id" in
-        shogun)    role="shogun" ;;
-        karo)      role="karo" ;;
-        gunshi)    role="gunshi" ;;
-        ashigaru*) role="ashigaru" ;;
+        king)      role="king" ;;
+        minister)  role="minister" ;;
+        priest)    role="priest" ;;
+        citizen*)  role="citizen" ;;
         *)
             echo "" >&2
             return 1
@@ -258,18 +258,18 @@ get_agent_model() {
         kimi)
             # Kimi CLI用デフォルトモデル
             case "$agent_id" in
-                shogun|karo)    echo "k2.5" ;;
-                ashigaru*)      echo "k2.5" ;;
+                king|minister)  echo "k2.5" ;;
+                citizen*)       echo "k2.5" ;;
                 *)              echo "k2.5" ;;
             esac
             ;;
         *)
             # Claude Code/Codex/Copilot用デフォルトモデル
             case "$agent_id" in
-                shogun)         echo "opus" ;;
-                karo)           echo "sonnet" ;;
-                gunshi)         echo "opus" ;;
-                ashigaru*)      echo "sonnet" ;;
+                king)           echo "opus" ;;
+                minister)       echo "sonnet" ;;
+                priest)         echo "opus" ;;
+                citizen*)       echo "sonnet" ;;
                 *)              echo "sonnet" ;;
             esac
             ;;
@@ -593,7 +593,7 @@ can_model_switch() {
 
 # =============================================================================
 # Dynamic Model Routing — Issue #53 Phase 3
-# gunshi_analysis.yamlバリデーション、Bloom分析トリガー判定
+# priest_analysis.yamlバリデーション、Bloom分析トリガー判定
 # =============================================================================
 
 # get_bloom_routing()
@@ -631,11 +631,11 @@ except Exception:
     esac
 }
 
-# validate_gunshi_analysis(yaml_path)
-# gunshi_analysis.yamlのスキーマバリデーション
+# validate_priest_analysis(yaml_path)
+# priest_analysis.yamlのスキーマバリデーション
 # 出力: "valid" (正常) | エラーメッセージ (異常)
 # 終了コード: 0 (正常) | 1 (異常)
-validate_gunshi_analysis() {
+validate_priest_analysis() {
     local yaml_path="$1"
 
     if [[ ! -f "$yaml_path" ]]; then
@@ -700,19 +700,19 @@ print('valid')
     fi
 }
 
-# should_trigger_bloom_analysis(bloom_routing, bloom_analysis_required, gunshi_available)
+# should_trigger_bloom_analysis(bloom_routing, bloom_analysis_required, priest_available)
 # Bloom分析をトリガーすべきか判定
 # $1: bloom_routing — "auto" | "manual" | "off"
 # $2: bloom_analysis_required — "true" | "false" (タスクYAMLのフラグ)
-# $3: gunshi_available — "yes" | "no" (省略時 "yes")
+# $3: priest_available — "yes" | "no" (省略時 "yes")
 # 出力: "yes" | "no" | "fallback"
 should_trigger_bloom_analysis() {
     local bloom_routing="${1:-off}"
     local bloom_analysis_required="${2:-false}"
-    local gunshi_available="${3:-yes}"
+    local priest_available="${3:-yes}"
 
-    # 軍師未起動 → Phase 2フォールバック
-    if [[ "$gunshi_available" = "no" ]]; then
+    # 司祭未起動 → Phase 2フォールバック
+    if [[ "$priest_available" = "no" ]]; then
         echo "fallback"
         return 0
     fi
@@ -898,20 +898,20 @@ except Exception:
 }
 
 # find_agent_for_model() — Issue #53 Phase 2
-# 指定モデルを使用している空き足軽を探す。
+# 指定モデルを使用している空き市民を探す。
 #
 # 核心設計原則（殿の方針）:
 #   - ビジーペイン: 絶対に触らない（作業中断・データ消失リスク）
 #   - アイドルペイン: CLI切り替えOK（停止→起動）
 #   例) Codex 5.3が必要でClaude CodeしかアイドルならClaude Codeに降格OK
 #   例) Claude Codeが必要でCodexしかアイドルなら、CodexをkillしてClaude Codeを起動OK
-#   CLI切り替えの実際の再起動処理はkaro.mdが担当（この関数はagent_idを返すのみ）
+#   CLI切り替えの実際の再起動処理はminister.mdが担当（この関数はagent_idを返すのみ）
 #
 # 引数:
 #   $1: recommended_model — get_recommended_model() の返り値
 #
 # 返り値:
-#   空き足軽ID (例: "ashigaru4") — 完全一致またはフォールバック
+#   空き市民ID (例: "citizen4") — 完全一致またはフォールバック
 #   全員ビジー → "QUEUE"
 #   エラー → "" (空文字)
 #
@@ -920,7 +920,7 @@ except Exception:
 #   case "$agent" in
 #     QUEUE) echo "待機キューに積む" ;;
 #     "")    echo "エラー" ;;
-#     *)     echo "足軽: $agent に振る（karo.mdがCLI切り替えを判断）" ;;
+#     *)     echo "市民: $agent に振る（minister.mdがCLI切り替えを判断）" ;;
 #   esac
 find_agent_for_model() {
     local recommended_model="$1"
@@ -944,8 +944,8 @@ try:
 
     results = []
     for agent_id, spec in agents.items():
-        # 足軽のみ対象（karo, gunshi, shogunは除外）
-        if not agent_id.startswith('ashigaru'):
+        # 市民のみ対象（minister, priest, kingは除外）
+        if not agent_id.startswith('citizen'):
             continue
         if not isinstance(spec, dict):
             continue
@@ -953,14 +953,14 @@ try:
         if agent_model == '${recommended_model}':
             results.append(agent_id)
 
-    # 番号順にソート（ashigaru1, ashigaru2, ...）
-    results.sort(key=lambda x: int(x.replace('ashigaru', '')) if x.replace('ashigaru', '').isdigit() else 99)
+    # 番号順にソート（citizen1, citizen2, ...）
+    results.sort(key=lambda x: int(x.replace('citizen', '')) if x.replace('citizen', '').isdigit() else 99)
     print(' '.join(results))
 except Exception:
     pass
 " 2>/dev/null)
 
-    # 候補足軽を順番にチェック（空きを探す）
+    # 候補市民を順番にチェック（空きを探す）
     # agent_status.sh の agent_is_busy_check を再利用
     local agent_status_lib="${CLI_ADAPTER_PROJECT_ROOT}/lib/agent_status.sh"
 
@@ -1001,7 +1001,7 @@ except Exception:
         fi
     done
 
-    # フェーズ2: 完全一致が全員ビジー → 任意のアイドル足軽にフォールバック
+    # フェーズ2: 完全一致が全員ビジー → 任意のアイドル市民にフォールバック
     # 殿の方針: 「Codex 5.3が欲しくて Claude Code しか空いていなければ Claude Code で可」
     # kill/restart は絶対しない。アイドルペインを再利用する。
     local all_agents
@@ -1012,8 +1012,8 @@ try:
     with open('${settings}') as f:
         cfg = yaml.safe_load(f) or {}
     agents = cfg.get('cli', {}).get('agents', {})
-    results = [k for k in agents if k.startswith('ashigaru')]
-    results.sort(key=lambda x: int(x.replace('ashigaru', '')) if x.replace('ashigaru', '').isdigit() else 99)
+    results = [k for k in agents if k.startswith('citizen')]
+    results.sort(key=lambda x: int(x.replace('citizen', '')) if x.replace('citizen', '').isdigit() else 99)
     print(' '.join(results))
 except Exception:
     pass
@@ -1046,15 +1046,15 @@ except Exception:
         fi
     done
 
-    # 全足軽ビジー → キュー待ち
+    # 全市民ビジー → キュー待ち
     echo "QUEUE"
     return 0
 }
 
-# get_ashigaru_ids()
-# settings.yaml の cli.agents から足軽ID一覧を返す（スペース区切り、番号順）
-# フォールバック: "ashigaru1 ashigaru2 ashigaru3 ashigaru4 ashigaru5 ashigaru6 ashigaru7"
-get_ashigaru_ids() {
+# get_citizen_ids()
+# settings.yaml の cli.agents から市民ID一覧を返す（スペース区切り、番号順）
+# フォールバック: "citizen1 citizen2 citizen3 citizen4 citizen5 citizen6 citizen7"
+get_citizen_ids() {
     local settings="${CLI_ADAPTER_SETTINGS:-${CLI_ADAPTER_PROJECT_ROOT}/config/settings.yaml}"
     local result
     result=$("$CLI_ADAPTER_PROJECT_ROOT/.venv/bin/python3" -c "
@@ -1063,8 +1063,8 @@ try:
     with open('${settings}') as f:
         cfg = yaml.safe_load(f) or {}
     agents = cfg.get('cli', {}).get('agents', {})
-    results = [k for k in agents if k.startswith('ashigaru')]
-    results.sort(key=lambda x: int(x.replace('ashigaru', '')) if x.replace('ashigaru', '').isdigit() else 99)
+    results = [k for k in agents if k.startswith('citizen')]
+    results.sort(key=lambda x: int(x.replace('citizen', '')) if x.replace('citizen', '').isdigit() else 99)
     print(' '.join(results))
 except Exception:
     pass
@@ -1072,6 +1072,6 @@ except Exception:
     if [[ -n "$result" ]]; then
         echo "$result"
     else
-        echo "ashigaru1 ashigaru2 ashigaru3 ashigaru4 ashigaru5 ashigaru6 ashigaru7"
+        echo "citizen1 citizen2 citizen3 citizen4 citizen5 citizen6 citizen7"
     fi
 }
