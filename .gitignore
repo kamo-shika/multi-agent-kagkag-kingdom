@@ -26,10 +26,10 @@
 
 # Instructions (core OSS)
 !instructions/
-!instructions/shogun.md
-!instructions/karo.md
-!instructions/ashigaru.md
-!instructions/gunshi.md
+!instructions/king.md
+!instructions/minister.md
+!instructions/citizen.md
+!instructions/priest.md
 
 # Multi-CLI: CLI-specific tool descriptions
 !instructions/cli_specific/
@@ -130,12 +130,12 @@
 !skills/
 !skills/skill-creator/
 !skills/skill-creator/SKILL.md
-!skills/shogun-agent-status/
-!skills/shogun-agent-status/SKILL.md
-!skills/shogun-model-list/
-!skills/shogun-model-list/SKILL.md
-!skills/shogun-bloom-config/
-!skills/shogun-bloom-config/SKILL.md
+!skills/king-agent-status/
+!skills/king-agent-status/SKILL.md
+!skills/king-model-list/
+!skills/king-model-list/SKILL.md
+!skills/king-bloom-config/
+!skills/king-bloom-config/SKILL.md
 
 # Test specs
 !tests/specs/
