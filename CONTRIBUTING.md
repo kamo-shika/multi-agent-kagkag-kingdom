@@ -1,6 +1,6 @@
-# Contributing to multi-agent-shogun
+# Contributing to multi-agent-kagkag-kingdom
 
-Thank you for your interest in contributing to multi-agent-shogun! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to multi-agent-kagkag-kingdom! This document provides guidelines for contributing to the project.
 
 ## Table of Contents
 
@@ -21,8 +21,8 @@ Thank you for your interest in contributing to multi-agent-shogun! This document
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/multi-agent-shogun.git
-   cd multi-agent-shogun
+   git clone https://github.com/YOUR_USERNAME/multi-agent-kagkag-kingdom.git
+   cd multi-agent-kagkag-kingdom
    ```
 3. **Create a feature branch**:
    ```bash
@@ -37,8 +37,8 @@ Thank you for your interest in contributing to multi-agent-shogun! This document
 
 ### Before You Start
 
-- Check existing [Issues](https://github.com/yohey-w/multi-agent-shogun/issues) to avoid duplicate work
-- For major changes, open a [Discussion](https://github.com/yohey-w/multi-agent-shogun/discussions) first
+- Check existing [Issues](https://github.com/yohey-w/multi-agent-kagkag-kingdom/issues) to avoid duplicate work
+- For major changes, open a [Discussion](https://github.com/yohey-w/multi-agent-kagkag-kingdom/discussions) first
 - Read this entire document to understand our conventions and requirements
 
 ---
@@ -48,7 +48,7 @@ Thank you for your interest in contributing to multi-agent-shogun! This document
 Understanding the directory layout will help you navigate the codebase:
 
 ```
-multi-agent-shogun/
+multi-agent-kagkag-kingdom/
 │
 ├── scripts/              # Core utility scripts
 │   ├── inbox_write.sh    # Agent-to-agent messaging (file-based mailbox)
@@ -57,9 +57,9 @@ multi-agent-shogun/
 │   └── build_instructions.sh  # Generate CLI-specific instructions
 │
 ├── instructions/         # Agent behavior definitions
-│   ├── shogun.md         # Shogun (commander) instructions
-│   ├── karo.md           # Karo (manager) instructions
-│   ├── ashigaru.md       # Ashigaru (worker) instructions
+│   ├── king.md         # King (commander) instructions
+│   ├── minister.md           # Minister (manager) instructions
+│   ├── citizen.md       # Citizen (worker) instructions
 │   ├── cli_specific/     # CLI-specific tool descriptions
 │   │   ├── claude_tools.md
 │   │   ├── codex_tools.md
@@ -74,7 +74,7 @@ multi-agent-shogun/
 │   └── integ_*.md        # Integration report templates
 │
 ├── queue/                # Communication and task data
-│   ├── shogun_to_karo.yaml  # Command queue
+│   ├── king_to_minister.yaml  # Command queue
 │   ├── inbox/            # Per-agent mailboxes
 │   ├── tasks/            # Per-worker task assignments
 │   └── reports/          # Completion reports
@@ -193,7 +193,7 @@ All shell scripts must adhere to these standards:
    # Function: send_message
    # Description: Writes a message to an agent's inbox
    # Arguments:
-   #   $1 - target_agent (shogun|karo|ashigaru1-8)
+   #   $1 - target_agent (king|minister|citizen1-8)
    #   $2 - message content
    # Returns: 0 on success, 1 on error
    send_message() {
@@ -228,7 +228,7 @@ All shell scripts must adhere to these standards:
 
 Example:
 ```yaml
-# Task assignment for ashigaru1
+# Task assignment for citizen1
 task:
   task_id: subtask_001
   description: "Research React 19 features"
@@ -255,7 +255,7 @@ The project uses a three-tier testing strategy:
 |-------|------|------|----------|-------------|
 | L1 | Unit | bats | `tests/unit/` | `make test` |
 | L2 | Integration | bats | `tests/integration/` | `make test-int` |
-| L3 | End-to-End | Manual | N/A | Karo executes |
+| L3 | End-to-End | Manual | N/A | Minister executes |
 
 ### SKIP = FAIL Policy
 
@@ -303,9 +303,9 @@ teardown() {
 }
 
 @test "inbox_write.sh creates inbox file" {
-    run bash scripts/inbox_write.sh karo "test message" cmd_new shogun
+    run bash scripts/inbox_write.sh minister "test message" cmd_new king
     [ "$status" -eq 0 ]
-    [ -f "queue/inbox/karo.yaml" ]
+    [ -f "queue/inbox/minister.yaml" ]
 }
 ```
 
@@ -333,7 +333,7 @@ teardown() {
    }
    ```
 
-4. **E2E tests**: Only Karo can execute E2E tests (requires multi-agent control)
+4. **E2E tests**: Only Minister can execute E2E tests (requires multi-agent control)
 
 ---
 
@@ -443,10 +443,10 @@ Any other context about the problem.
 
 ## License
 
-By contributing to multi-agent-shogun, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+By contributing to multi-agent-kagkag-kingdom, you agree that your contributions will be licensed under the [MIT License](LICENSE).
 
 ---
 
 ## Credits
 
-Contributions are recognized in the project README. Thank you for making multi-agent-shogun better!
+Contributions are recognized in the project README. Thank you for making multi-agent-kagkag-kingdom better!

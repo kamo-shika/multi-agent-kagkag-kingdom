@@ -1,16 +1,16 @@
 <div align="center">
 
-# multi-agent-shogun
+# multi-agent-kagkag-kingdom
 
-**Command your AI army like a feudal warlord.**
+**Command your AI army like a medieval king.**
 
-Run 10 AI coding agents in parallel — **Claude Code, OpenAI Codex, GitHub Copilot, Kimi Code** — orchestrated through a samurai-inspired hierarchy with zero coordination overhead.
+Run 10 AI coding agents in parallel — **Claude Code, OpenAI Codex, GitHub Copilot, Kimi Code** — orchestrated through a kingdom-inspired hierarchy with zero coordination overhead.
 
 **Talk Coding, not Vibe Coding. Speak to your phone, AI executes.**
 
-[![GitHub Stars](https://img.shields.io/github/stars/yohey-w/multi-agent-shogun?style=social)](https://github.com/yohey-w/multi-agent-shogun)
+[![GitHub Stars](https://img.shields.io/github/stars/yohey-w/multi-agent-kagkag-kingdom?style=social)](https://github.com/yohey-w/multi-agent-kagkag-kingdom)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![v3.5 Dynamic Model Routing](https://img.shields.io/badge/v3.5-Dynamic_Model_Routing-ff6600?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPuKalTwvdGV4dD48L3N2Zz4=)](https://github.com/yohey-w/multi-agent-shogun)
+[![v3.5 Dynamic Model Routing](https://img.shields.io/badge/v3.5-Dynamic_Model_Routing-ff6600?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPuKalTwvdGV4dD48L3N2Zz4=)](https://github.com/yohey-w/multi-agent-kagkag-kingdom)
 [![Shell](https://img.shields.io/badge/Shell%2FBash-100%25-green)]()
 
 [English](README.md) | [日本語](README_ja.md)
@@ -18,21 +18,21 @@ Run 10 AI coding agents in parallel — **Claude Code, OpenAI Codex, GitHub Copi
 </div>
 
 <p align="center">
-  <img src="images/screenshots/hero/latest-translucent-20260210-190453.png" alt="Latest translucent command session in the Shogun pane" width="940">
+  <img src="images/screenshots/hero/latest-translucent-20260210-190453.png" alt="Latest translucent command session in the King pane" width="940">
 </p>
 
 <p align="center">
-  <img src="images/screenshots/hero/latest-translucent-20260208-084602.png" alt="Quick natural-language command in the Shogun pane" width="420">
-  <img src="images/company-creed-all-panes.png" alt="Karo and Ashigaru panes reacting in parallel" width="520">
+  <img src="images/screenshots/hero/latest-translucent-20260208-084602.png" alt="Quick natural-language command in the King pane" width="420">
+  <img src="images/company-creed-all-panes.png" alt="Minister and Citizen panes reacting in parallel" width="520">
 </p>
 
-<p align="center"><i>One Karo (manager) coordinating 7 Ashigaru (workers) + 1 Gunshi (strategist) — real session, no mock data.</i></p>
+<p align="center"><i>One Minister (manager) coordinating 7 Citizen (workers) + 1 Priest (strategist) — real session, no mock data.</i></p>
 
 ---
 
 ## What is this?
 
-**multi-agent-shogun** is a system that runs multiple AI coding CLI instances simultaneously, orchestrating them like a feudal Japanese army. Supports **Claude Code**, **OpenAI Codex**, **GitHub Copilot**, and **Kimi Code**.
+**multi-agent-kagkag-kingdom** is a system that runs multiple AI coding CLI instances simultaneously, orchestrating them like a medieval fantasy kingdom. Supports **Claude Code**, **OpenAI Codex**, **GitHub Copilot**, and **Kimi Code**.
 
 **Why use it?**
 - One command spawns 7 AI workers + 1 strategist executing in parallel
@@ -45,28 +45,28 @@ Run 10 AI coding agents in parallel — **Claude Code, OpenAI Codex, GitHub Copi
              │
              ▼  Give orders
       ┌─────────────┐
-      │   SHOGUN    │  ← Receives your command, delegates instantly
+      │   KING    │  ← Receives your command, delegates instantly
       └──────┬──────┘
              │  YAML + tmux
       ┌──────▼──────┐
-      │    KARO     │  ← Distributes tasks to workers
+      │    MINISTER     │  ← Distributes tasks to workers
       └──────┬──────┘
              │
     ┌─┬─┬─┬─┴─┬─┬─┬─┬────────┐
-    │1│2│3│4│5│6│7│ GUNSHI │  ← 7 workers + 1 strategist
+    │1│2│3│4│5│6│7│ PRIEST │  ← 7 workers + 1 strategist
     └─┴─┴─┴─┴─┴─┴─┴────────┘
-       ASHIGARU      軍師
+       CITIZEN      司祭
 ```
 
 ---
 
-## Why Shogun?
+## Why King?
 
-Most multi-agent frameworks burn API tokens on coordination. Shogun doesn't.
+Most multi-agent frameworks burn API tokens on coordination. King doesn't.
 
-| | Claude Code `Task` tool | Claude Code Agent Teams | LangGraph | CrewAI | **multi-agent-shogun** |
+| | Claude Code `Task` tool | Claude Code Agent Teams | LangGraph | CrewAI | **multi-agent-kagkag-kingdom** |
 |---|---|---|---|---|---|
-| **Architecture** | Subagents inside one process | Team lead + teammates (JSON mailbox) | Graph-based state machine | Role-based agents | Feudal hierarchy via tmux |
+| **Architecture** | Subagents inside one process | Team lead + teammates (JSON mailbox) | Graph-based state machine | Role-based agents | Kingdom hierarchy via tmux |
 | **Parallelism** | Sequential (one at a time) | Multiple independent sessions | Parallel nodes (v0.2+) | Limited | **8 independent agents** |
 | **Coordination cost** | API calls per Task | Token-heavy (each teammate = separate context) | API + infra (Postgres/Redis) | API + CrewAI platform | **Zero** (YAML + tmux) |
 | **Multi-CLI** | Claude Code only | Claude Code only | Any LLM API | Any LLM API | **4 CLIs** (Claude/Codex/Copilot/Kimi) |
@@ -80,7 +80,7 @@ Most multi-agent frameworks burn API tokens on coordination. Shogun doesn't.
 
 **Full transparency** — Every agent runs in a visible tmux pane. Every instruction, report, and decision is a plain YAML file you can read, diff, and version-control. No black boxes.
 
-**Battle-tested hierarchy** — The Shogun → Karo → Ashigaru chain of command prevents conflicts by design: clear ownership, dedicated files per agent, event-driven communication, no polling.
+**Battle-tested hierarchy** — The King → Minister → Citizen chain of command prevents conflicts by design: clear ownership, dedicated files per agent, event-driven communication, no polling.
 
 ---
 
@@ -99,7 +99,7 @@ Most AI coding tools charge per token. Running 8 Opus-grade agents through the A
 
 ### Multi-CLI Support
 
-Shogun isn't locked to one vendor. The system supports 4 CLI tools, each with unique strengths:
+King isn't locked to one vendor. The system supports 4 CLI tools, each with unique strengths:
 
 | CLI | Key Strength | Default Model |
 |-----|-------------|---------------|
@@ -116,7 +116,7 @@ instructions/
 ├── cli_specific/        # CLI-specific tool descriptions
 │   ├── claude_tools.md  # Claude Code tools & features
 │   └── copilot_tools.md # GitHub Copilot CLI tools & features
-└── roles/               # Role definitions (shogun, karo, ashigaru)
+└── roles/               # Role definitions (king, minister, citizen)
     ↓ build
 CLAUDE.md / AGENTS.md / copilot-instructions.md  ← Generated per CLI
 ```
@@ -129,10 +129,10 @@ One source of truth, zero sync drift. Change a rule once, all CLIs get it.
 
 This is the feature no other framework has.
 
-As Ashigaru execute tasks, they **automatically identify reusable patterns** and propose them as skill candidates. The Karo aggregates these proposals in `dashboard.md`, and you — the Lord — decide what gets promoted to a permanent skill.
+As Citizen execute tasks, they **automatically identify reusable patterns** and propose them as skill candidates. The Minister aggregates these proposals in `dashboard.md`, and you — the Lord — decide what gets promoted to a permanent skill.
 
 ```
-Ashigaru finishes a task
+Citizen finishes a task
     ↓
 Notices: "I've done this pattern 3 times across different projects"
     ↓
@@ -165,9 +165,9 @@ Skills grow organically from real work — not from a predefined template librar
 
 📥 **Download the repository**
 
-[Download ZIP](https://github.com/yohey-w/multi-agent-shogun/archive/refs/heads/main.zip) and extract to `C:\tools\multi-agent-shogun`
+[Download ZIP](https://github.com/yohey-w/multi-agent-kagkag-kingdom/archive/refs/heads/main.zip) and extract to `C:\tools\multi-agent-kagkag-kingdom`
 
-*Or use git:* `git clone https://github.com/yohey-w/multi-agent-shogun.git C:\tools\multi-agent-shogun`
+*Or use git:* `git clone https://github.com/yohey-w/multi-agent-kagkag-kingdom.git C:\tools\multi-agent-kagkag-kingdom`
 
 </td>
 </tr>
@@ -196,7 +196,7 @@ Right-click → "Run as Administrator" (if WSL2 is not installed). Sets up WSL2 
 🐧 **Open Ubuntu and run** (first time only)
 
 ```bash
-cd /mnt/c/tools/multi-agent-shogun
+cd /mnt/c/tools/multi-agent-kagkag-kingdom
 ./first_setup.sh
 ```
 
@@ -213,7 +213,7 @@ cd /mnt/c/tools/multi-agent-shogun
 ✅ **Deploy!**
 
 ```bash
-./shutsujin_departure.sh
+./departure.sh
 ```
 
 </td>
@@ -242,8 +242,8 @@ This saves credentials to `~/.claude/` — you won't need to do it again.
 Open an **Ubuntu terminal** (WSL) and run:
 
 ```bash
-cd /mnt/c/tools/multi-agent-shogun
-./shutsujin_departure.sh
+cd /mnt/c/tools/multi-agent-kagkag-kingdom
+./departure.sh
 ```
 
 ### 📱 Mobile Access (Command from anywhere)
@@ -272,7 +272,7 @@ Control your AI army from your phone — bed, café, or bathroom.
    ```sh
    pkg update && pkg install openssh
    ssh youruser@your-tailscale-ip
-   css    # Connect to Shogun
+   css    # Connect to King
    ```
 4. Open a new Termux window (+ button) for workers:
    ```sh
@@ -291,7 +291,7 @@ sudo systemctl restart ssh
 ```
 This detects dead connections within 45 seconds instead of waiting for TCP timeout.
 
-**Voice input:** Use your phone's voice keyboard to speak commands. The Shogun understands natural language, so typos from speech-to-text don't matter.
+**Voice input:** Use your phone's voice keyboard to speak commands. The King understands natural language, so typos from speech-to-text don't matter.
 
 **Even simpler:** With ntfy configured, you can receive notifications and send commands directly from the ntfy app — no SSH required.
 
@@ -304,8 +304,8 @@ This detects dead connections within 45 seconds instead of waiting for TCP timeo
 
 ```bash
 # 1. Clone
-git clone https://github.com/yohey-w/multi-agent-shogun.git ~/multi-agent-shogun
-cd ~/multi-agent-shogun
+git clone https://github.com/yohey-w/multi-agent-kagkag-kingdom.git ~/multi-agent-kagkag-kingdom
+cd ~/multi-agent-kagkag-kingdom
 
 # 2. Make scripts executable
 chmod +x *.sh
@@ -317,8 +317,8 @@ chmod +x *.sh
 ### Daily startup
 
 ```bash
-cd ~/multi-agent-shogun
-./shutsujin_departure.sh
+cd ~/multi-agent-kagkag-kingdom
+./departure.sh
 ```
 
 </details>
@@ -357,15 +357,15 @@ Then restart your computer and run `install.bat` again.
 |--------|---------|-------------|
 | `install.bat` | Windows: WSL2 + Ubuntu setup | First time only |
 | `first_setup.sh` | Install tmux, Node.js, Claude Code CLI + Memory MCP config | First time only |
-| `shutsujin_departure.sh` | Create tmux sessions + launch Claude Code + load instructions + start ntfy listener | Daily |
+| `departure.sh` | Create tmux sessions + launch Claude Code + load instructions + start ntfy listener | Daily |
 
 ### What `install.bat` does automatically:
 - ✅ Checks if WSL2 is installed (guides you if not)
 - ✅ Checks if Ubuntu is installed (guides you if not)
 - ✅ Shows next steps (how to run `first_setup.sh`)
 
-### What `shutsujin_departure.sh` does:
-- ✅ Creates tmux sessions (shogun + multiagent)
+### What `departure.sh` does:
+- ✅ Creates tmux sessions (king + multiagent)
 - ✅ Launches Claude Code on all agents
 - ✅ Auto-loads instruction files for each agent
 - ✅ Resets queue files for a fresh state
@@ -400,43 +400,43 @@ Whichever option you chose, **10 AI agents** are automatically launched:
 
 | Agent | Role | Count |
 |-------|------|-------|
-| 🏯 Shogun | Supreme commander — receives your orders | 1 |
-| 📋 Karo | Manager — distributes tasks, quality checks | 1 |
-| ⚔️ Ashigaru | Workers — execute implementation tasks in parallel | 7 |
-| 🧠 Gunshi | Strategist — handles analysis, evaluation, and design | 1 |
+| 🏯 King | Supreme commander — receives your orders | 1 |
+| 📋 Minister | Manager — distributes tasks, quality checks | 1 |
+| ⚔️ Citizen | Workers — execute implementation tasks in parallel | 7 |
+| 🧠 Priest | Strategist — handles analysis, evaluation, and design | 1 |
 
 Two tmux sessions are created:
-- `shogun` — connect here to give commands
-- `multiagent` — Karo, Ashigaru, and Gunshi running in the background
+- `king` — connect here to give commands
+- `multiagent` — Minister, Citizen, and Priest running in the background
 
 ---
 
 ## How It Works
 
-### Step 1: Connect to the Shogun
+### Step 1: Connect to the King
 
-After running `shutsujin_departure.sh`, all agents automatically load their instructions and are ready.
+After running `departure.sh`, all agents automatically load their instructions and are ready.
 
 Open a new terminal and connect:
 
 ```bash
-tmux attach-session -t shogun
+tmux attach-session -t king
 ```
 
 ### Step 2: Give your first order
 
-The Shogun is already initialized — just give a command:
+The King is already initialized — just give a command:
 
 ```
 Research the top 5 JavaScript frameworks and create a comparison table
 ```
 
-The Shogun will:
+The King will:
 1. Write the task to a YAML file
-2. Notify the Karo (manager)
+2. Notify the Minister (manager)
 3. Return control to you immediately — no waiting!
 
-Meanwhile, the Karo distributes tasks to Ashigaru workers for parallel execution.
+Meanwhile, the Minister distributes tasks to Citizen workers for parallel execution.
 
 ### Step 3: Check progress
 
@@ -446,9 +446,9 @@ Open `dashboard.md` in your editor for a real-time status view:
 ## In Progress
 | Worker | Task | Status |
 |--------|------|--------|
-| Ashigaru 1 | Research React | Running |
-| Ashigaru 2 | Research Vue | Running |
-| Ashigaru 3 | Research Angular | Completed |
+| Citizen 1 | Research React | Running |
+| Citizen 2 | Research Vue | Running |
+| Citizen 3 | Research Angular | Completed |
 ```
 
 ### Detailed flow
@@ -457,22 +457,22 @@ Open `dashboard.md` in your editor for a real-time status view:
 You: "Research the top 5 MCP servers and create a comparison table"
 ```
 
-The Shogun writes the task to `queue/shogun_to_karo.yaml` and wakes the Karo. Control returns to you immediately.
+The King writes the task to `queue/king_to_minister.yaml` and wakes the Minister. Control returns to you immediately.
 
-The Karo breaks the task into subtasks:
+The Minister breaks the task into subtasks:
 
 | Worker | Assignment |
 |--------|-----------|
-| Ashigaru 1 | Research Notion MCP |
-| Ashigaru 2 | Research GitHub MCP |
-| Ashigaru 3 | Research Playwright MCP |
-| Ashigaru 4 | Research Memory MCP |
-| Ashigaru 5 | Research Sequential Thinking MCP |
+| Citizen 1 | Research Notion MCP |
+| Citizen 2 | Research GitHub MCP |
+| Citizen 3 | Research Playwright MCP |
+| Citizen 4 | Research Memory MCP |
+| Citizen 5 | Research Sequential Thinking MCP |
 
-All 5 Ashigaru research simultaneously. You can watch them work in real time:
+All 5 Citizen research simultaneously. You can watch them work in real time:
 
 <p align="center">
-  <img src="images/company-creed-all-panes.png" alt="Ashigaru agents working in parallel across tmux panes" width="900">
+  <img src="images/company-creed-all-panes.png" alt="Citizen agents working in parallel across tmux panes" width="900">
 </p>
 
 Results appear in `dashboard.md` as they complete.
@@ -487,16 +487,16 @@ One command spawns up to 8 parallel tasks:
 
 ```
 You: "Research 5 MCP servers"
-→ 5 Ashigaru start researching simultaneously
+→ 5 Citizen start researching simultaneously
 → Results in minutes, not hours
 ```
 
 ### 🔄 2. Non-Blocking Workflow
 
-The Shogun delegates instantly and returns control to you:
+The King delegates instantly and returns control to you:
 
 ```
-You: Command → Shogun: Delegates → You: Give next command immediately
+You: Command → King: Delegates → You: Give next command immediately
                                        ↓
                        Workers: Execute in background
                                        ↓
@@ -522,14 +522,14 @@ Session 2: AI loads memory on startup
 Agents talk to each other by writing YAML files — like passing notes. **No polling loops, no wasted API calls.**
 
 ```
-Karo wants to wake Ashigaru 3:
+Minister wants to wake Citizen 3:
 
 Step 1: Write the message          Step 2: Wake the agent up
 ┌──────────────────────┐           ┌──────────────────────────┐
 │ inbox_write.sh       │           │ inbox_watcher.sh         │
 │                      │           │                          │
 │ Writes full message  │  file     │ Detects file change      │
-│ to ashigaru3.yaml    │──change──▶│ (inotifywait, not poll)  │
+│ to citizen3.yaml    │──change──▶│ (inotifywait, not poll)  │
 │ with flock (no race) │           │                          │
 └──────────────────────┘           │ Wakes agent via:         │
                                    │  1. Self-watch (skip)    │
@@ -539,7 +539,7 @@ Step 1: Write the message          Step 2: Wake the agent up
 
 Step 3: Agent reads its own inbox
 ┌──────────────────────────────────┐
-│ Ashigaru 3 reads ashigaru3.yaml  │
+│ Citizen 3 reads citizen3.yaml  │
 │ → Finds unread messages          │
 │ → Processes them                 │
 │ → Marks as read                  │
@@ -582,19 +582,19 @@ bash scripts/agent_status.sh --session mysession --lang en
 ```
 Agent      CLI     Pane      Task ID                                    Status     Inbox
 ---------- ------- --------- ------------------------------------------ ---------- -----
-karo       claude  待機中    ---                                        ---        0
-ashigaru1  codex   稼働中    subtask_042a_research                      assigned   0
-ashigaru2  codex   待機中    subtask_042b_review                        done       0
-gunshi     claude  稼働中    subtask_042c_analysis                      assigned   0
+minister       claude  待機中    ---                                        ---        0
+citizen1  codex   稼働中    subtask_042a_research                      assigned   0
+citizen2  codex   待機中    subtask_042b_review                        done       0
+priest     claude  稼働中    subtask_042c_analysis                      assigned   0
 ```
 
 **Standalone mode output** (no project config needed):
 ```
 Pane                           State      Agent ID
 ------------------------------ ---------- ----------
-multiagent:agents.0            IDLE       karo
-multiagent:agents.1            BUSY       ashigaru1
-multiagent:agents.8            BUSY       gunshi
+multiagent:agents.0            IDLE       minister
+multiagent:agents.1            BUSY       citizen1
+multiagent:agents.8            BUSY       priest
 ```
 
 Detection works for both **Claude Code** and **Codex CLI** by checking CLI-specific prompt/spinner patterns in the bottom 5 lines of each tmux pane. The detection logic lives in `lib/agent_status.sh` — source it in your own scripts:
@@ -615,7 +615,7 @@ screenshot:
 ```
 
 ```
-# Just tell the Shogun:
+# Just tell the King:
 You: "Check the latest screenshot"
 You: "Look at the last 2 screenshots"
 → AI instantly reads and analyzes your screen captures
@@ -634,13 +634,13 @@ Efficient knowledge sharing through a four-layer context system:
 
 | Layer | Location | Purpose |
 |-------|----------|---------|
-| Layer 1: Memory MCP | `memory/shogun_memory.jsonl` | Cross-project, cross-session long-term memory |
+| Layer 1: Memory MCP | `memory/king_memory.jsonl` | Cross-project, cross-session long-term memory |
 | Layer 2: Project | `config/projects.yaml`, `projects/<id>.yaml`, `context/{project}.md` | Project-specific information and technical knowledge |
-| Layer 3: YAML Queue | `queue/shogun_to_karo.yaml`, `queue/tasks/`, `queue/reports/` | Task management — source of truth for instructions and reports |
+| Layer 3: YAML Queue | `queue/king_to_minister.yaml`, `queue/tasks/`, `queue/reports/` | Task management — source of truth for instructions and reports |
 | Layer 4: Session | CLAUDE.md, instructions/*.md | Working context (wiped by `/clear`) |
 
 This design enables:
-- Any Ashigaru can work on any project
+- Any Citizen can work on any project
 - Context persists across agent switches
 - Clear separation of concerns
 - Knowledge survives across sessions
@@ -651,7 +651,7 @@ As agents work, their session context (Layer 4) grows, increasing API costs. `/c
 
 Recovery cost after `/clear`: **~6,800 tokens** (42% improved from v1 — CLAUDE.md YAML conversion + English-only instructions reduced token cost by 70%)
 
-1. CLAUDE.md (auto-loaded) → recognizes itself as part of the Shogun System
+1. CLAUDE.md (auto-loaded) → recognizes itself as part of the King System
 2. `tmux display-message -t "$TMUX_PANE" -p '#{@agent_id}'` → identifies its own number
 3. Memory MCP read → restores the Lord's preferences (~700 tokens)
 4. Task YAML read → picks up the next assignment (~800 tokens)
@@ -675,23 +675,23 @@ All projects use the same 7-section template:
 This unified format enables:
 - Quick onboarding for any agent
 - Consistent information management across all projects
-- Easy handoff between Ashigaru workers
+- Easy handoff between Citizen workers
 
 ### 📱 8. Phone Notifications (ntfy)
 
-Two-way communication between your phone and the Shogun — no SSH, no Tailscale, no server needed.
+Two-way communication between your phone and the King — no SSH, no Tailscale, no server needed.
 
 | Direction | How it works |
 |-----------|-------------|
-| **Phone → Shogun** | Send a message from the ntfy app → `ntfy_listener.sh` receives it via streaming → auto-ACK reply (`📱受信: {your message}`) sent back to your phone → Shogun processes automatically |
-| **Karo → Phone (direct)** | When Karo updates `dashboard.md`, it sends push notifications directly via `scripts/ntfy.sh` — **Shogun is bypassed** (Shogun is for human interaction, not progress reporting) |
+| **Phone → King** | Send a message from the ntfy app → `ntfy_listener.sh` receives it via streaming → auto-ACK reply (`📱受信: {your message}`) sent back to your phone → King processes automatically |
+| **Minister → Phone (direct)** | When Minister updates `dashboard.md`, it sends push notifications directly via `scripts/ntfy.sh` — **King is bypassed** (King is for human interaction, not progress reporting) |
 
 ```
-📱 You (from bed)          🏯 Shogun
+📱 You (from bed)          🏯 King
     │                          │
     │  "Research React 19"     │
     ├─────────────────────────►│
-    │    (ntfy message)        │  → Delegates to Karo → Ashigaru work
+    │    (ntfy message)        │  → Delegates to Minister → Citizen work
     │                          │
     │  "✅ cmd_042 complete"   │
     │◄─────────────────────────┤
@@ -699,9 +699,9 @@ Two-way communication between your phone and the Shogun — no SSH, no Tailscale
 ```
 
 **Setup:**
-1. Add `ntfy_topic: "shogun-yourname"` to `config/settings.yaml`
+1. Add `ntfy_topic: "king-yourname"` to `config/settings.yaml`
 2. Install the [ntfy app](https://ntfy.sh) on your phone and subscribe to the same topic
-3. `shutsujin_departure.sh` automatically starts the listener — no extra steps
+3. `departure.sh` automatically starts the listener — no extra steps
 
 **Notification examples:**
 
@@ -714,13 +714,13 @@ Two-way communication between your phone and the Shogun — no SSH, no Tailscale
 
 Free, no account required, no server to maintain. Uses [ntfy.sh](https://ntfy.sh) — an open-source push notification service.
 
-> **⚠️ Security:** Your topic name is your password. Anyone who knows it can read your notifications and send messages to your Shogun. Choose a hard-to-guess name and **never share it publicly** (e.g., in screenshots, blog posts, or GitHub commits).
+> **⚠️ Security:** Your topic name is your password. Anyone who knows it can read your notifications and send messages to your King. Choose a hard-to-guess name and **never share it publicly** (e.g., in screenshots, blog posts, or GitHub commits).
 
 **Verify it works:**
 
 ```bash
 # Send a test notification to your phone
-bash scripts/ntfy.sh "Test notification from Shogun 🏯"
+bash scripts/ntfy.sh "Test notification from King 🏯"
 ```
 
 If your phone receives the notification, you're all set. If not, check:
@@ -733,12 +733,12 @@ If your phone receives the notification, you're all set. If not, check:
 1. Open the ntfy app on your phone
 2. Tap your subscribed topic
 3. Type a message (e.g., `Research React 19 best practices`) and send
-4. `ntfy_listener.sh` receives it, writes to `queue/ntfy_inbox.yaml`, and wakes the Shogun
-5. The Shogun reads the message and processes it through the normal Karo → Ashigaru pipeline
+4. `ntfy_listener.sh` receives it, writes to `queue/ntfy_inbox.yaml`, and wakes the King
+5. The King reads the message and processes it through the normal Minister → Citizen pipeline
 
-Any text you send becomes a command. Write it like you'd talk to the Shogun — no special syntax needed.
+Any text you send becomes a command. Write it like you'd talk to the King — no special syntax needed.
 
-**Manual listener start** (if not using `shutsujin_departure.sh`):
+**Manual listener start** (if not using `departure.sh`):
 
 ```bash
 # Start the listener in the background
@@ -751,7 +751,7 @@ pgrep -f ntfy_listener.sh
 bash scripts/ntfy_listener.sh  # Run in foreground to see logs
 ```
 
-The listener automatically reconnects if the connection drops. `shutsujin_departure.sh` starts it automatically on deployment — you only need manual start if you skipped the deployment script.
+The listener automatically reconnects if the connection drops. `departure.sh` starts it automatically on deployment — you only need manual start if you skipped the deployment script.
 
 **Troubleshooting:**
 
@@ -759,10 +759,10 @@ The listener automatically reconnects if the connection drops. `shutsujin_depart
 |---------|-----|
 | No notifications on phone | Check topic name matches exactly in `settings.yaml` and ntfy app |
 | Listener not starting | Run `bash scripts/ntfy_listener.sh` in foreground to see errors |
-| Phone → Shogun not working | Verify listener is running: `pgrep -f ntfy_listener.sh` |
-| Messages not reaching Shogun | Check `queue/ntfy_inbox.yaml` — if message is there, Shogun may be busy |
+| Phone → King not working | Verify listener is running: `pgrep -f ntfy_listener.sh` |
+| Messages not reaching King | Check `queue/ntfy_inbox.yaml` — if message is there, King may be busy |
 | "ntfy_topic not configured" error | Add `ntfy_topic: "your-topic"` to `config/settings.yaml` |
-| Duplicate notifications | Normal on reconnect — Shogun deduplicates by message ID |
+| Duplicate notifications | Normal on reconnect — King deduplicates by message ID |
 | Changed topic name but no notifications | The listener must be restarted: `pkill -f ntfy_listener.sh && nohup bash scripts/ntfy_listener.sh &>/dev/null &` |
 
 **Real-world notification screenshots:**
@@ -772,14 +772,14 @@ The listener automatically reconnects if the connection drops. `shutsujin_depart
   &nbsp;&nbsp;
   <img src="images/screenshots/masked/ntfy_cmd043_progress.jpg" alt="Progress notification" width="300">
 </p>
-<p align="center"><i>Left: Bidirectional phone ↔ Shogun communication · Right: Real-time progress report from Ashigaru</i></p>
+<p align="center"><i>Left: Bidirectional phone ↔ King communication · Right: Real-time progress report from Citizen</i></p>
 
 <p align="center">
   <img src="images/screenshots/masked/ntfy_bloom_oc_test.jpg" alt="Command completion notification" width="300">
   &nbsp;&nbsp;
   <img src="images/screenshots/masked/ntfy_persona_eval_complete.jpg" alt="8-agent parallel completion" width="300">
 </p>
-<p align="center"><i>Left: Command completion notification · Right: All 8 Ashigaru completing in parallel</i></p>
+<p align="center"><i>Left: Command completion notification · Right: All 8 Citizen completing in parallel</i></p>
 
 > *Note: Topic names shown in screenshots are examples. Use your own unique topic name.*
 
@@ -796,30 +796,30 @@ Behavioral psychology-driven motivation through your notification feed:
 Each tmux pane shows the agent's current task directly on its border:
 
 ```
-┌ ashigaru1 (Sonnet) VF requirements ─┬ ashigaru3 (Opus) API research ──────┐
+┌ citizen1 (Sonnet) VF requirements ─┬ citizen3 (Opus) API research ──────┐
 │                                      │                                     │
 │  Working on SayTask requirements     │  Researching REST API patterns      │
 │                                      │                                     │
-├ ashigaru2 (Sonnet) ─────────────────┼ ashigaru4 (Opus) DB schema design ──┤
+├ citizen2 (Sonnet) ─────────────────┼ citizen4 (Opus) DB schema design ──┤
 │                                      │                                     │
 │  (idle — waiting for assignment)     │  Designing database schema          │
 │                                      │                                     │
 └──────────────────────────────────────┴─────────────────────────────────────┘
 ```
 
-- **Working**: `ashigaru1 (Sonnet) VF requirements` — agent name, model, and task summary
-- **Idle**: `ashigaru1 (Sonnet)` — model name only, no task
-- Updated automatically by the Karo when assigning or completing tasks
+- **Working**: `citizen1 (Sonnet) VF requirements` — agent name, model, and task summary
+- **Idle**: `citizen1 (Sonnet)` — model name only, no task
+- Updated automatically by the Minister when assigning or completing tasks
 - Glance at all 9 panes to instantly know who's doing what
 
 ### 🔊 10. Shout Mode (Battle Cries)
 
-When an Ashigaru completes a task, it shouts a personalized battle cry in the tmux pane — a visual reminder that your army is working hard.
+When an Citizen completes a task, it shouts a personalized battle cry in the tmux pane — a visual reminder that your army is working hard.
 
 ```
-┌ ashigaru1 (Sonnet) ──────────┬ ashigaru2 (Sonnet) ──────────┐
+┌ citizen1 (Sonnet) ──────────┬ citizen2 (Sonnet) ──────────┐
 │                               │                               │
-│  ⚔️ 足軽1号、先陣切った！     │  🔥 足軽2号、二番槍の意地！   │
+│  ⚔️ 市民1号、先陣切った！     │  🔥 市民2号、二番槍の意地！   │
 │  八刃一志！                   │  八刃一志！                   │
 │  ❯                            │  ❯                            │
 └───────────────────────────────┴───────────────────────────────┘
@@ -827,24 +827,24 @@ When an Ashigaru completes a task, it shouts a personalized battle cry in the tm
 
 **How it works:**
 
-The Karo writes an `echo_message` field in each task YAML. After completing all work (report + inbox notification), the Ashigaru runs `echo` as its **final action**. The message stays visible above the `❯` prompt.
+The Minister writes an `echo_message` field in each task YAML. After completing all work (report + inbox notification), the Citizen runs `echo` as its **final action**. The message stays visible above the `❯` prompt.
 
 ```yaml
-# In the task YAML (written by Karo)
+# In the task YAML (written by Minister)
 task:
   task_id: subtask_001
   description: "Create comparison table"
-  echo_message: "🔥 足軽1号、先陣を切って参る！八刃一志！"
+  echo_message: "🔥 市民1号、先陣を切って参る！八刃一志！"
 ```
 
 **Shout mode is the default.** To disable (saves API tokens on the echo call):
 
 ```bash
-./shutsujin_departure.sh --silent    # No battle cries
-./shutsujin_departure.sh             # Default: shout mode (battle cries enabled)
+./departure.sh --silent    # No battle cries
+./departure.sh             # Default: shout mode (battle cries enabled)
 ```
 
-Silent mode sets `DISPLAY_MODE=silent` as a tmux environment variable. The Karo checks this when writing task YAMLs and omits the `echo_message` field.
+Silent mode sets `DISPLAY_MODE=silent` as a tmux environment variable. The Minister checks this when writing task YAMLs and omits the `echo_message` field.
 
 ---
 
@@ -873,7 +873,7 @@ Silent mode sets `DISPLAY_MODE=silent` as a tmux environment variable. The Karo 
        │
        ▼
  ┌──────────────────┐
- │  ntfy → Shogun   │  AI auto-categorize, parse dates, set priorities
+ │  ntfy → King   │  AI auto-categorize, parse dates, set priorities
  └────────┬─────────┘
           │
           ▼
@@ -908,8 +908,8 @@ Silent mode sets `DISPLAY_MODE=silent` as a tmux environment variable. The Karo 
 **Q: How is this different from other task apps?**
 A: You never open an app. Just speak. Zero friction. Most task apps fail because people stop opening them. SayTask removes that step entirely.
 
-**Q: Can I use SayTask without the full Shogun system?**
-A: SayTask is a feature of Shogun. Shogun also works as a standalone multi-agent development platform — you get both capabilities in one system.
+**Q: Can I use SayTask without the full King system?**
+A: SayTask is a feature of King. King also works as a standalone multi-agent development platform — you get both capabilities in one system.
 
 **Q: What's the Frog 🐸?**
 A: Every morning, AI picks your hardest task — the one you'd rather avoid. Tackle it first (the "Eat the Frog" method) or ignore it. Your call.
@@ -925,7 +925,7 @@ A: AI does its best to categorize and schedule it. You can always refine later �
 
 ### SayTask vs cmd Pipeline
 
-Shogun has two complementary task systems:
+King has two complementary task systems:
 
 | Capability | SayTask (Voice Layer) | cmd Pipeline (AI Execution) |
 |---|:-:|:-:|
@@ -944,12 +944,12 @@ SayTask handles personal productivity (capture → schedule → remind). The cmd
 
 | Agent | Default Model | Thinking | Role |
 |-------|--------------|----------|------|
-| Shogun | Opus | **Enabled (high)** | Strategic advisor to the Lord. Use `--shogun-no-thinking` for relay-only mode |
-| Karo | Sonnet | Enabled | Task distribution, simple QC, dashboard management |
-| Gunshi | Sonnet 4.6 | Enabled | Deep analysis, design review, architecture evaluation |
-| Ashigaru 1–7 | Sonnet 4.6 | Enabled | Implementation: code, research, file operations |
+| King | Opus | **Enabled (high)** | Strategic advisor to the Lord. Use `--king-no-thinking` for relay-only mode |
+| Minister | Sonnet | Enabled | Task distribution, simple QC, dashboard management |
+| Priest | Sonnet 4.6 | Enabled | Deep analysis, design review, architecture evaluation |
+| Citizen 1–7 | Sonnet 4.6 | Enabled | Implementation: code, research, file operations |
 
-The system routes work by **cognitive complexity** at two levels: **Agent routing** (Ashigaru for L1–L3, Gunshi for L4–L6) and **Model routing within Ashigaru** via `capability_tiers` (see Dynamic Model Routing below).
+The system routes work by **cognitive complexity** at two levels: **Agent routing** (Citizen for L1–L3, Priest for L4–L6) and **Model routing within Citizen** via `capability_tiers` (see Dynamic Model Routing below).
 
 ### Bloom's Taxonomy → Agent Routing
 
@@ -957,32 +957,32 @@ Tasks are classified using Bloom's Taxonomy and routed to the appropriate **agen
 
 | Level | Category | Description | Routed To |
 |-------|----------|-------------|-----------|
-| L1 | Remember | Recall facts, copy, list | **Ashigaru** |
-| L2 | Understand | Explain, summarize, paraphrase | **Ashigaru** |
-| L3 | Apply | Execute procedures, implement known patterns | **Ashigaru** |
-| L4 | Analyze | Compare, investigate, deconstruct | **Gunshi** |
-| L5 | Evaluate | Judge, critique, recommend | **Gunshi** |
-| L6 | Create | Design, build, synthesize new solutions | **Gunshi** |
+| L1 | Remember | Recall facts, copy, list | **Citizen** |
+| L2 | Understand | Explain, summarize, paraphrase | **Citizen** |
+| L3 | Apply | Execute procedures, implement known patterns | **Citizen** |
+| L4 | Analyze | Compare, investigate, deconstruct | **Priest** |
+| L5 | Evaluate | Judge, critique, recommend | **Priest** |
+| L6 | Create | Design, build, synthesize new solutions | **Priest** |
 
-The Karo assigns each subtask a Bloom level and routes it to the appropriate agent. L1–L3 tasks go to Ashigaru for parallel execution; L4–L6 tasks go to the Gunshi for deeper analysis. Simple L4 tasks (e.g., small code review) may still go to Ashigaru when the Karo judges it appropriate.
+The Minister assigns each subtask a Bloom level and routes it to the appropriate agent. L1–L3 tasks go to Citizen for parallel execution; L4–L6 tasks go to the Priest for deeper analysis. Simple L4 tasks (e.g., small code review) may still go to Citizen when the Minister judges it appropriate.
 
 ### Task Dependencies (blockedBy)
 
 Tasks can declare dependencies on other tasks using `blockedBy`:
 
 ```yaml
-# queue/tasks/ashigaru2.yaml
+# queue/tasks/citizen2.yaml
 task:
   task_id: subtask_010b
-  blockedBy: ["subtask_010a"]  # Waits for ashigaru1's task to complete
+  blockedBy: ["subtask_010a"]  # Waits for citizen1's task to complete
   description: "Integrate the API client built by subtask_010a"
 ```
 
-When a blocking task completes, the Karo automatically unblocks dependent tasks and assigns them to available Ashigaru. This prevents idle waiting and enables efficient pipelining of dependent work.
+When a blocking task completes, the Minister automatically unblocks dependent tasks and assigns them to available Citizen. This prevents idle waiting and enables efficient pipelining of dependent work.
 
 ### Dynamic Model Routing (capability_tiers)
 
-Beyond agent-level routing, you can configure **model-level routing within the Ashigaru tier**. Define a `capability_tiers` table in `config/settings.yaml` mapping each model to its maximum Bloom level:
+Beyond agent-level routing, you can configure **model-level routing within the Citizen tier**. Define a `capability_tiers` table in `config/settings.yaml` mapping each model to its maximum Bloom level:
 
 ```yaml
 capability_tiers:
@@ -1006,10 +1006,10 @@ Two built-in skills help you configure this:
 
 | Skill | Purpose |
 |-------|---------|
-| `/shogun-model-list` | Reference table: all models × subscriptions × Bloom max |
-| `/shogun-bloom-config` | Interactive: answer 2 questions → get ready-to-paste YAML |
+| `/king-model-list` | Reference table: all models × subscriptions × Bloom max |
+| `/king-bloom-config` | Interactive: answer 2 questions → get ready-to-paste YAML |
 
-Run `/shogun-bloom-config` after setup to generate your optimal `capability_tiers` configuration.
+Run `/king-bloom-config` after setup to generate your optimal `capability_tiers` configuration.
 
 ---
 
@@ -1017,7 +1017,7 @@ Run `/shogun-bloom-config` after setup to generate your optimal `capability_tier
 
 > "Don't execute tasks mindlessly. Always keep 'fastest × best output' in mind."
 
-The Shogun System is built on five core principles:
+The King System is built on five core principles:
 
 | Principle | Description |
 |-----------|-------------|
@@ -1033,14 +1033,14 @@ These principles are documented in detail: **[docs/philosophy.md](docs/philosoph
 
 ## Design Philosophy
 
-### Why a hierarchy (Shogun → Karo → Ashigaru)?
+### Why a hierarchy (King → Minister → Citizen)?
 
-1. **Instant response**: The Shogun delegates immediately, returning control to you
-2. **Parallel execution**: The Karo distributes to multiple Ashigaru simultaneously
+1. **Instant response**: The King delegates immediately, returning control to you
+2. **Parallel execution**: The Minister distributes to multiple Citizen simultaneously
 3. **Single responsibility**: Each role is clearly separated — no confusion
-4. **Scalability**: Adding more Ashigaru doesn't break the structure
-5. **Fault isolation**: One Ashigaru failing doesn't affect the others
-6. **Unified reporting**: Only the Shogun communicates with you, keeping information organized
+4. **Scalability**: Adding more Citizen doesn't break the structure
+5. **Fault isolation**: One Citizen failing doesn't affect the others
+6. **Unified reporting**: Only the King communicates with you, keeping information organized
 
 ### Why Mailbox System?
 
@@ -1057,7 +1057,7 @@ Why use files instead of direct messaging between agents?
 
 ### Agent Identification (@agent_id)
 
-Each pane has a `@agent_id` tmux user option (e.g., `karo`, `ashigaru1`). While `pane_index` can shift when panes are rearranged, `@agent_id` is set at startup by `shutsujin_departure.sh` and never changes.
+Each pane has a `@agent_id` tmux user option (e.g., `minister`, `citizen1`). While `pane_index` can shift when panes are rearranged, `@agent_id` is set at startup by `departure.sh` and never changes.
 
 Agent self-identification:
 ```bash
@@ -1067,12 +1067,12 @@ The `-t "$TMUX_PANE"` is required. Omitting it returns the active pane's value (
 
 Model names are stored as `@model_name` and current task summaries as `@current_task` — both displayed in the `pane-border-format`. Even if Claude Code overwrites the pane title, these user options persist.
 
-### Why only the Karo updates dashboard.md
+### Why only the Minister updates dashboard.md
 
 1. **Single writer**: Prevents conflicts by limiting updates to one agent
-2. **Information aggregation**: The Karo receives all Ashigaru reports, so it has the full picture
+2. **Information aggregation**: The Minister receives all Citizen reports, so it has the full picture
 3. **Consistency**: All updates pass through a single quality gate
-4. **No interruptions**: If the Shogun updated it, it could interrupt the Lord's input
+4. **No interruptions**: If the King updated it, it could interrupt the Lord's input
 
 ---
 
@@ -1080,7 +1080,7 @@ Model names are stored as `@model_name` and current task summaries as `@current_
 
 No skills are included out of the box. Skills emerge organically during operation — you approve candidates from `dashboard.md` as they're discovered.
 
-Invoke skills with `/skill-name`. Just tell the Shogun: "run /skill-name".
+Invoke skills with `/skill-name`. Just tell the King: "run /skill-name".
 
 ### Included Skills (committed to repo)
 
@@ -1088,8 +1088,8 @@ Two skills ship with the repository in `skills/`. They are domain-agnostic setup
 
 | Skill | Description |
 |-------|-------------|
-| `/shogun-model-list` | Reference table: all CLI tools × models × subscriptions × Bloom max level |
-| `/shogun-bloom-config` | Interactive configurator: answer 2 questions about your subscriptions → get ready-to-paste `capability_tiers` YAML |
+| `/king-model-list` | Reference table: all CLI tools × models × subscriptions × Bloom max level |
+| `/king-bloom-config` | Interactive configurator: answer 2 questions about your subscriptions → get ready-to-paste `capability_tiers` YAML |
 
 These are intentionally minimal — they help you configure the system, not do your work for you.
 
@@ -1104,13 +1104,13 @@ Skills in `.claude/commands/` are excluded from version control by design:
 **2. How skills are discovered**
 
 ```
-Ashigaru notices a pattern during work
+Citizen notices a pattern during work
     ↓
 Appears in dashboard.md under "Skill Candidates"
     ↓
 You (the Lord) review the proposal
     ↓
-If approved, instruct the Karo to create the skill
+If approved, instruct the Minister to create the skill
 ```
 
 Skills are user-driven. Automatic creation would lead to unmanageable bloat — only keep what you find genuinely useful.
@@ -1149,7 +1149,7 @@ claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequen
 # 5. Memory - Cross-session long-term memory (recommended!)
 # ✅ Auto-configured by first_setup.sh
 # To reconfigure manually:
-claude mcp add memory -e MEMORY_FILE_PATH="$PWD/memory/shogun_memory.jsonl" -- npx -y @modelcontextprotocol/server-memory
+claude mcp add memory -e MEMORY_FILE_PATH="$PWD/memory/king_memory.jsonl" -- npx -y @modelcontextprotocol/server-memory
 ```
 
 ### Verify installation
@@ -1172,13 +1172,13 @@ This system manages **all white-collar tasks**, not just code. Projects can live
 You: "Research the top 5 AI coding assistants and compare them"
 
 What happens:
-1. Shogun delegates to Karo
-2. Karo assigns:
-   - Ashigaru 1: Research GitHub Copilot
-   - Ashigaru 2: Research Cursor
-   - Ashigaru 3: Research Claude Code
-   - Ashigaru 4: Research Codeium
-   - Ashigaru 5: Research Amazon CodeWhisperer
+1. King delegates to Minister
+2. Minister assigns:
+   - Citizen 1: Research GitHub Copilot
+   - Citizen 2: Research Cursor
+   - Citizen 3: Research Claude Code
+   - Citizen 4: Research Codeium
+   - Citizen 5: Research Amazon CodeWhisperer
 3. All 5 research simultaneously
 4. Results compiled in dashboard.md
 ```
@@ -1189,10 +1189,10 @@ What happens:
 You: "Prepare a PoC for the project on this Notion page: [URL]"
 
 What happens:
-1. Karo fetches Notion content via MCP
-2. Ashigaru 2: Lists items to verify
-3. Ashigaru 3: Investigates technical feasibility
-4. Ashigaru 4: Drafts a PoC plan
+1. Minister fetches Notion content via MCP
+2. Citizen 2: Lists items to verify
+3. Citizen 3: Investigates technical feasibility
+4. Citizen 4: Drafts a PoC plan
 5. All results compiled in dashboard.md — meeting prep done
 ```
 
@@ -1204,8 +1204,8 @@ What happens:
 
 ```yaml
 # config/settings.yaml
-language: ja   # Samurai Japanese only
-language: en   # Samurai Japanese + English translation
+language: ja   # Kingdom Japanese only
+language: en   # Kingdom Japanese + English translation
 ```
 
 ### Screenshot integration
@@ -1216,16 +1216,16 @@ screenshot:
   path: "/mnt/c/Users/YourName/Pictures/Screenshots"
 ```
 
-Tell the Shogun "check the latest screenshot" and it reads your screen captures for visual context. (`Win+Shift+S` on Windows.)
+Tell the King "check the latest screenshot" and it reads your screen captures for visual context. (`Win+Shift+S` on Windows.)
 
 ### ntfy (Phone Notifications)
 
 ```yaml
 # config/settings.yaml
-ntfy_topic: "shogun-yourname"
+ntfy_topic: "king-yourname"
 ```
 
-Subscribe to the same topic in the [ntfy app](https://ntfy.sh) on your phone. The listener starts automatically with `shutsujin_departure.sh`.
+Subscribe to the same topic in the [ntfy app](https://ntfy.sh) on your phone. The listener starts automatically with `departure.sh`.
 
 #### ntfy Authentication (Self-Hosted Servers)
 
@@ -1279,10 +1279,10 @@ Priority: Token > Basic > None. If neither is set, no auth headers are sent (bac
 │                    Daily Startup (run every day)                     │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
-│  shutsujin_departure.sh                                             │
+│  departure.sh                                             │
 │      │                                                              │
 │      ├──▶ Create tmux sessions                                      │
-│      │         • "shogun" session (1 pane)                          │
+│      │         • "king" session (1 pane)                          │
 │      │         • "multiagent" session (9 panes, 3x3 grid)          │
 │      │                                                              │
 │      ├──▶ Reset queue files and dashboard                           │
@@ -1295,38 +1295,38 @@ Priority: Token > Basic > None. If neither is set, no auth headers are sent (bac
 </details>
 
 <details>
-<summary><b>shutsujin_departure.sh Options</b> (click to expand)</summary>
+<summary><b>departure.sh Options</b> (click to expand)</summary>
 
 ```bash
 # Default: Full startup (tmux sessions + Claude Code launch)
-./shutsujin_departure.sh
+./departure.sh
 
 # Session setup only (no Claude Code launch)
-./shutsujin_departure.sh -s
-./shutsujin_departure.sh --setup-only
+./departure.sh -s
+./departure.sh --setup-only
 
 # Clean task queues (preserves command history)
-./shutsujin_departure.sh -c
-./shutsujin_departure.sh --clean
+./departure.sh -c
+./departure.sh --clean
 
-# Battle formation: All Ashigaru on Opus (max capability, higher cost)
-./shutsujin_departure.sh -k
-./shutsujin_departure.sh --kessen
+# Battle formation: All Citizen on Opus (max capability, higher cost)
+./departure.sh -k
+./departure.sh --kessen
 
 # Silent mode: Disable battle cries (saves API tokens on echo calls)
-./shutsujin_departure.sh -S
-./shutsujin_departure.sh --silent
+./departure.sh -S
+./departure.sh --silent
 
 # Full startup + open Windows Terminal tabs
-./shutsujin_departure.sh -t
-./shutsujin_departure.sh --terminal
+./departure.sh -t
+./departure.sh --terminal
 
-# Shogun relay-only mode: Disable Shogun's thinking (cost savings)
-./shutsujin_departure.sh --shogun-no-thinking
+# King relay-only mode: Disable King's thinking (cost savings)
+./departure.sh --king-no-thinking
 
 # Show help
-./shutsujin_departure.sh -h
-./shutsujin_departure.sh --help
+./departure.sh -h
+./departure.sh --help
 ```
 
 </details>
@@ -1336,27 +1336,27 @@ Priority: Token > Basic > None. If neither is set, no auth headers are sent (bac
 
 **Normal daily use:**
 ```bash
-./shutsujin_departure.sh          # Launch everything
-tmux attach-session -t shogun     # Connect and give commands
+./departure.sh          # Launch everything
+tmux attach-session -t king     # Connect and give commands
 ```
 
 **Debug mode (manual control):**
 ```bash
-./shutsujin_departure.sh -s       # Create sessions only
+./departure.sh -s       # Create sessions only
 
 # Manually launch Claude Code on specific agents
-tmux send-keys -t shogun:0 'claude --dangerously-skip-permissions' Enter
+tmux send-keys -t king:0 'claude --dangerously-skip-permissions' Enter
 tmux send-keys -t multiagent:0.0 'claude --dangerously-skip-permissions' Enter
 ```
 
 **Restart after crash:**
 ```bash
 # Kill existing sessions
-tmux kill-session -t shogun
+tmux kill-session -t king
 tmux kill-session -t multiagent
 
 # Fresh start
-./shutsujin_departure.sh
+./departure.sh
 ```
 
 </details>
@@ -1367,9 +1367,9 @@ tmux kill-session -t multiagent
 Running `first_setup.sh` automatically adds these aliases to `~/.bashrc`:
 
 ```bash
-alias csst='cd /mnt/c/tools/multi-agent-shogun && ./shutsujin_departure.sh'
-alias css='tmux attach-session -t shogun'      # Connect to Shogun
-alias csm='tmux attach-session -t multiagent'  # Connect to Karo + Ashigaru
+alias csst='cd /mnt/c/tools/multi-agent-kagkag-kingdom && ./departure.sh'
+alias css='tmux attach-session -t king'      # Connect to King
+alias csm='tmux attach-session -t multiagent'  # Connect to Minister + Citizen
 ```
 
 To apply aliases: run `source ~/.bashrc` or restart your terminal (PowerShell: `wsl --shutdown` then reopen).
@@ -1384,19 +1384,19 @@ To apply aliases: run `source ~/.bashrc` or restart your terminal (PowerShell: `
 <summary><b>Click to expand file structure</b></summary>
 
 ```
-multi-agent-shogun/
+multi-agent-kagkag-kingdom/
 │
 │  ┌──────────────── Setup Scripts ────────────────────┐
 ├── install.bat               # Windows: First-time setup
 ├── first_setup.sh            # Ubuntu/Mac: First-time setup
-├── shutsujin_departure.sh    # Daily deployment (auto-loads instructions)
+├── departure.sh    # Daily deployment (auto-loads instructions)
 │  └──────────────────────────────────────────────────┘
 │
 ├── instructions/             # Agent behavior definitions
-│   ├── shogun.md             # Shogun instructions
-│   ├── karo.md               # Karo instructions
-│   ├── ashigaru.md           # Ashigaru instructions
-│   ├── gunshi.md             # Gunshi (strategist) instructions
+│   ├── king.md             # King instructions
+│   ├── minister.md               # Minister instructions
+│   ├── citizen.md           # Citizen instructions
+│   ├── priest.md             # Priest (strategist) instructions
 │   └── cli_specific/         # CLI-specific tool descriptions
 │       ├── claude_tools.md   # Claude Code tools & features
 │       └── copilot_tools.md  # GitHub Copilot CLI tools & features
@@ -1422,12 +1422,12 @@ multi-agent-shogun/
 │   └── <project_id>.yaml    # Full info per project (clients, tasks, Notion links, etc.)
 │
 ├── queue/                    # Communication files
-│   ├── shogun_to_karo.yaml   # Shogun → Karo commands
+│   ├── king_to_minister.yaml   # King → Minister commands
 │   ├── ntfy_inbox.yaml       # Incoming messages from phone (ntfy)
 │   ├── inbox/                # Per-agent inbox files
-│   │   ├── shogun.yaml       # Messages to Shogun
-│   │   ├── karo.yaml         # Messages to Karo
-│   │   └── ashigaru{1-8}.yaml # Messages to each Ashigaru
+│   │   ├── king.yaml       # Messages to King
+│   │   ├── minister.yaml         # Messages to Minister
+│   │   └── citizen{1-8}.yaml # Messages to each Citizen
 │   ├── tasks/                # Per-worker task files
 │   └── reports/              # Worker reports
 │
@@ -1490,7 +1490,7 @@ current_tasks:
     status: in_progress
 ```
 
-This separation lets the Shogun System coordinate across multiple external projects while keeping project details out of version control.
+This separation lets the King System coordinate across multiple external projects while keeping project details out of version control.
 
 ---
 
@@ -1529,7 +1529,7 @@ mcp__memory__read_graph()
 <details>
 <summary><b>Agents asking for permissions?</b></summary>
 
-Agents should start with `--dangerously-skip-permissions`. This is handled automatically by `shutsujin_departure.sh`.
+Agents should start with `--dangerously-skip-permissions`. This is handled automatically by `departure.sh`.
 
 </details>
 
@@ -1554,8 +1554,8 @@ tmux attach-session -t multiagent
 # Method 1: Run claude directly in the pane
 claude --model opus --dangerously-skip-permissions
 
-# Method 2: Karo force-restarts via respawn-pane (also fixes nesting)
-tmux respawn-pane -t shogun:0.0 -k 'claude --model opus --dangerously-skip-permissions'
+# Method 2: Minister force-restarts via respawn-pane (also fixes nesting)
+tmux respawn-pane -t king:0.0 -k 'claude --model opus --dangerously-skip-permissions'
 ```
 
 **If you accidentally nested tmux:**
@@ -1571,11 +1571,11 @@ tmux respawn-pane -t shogun:0.0 -k 'claude --model opus --dangerously-skip-permi
 
 | Command | Description |
 |---------|-------------|
-| `tmux attach -t shogun` | Connect to the Shogun |
+| `tmux attach -t king` | Connect to the King |
 | `tmux attach -t multiagent` | Connect to workers |
 | `Ctrl+B` then `0`–`8` | Switch panes |
 | `Ctrl+B` then `d` | Detach (agents keep running) |
-| `tmux kill-session -t shogun` | Stop the Shogun session |
+| `tmux kill-session -t king` | Stop the King session |
 | `tmux kill-session -t multiagent` | Stop the worker session |
 
 ### Mouse Support
@@ -1597,18 +1597,18 @@ Even if you're not comfortable with keyboard shortcuts, you can switch, scroll, 
 > **Right model for the right task — without restarting any agent.** Sonnet 4.6 closes the gap with Opus to just 1.2pp on SWE-bench (79.6% vs 80.8%), making per-task model routing practical and cost-effective for the first time.
 
 - **Bloom Dynamic Model Routing** — `capability_tiers` in `config/settings.yaml` maps each model to its Bloom ceiling. L1–L3 → Spark (1000+ tok/s), L4 → Sonnet 4.6, L5 → Sonnet 4.6 + extended thinking, L6 → Opus (genuinely novel design only). Routing happens without agent restarts — the system finds the right idle agent by model capability
-- **Sonnet 4.6 as the new standard** — SWE-bench 79.6%, only 1.2pp below Opus 4.6. Gunshi downgraded Opus → Sonnet 4.6. All Ashigaru default to Sonnet 4.6. One YAML line change, no restarts required
-- **`/shogun-model-list` skill** — Complete reference table: all CLI tools × models × subscriptions × Bloom max level. Updated for Sonnet 4.6 and Spark positioning
-- **`/shogun-bloom-config` skill** — Interactive configurator: answer 2 questions about your subscriptions → get ready-to-paste `capability_tiers` YAML
+- **Sonnet 4.6 as the new standard** — SWE-bench 79.6%, only 1.2pp below Opus 4.6. Priest downgraded Opus → Sonnet 4.6. All Citizen default to Sonnet 4.6. One YAML line change, no restarts required
+- **`/king-model-list` skill** — Complete reference table: all CLI tools × models × subscriptions × Bloom max level. Updated for Sonnet 4.6 and Spark positioning
+- **`/king-bloom-config` skill** — Interactive configurator: answer 2 questions about your subscriptions → get ready-to-paste `capability_tiers` YAML
 
 <details>
 <summary><b>What was in v3.4 — Bloom→Agent Routing, E2E Tests, Stop Hook</b></summary>
 
-- **Bloom → Agent routing** — Replaced dynamic model switching with agent-level routing. L1–L3 tasks go to Ashigaru, L4–L6 tasks go to Gunshi. No more mid-session `/model opus` promotions
-- **Gunshi (軍師) as first-class agent** — Strategic advisor on pane 8. Handles deep analysis, design review, architecture evaluation, and complex QC
+- **Bloom → Agent routing** — Replaced dynamic model switching with agent-level routing. L1–L3 tasks go to Citizen, L4–L6 tasks go to Priest. No more mid-session `/model opus` promotions
+- **Priest (司祭) as first-class agent** — Strategic advisor on pane 8. Handles deep analysis, design review, architecture evaluation, and complex QC
 - **E2E test suite (19 tests, 7 scenarios)** — Mock CLI framework simulates agent behavior in isolated tmux sessions
 - **Stop hook inbox delivery** — Claude Code agents automatically check inbox at turn end via `.claude/settings.json` Stop hook. Eliminates the `send-keys` interruption problem
-- **Model defaults updated** — Karo: Opus → Sonnet. Gunshi: Opus (deep reasoning). Ashigaru: Sonnet (uniform tier)
+- **Model defaults updated** — Minister: Opus → Sonnet. Priest: Opus (deep reasoning). Citizen: Sonnet (uniform tier)
 - **Escape escalation disabled for Claude Code** — Phase 2 escalation was interrupting active Claude Code turns; Stop hook handles delivery instead
 - **Codex CLI startup prompt** — `get_startup_prompt()` in `cli_adapter.sh` passes initial `[PROMPT]` argument to Codex CLI launch
 - **YAML slimming utility** — `scripts/slim_yaml.sh` archives read messages and completed commands
@@ -1620,17 +1620,17 @@ Even if you're not comfortable with keyboard shortcuts, you can switch, scroll, 
 > **New model, same YAML.** Add `model: gpt-5.3-codex-spark` to any Codex agent in `settings.yaml`.
 
 - **Codex `--model` flag support** — `build_cli_command()` now passes `settings.yaml` model config to the Codex CLI via `--model`. Supports `gpt-5.3-codex-spark` and any future Codex models
-- **Separate rate limit** — Spark runs on its own rate limit quota, independent of GPT-5.3-Codex. Run both models in parallel across different Ashigaru to **double your effective throughput**
-- **Startup display** — `shutsujin_departure.sh` now shows the actual model name (e.g., `codex/gpt-5.3-codex-spark`) instead of the generic effort level
+- **Separate rate limit** — Spark runs on its own rate limit quota, independent of GPT-5.3-Codex. Run both models in parallel across different Citizen to **double your effective throughput**
+- **Startup display** — `departure.sh` now shows the actual model name (e.g., `codex/gpt-5.3-codex-spark`) instead of the generic effort level
 
 ## What's New in v3.0 — Multi-CLI
 
-> **Shogun is no longer Claude-only.** Mix and match 4 AI coding CLIs in a single army.
+> **King is no longer Claude-only.** Mix and match 4 AI coding CLIs in a single army.
 
 - **Multi-CLI as first-class architecture** — `lib/cli_adapter.sh` dynamically selects CLI per agent. Change one line in `settings.yaml` to swap any worker between Claude Code, Codex, Copilot, or Kimi
 - **OpenAI Codex CLI integration** — GPT-5.3-codex with `--dangerously-bypass-approvals-and-sandbox` for true autonomous execution. `--no-alt-screen` makes agent activity visible in tmux
 - **CLI bypass flag discovery** — `--full-auto` is NOT fully automatic (it's `-a on-request`). Documented the correct flags for all 4 CLIs
-- **Hybrid architecture** — Command layer (Shogun + Karo) stays on Claude Code for Memory MCP and mailbox integration. Worker layer (Ashigaru) is CLI-agnostic
+- **Hybrid architecture** — Command layer (King + Minister) stays on Claude Code for Memory MCP and mailbox integration. Worker layer (Citizen) is CLI-agnostic
 - **Community-contributed CLI adapters** — Thanks to [@yuto-ts](https://github.com/yuto-ts) (cli_adapter.sh), [@circlemouth](https://github.com/circlemouth) (Codex support), [@koba6316](https://github.com/koba6316) (task routing)
 
 <details>
@@ -1639,7 +1639,7 @@ Even if you're not comfortable with keyboard shortcuts, you can switch, scroll, 
 - **ntfy bidirectional communication** — Send commands from your phone, receive push notifications for task completion
 - **SayTask notifications** — Streak tracking, Eat the Frog, behavioral psychology-driven motivation
 - **Pane border task display** — See each agent's current task at a glance on the tmux pane border
-- **Shout mode** (default) — Ashigaru shout personalized battle cries after completing tasks. Disable with `--silent`
+- **Shout mode** (default) — Citizen shout personalized battle cries after completing tasks. Disable with `--silent`
 - **Agent self-watch + escalation (v3.2)** — Each agent monitors its own inbox file with `inotifywait` (zero-polling, instant wake-up). Fallback: `tmux send-keys` short nudge (text/Enter sent separately for Codex CLI). 3-phase escalation: standard nudge (0-2min) → Escape×2+nudge (2-4min) → `/clear` force reset (4min+). Linux FS symlink resolves WSL2 9P inotify issues.
 - **Agent self-identification** (`@agent_id`) — Stable identity via tmux user options, immune to pane reordering
 - **Battle mode** (`-k` flag) — All-Opus formation for maximum capability

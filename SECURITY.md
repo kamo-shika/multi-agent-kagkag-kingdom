@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-multi-agent-shogun is currently in active development. Security updates are provided for the latest release on the `main` branch.
+multi-agent-kagkag-kingdom is currently in active development. Security updates are provided for the latest release on the `main` branch.
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -51,10 +51,10 @@ claude mcp add github -e GITHUB_PERSONAL_ACCESS_TOKEN=ghp_1234567890abcdef -- np
 
 Your **ntfy topic name is your password**. Anyone who knows your topic can:
 - Read your notifications
-- Send commands to your Shogun
+- Send commands to your King
 
 **Best practices**:
-- Use a hard-to-guess topic name (e.g., `shogun-random-string-12345`, not `shogun` or `my-tasks`)
+- Use a hard-to-guess topic name (e.g., `king-random-string-12345`, not `king` or `my-tasks`)
 - Never share your topic in screenshots, blog posts, or GitHub commits
 - Keep `config/settings.yaml` (which contains your topic) excluded from git
 
@@ -108,9 +108,9 @@ All scripts must pass `shellcheck` to catch common security issues.
 ### 7. tmux Session Security
 
 tmux sessions run locally and are accessible to anyone with access to your machine:
-- Do not run multi-agent-shogun on shared/untrusted systems
+- Do not run multi-agent-kagkag-kingdom on shared/untrusted systems
 - Be aware that tmux sessions persist after logout (unless explicitly killed)
-- Use `tmux kill-session -t shogun` to clean up after use
+- Use `tmux kill-session -t king` to clean up after use
 
 ---
 
@@ -122,13 +122,13 @@ tmux sessions run locally and are accessible to anyone with access to your machi
 
 1. **Do NOT open a public GitHub issue** for security vulnerabilities
 2. **Use GitHub Security Advisories** (recommended):
-   - Navigate to the [Security tab](https://github.com/yohey-w/multi-agent-shogun/security)
+   - Navigate to the [Security tab](https://github.com/yohey-w/multi-agent-kagkag-kingdom/security)
    - Click "Report a vulnerability"
    - Provide detailed information (see below)
 
 3. **Or email the maintainer** (if GitHub Security Advisories is unavailable):
    - Email: See GitHub profile for contact information
-   - Subject: `[SECURITY] multi-agent-shogun vulnerability report`
+   - Subject: `[SECURITY] multi-agent-kagkag-kingdom vulnerability report`
 
 ### What to Include
 
@@ -156,7 +156,7 @@ arbitrary commands on the host system.
 Steps to Reproduce:
 1. Send the following ntfy message: `$(rm -rf /)`
 2. inbox_listener.sh receives and writes to ntfy_inbox.yaml
-3. Shogun reads the YAML file and executes the embedded command
+3. King reads the YAML file and executes the embedded command
 
 Environment:
 - OS: WSL2 Ubuntu 22.04
@@ -239,7 +239,7 @@ The following are NOT considered security vulnerabilities:
 
 ## Security Best Practices for Users
 
-To keep your multi-agent-shogun installation secure:
+To keep your multi-agent-kagkag-kingdom installation secure:
 
 1. **Keep dependencies updated**:
    ```bash
@@ -254,7 +254,7 @@ To keep your multi-agent-shogun installation secure:
 2. **Use strong ntfy topics**:
    ```bash
    # Generate a random topic
-   echo "shogun-$(openssl rand -hex 8)"
+   echo "king-$(openssl rand -hex 8)"
    ```
 
 3. **Review scripts before running**:
@@ -297,11 +297,11 @@ We appreciate the security research community's efforts to keep open-source soft
 ## Contact
 
 For security-related questions (not vulnerability reports):
-- Open a [GitHub Discussion](https://github.com/yohey-w/multi-agent-shogun/discussions)
+- Open a [GitHub Discussion](https://github.com/yohey-w/multi-agent-kagkag-kingdom/discussions)
 - Tag your question with `security` label
 
 For vulnerability reports, use the process described in [Reporting a Vulnerability](#reporting-a-vulnerability).
 
 ---
 
-**Thank you for helping keep multi-agent-shogun secure!**
+**Thank you for helping keep multi-agent-kagkag-kingdom secure!**
