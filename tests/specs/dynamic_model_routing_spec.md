@@ -28,7 +28,7 @@
 |---|---|---|---|---|
 | L1 | Unit | 市民 | bats + bash + python3 | 関数/ロジック単体検証 |
 | L2 | Integration | 大臣 | L1 + tmux + inbox_write | model_switch連携の統合検証 |
-| L3 | E2E | 殿担当 | 実運用tmux全体 | Bloom分析→switch→実行の完走確認 |
+| L3 | E2E | 主担当 | 実運用tmux全体 | Bloom分析→switch→実行の完走確認 |
 
 注記:
 - `SKIP=0` は必須。SKIPが1以上なら「未完了」扱い。
@@ -230,9 +230,9 @@
 
 ---
 
-## 9. E2E範囲（殿担当）
+## 9. E2E範囲（主担当）
 
-- E2E-DMR-001: 殿→王様→司祭(Bloom分析)→大臣(switch)→市民(実行)の全系統完走
+- E2E-DMR-001: 主→王様→司祭(Bloom分析)→大臣(switch)→市民(実行)の全系統完走
 - E2E-DMR-002: L3タスクとL5タスクの混在時、異なるモデルで実行されること
 - E2E-DMR-003: capability_tiers追加前後でshutsuijinの正常起動を確認
 

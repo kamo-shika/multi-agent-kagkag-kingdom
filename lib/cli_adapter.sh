@@ -900,7 +900,7 @@ except Exception:
 # find_agent_for_model() — Issue #53 Phase 2
 # 指定モデルを使用している空き市民を探す。
 #
-# 核心設計原則（殿の方針）:
+# 核心設計原則（主の方針）:
 #   - ビジーペイン: 絶対に触らない（作業中断・データ消失リスク）
 #   - アイドルペイン: CLI切り替えOK（停止→起動）
 #   例) Codex 5.3が必要でClaude CodeしかアイドルならClaude Codeに降格OK
@@ -1002,7 +1002,7 @@ except Exception:
     done
 
     # フェーズ2: 完全一致が全員ビジー → 任意のアイドル市民にフォールバック
-    # 殿の方針: 「Codex 5.3が欲しくて Claude Code しか空いていなければ Claude Code で可」
+    # 主の方針: 「Codex 5.3が欲しくて Claude Code しか空いていなければ Claude Code で可」
     # kill/restart は絶対しない。アイドルペインを再利用する。
     local all_agents
     all_agents=$("$CLI_ADAPTER_PROJECT_ROOT/.venv/bin/python3" -c "

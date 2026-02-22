@@ -420,7 +420,7 @@ if [ "$CLEAN_MODE" = true ]; then
 # 📊 戦況報告
 最終更新: ${TIMESTAMP}
 
-## 🚨 要対応 - 殿のご判断をお待ちしております
+## 🚨 要対応 - 主のご判断をお待ちしております
 なし
 
 ## 🔄 進行中 - 只今、戦闘中でござる
@@ -448,7 +448,7 @@ EOF
 # 📊 戦況報告 (Battle Status Report)
 最終更新 (Last Updated): ${TIMESTAMP}
 
-## 🚨 要対応 - 殿のご判断をお待ちしております (Action Required - Awaiting Lord's Decision)
+## 🚨 要対応 - 主のご判断をお待ちしております (Action Required - Awaiting Lord's Decision)
 なし (None)
 
 ## 🔄 進行中 - 只今、戦闘中でござる (In Progress - Currently in Battle)
