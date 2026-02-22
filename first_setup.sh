@@ -44,13 +44,23 @@ log_step() {
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
+# macOS/Linux 両対応の sed -i ラッパー
+# macOS (BSD sed) は -i の後にバックアップ拡張子が必須
+sed_i() {
+    if [ "$(uname -s)" = "Darwin" ]; then
+        sed -i '' "$@"
+    else
+        sed -i "$@"
+    fi
+}
+
 # 結果追跡用変数
 RESULTS=()
 HAS_ERROR=false
 
 echo ""
 echo "  ╔══════════════════════════════════════════════════════════════╗"
-echo "  ║  🏰 multi-agent-kagkag-kingdom インストーラー                         ║"
+echo "  ║  🏰 multi-agent-kagkag-kingdom インストーラー                ║"
 echo "  ║     Initial Setup Script for Ubuntu / WSL                    ║"
 echo "  ╚══════════════════════════════════════════════════════════════╝"
 echo ""
@@ -737,11 +747,11 @@ ALIAS_ADDED=false
 if [ -f "$BASHRC_FILE" ]; then
     # 古い alias 形式を削除（存在する場合）
     if grep -q "alias css=" "$BASHRC_FILE" 2>/dev/null; then
-        sed -i '/alias css=/d' "$BASHRC_FILE"
+        sed_i '/alias css=/d' "$BASHRC_FILE"
         log_info "旧 alias css を削除しました"
     fi
     if grep -q "alias csm=" "$BASHRC_FILE" 2>/dev/null; then
-        sed -i '/alias csm=/d' "$BASHRC_FILE"
+        sed_i '/alias csm=/d' "$BASHRC_FILE"
         log_info "旧 alias csm を削除しました"
     fi
 
@@ -756,7 +766,7 @@ if [ -f "$BASHRC_FILE" ]; then
         ALIAS_ADDED=true
     else
         # 関数は存在する → 最新版に更新
-        sed -i '/^css()/d' "$BASHRC_FILE"
+        sed_i '/^css()/d' "$BASHRC_FILE"
         echo "$CSS_FUNC" >> "$BASHRC_FILE"
         log_info "css 関数を更新しました"
         ALIAS_ADDED=true
@@ -768,7 +778,7 @@ if [ -f "$BASHRC_FILE" ]; then
         log_info "csm 関数を追加しました（大臣・市民ウィンドウ — 自動掃除付き）"
         ALIAS_ADDED=true
     else
-        sed -i '/^csm()/d' "$BASHRC_FILE"
+        sed_i '/^csm()/d' "$BASHRC_FILE"
         echo "$CSM_FUNC" >> "$BASHRC_FILE"
         log_info "csm 関数を更新しました"
         ALIAS_ADDED=true
@@ -874,7 +884,7 @@ fi
 # ============================================================
 echo ""
 echo "  ╔══════════════════════════════════════════════════════════════╗"
-echo "  ║  📋 セットアップ結果サマリー                                  ║"
+echo "  ║  📋 セットアップ結果サマリー                                 ║"
 echo "  ╚══════════════════════════════════════════════════════════════╝"
 echo ""
 
@@ -892,14 +902,14 @@ echo ""
 
 if [ "$HAS_ERROR" = true ]; then
     echo "  ╔══════════════════════════════════════════════════════════════╗"
-    echo "  ║  ⚠️  一部の依存関係が不足しています                           ║"
+    echo "  ║  ⚠️  一部の依存関係が不足しています                          ║"
     echo "  ╚══════════════════════════════════════════════════════════════╝"
     echo ""
     echo "  上記の警告を確認し、不足しているものをインストールしてください。"
     echo "  すべての依存関係が揃ったら、再度このスクリプトを実行して確認できます。"
 else
     echo "  ╔══════════════════════════════════════════════════════════════╗"
-    echo "  ║  ✅ セットアップ完了！準備万端でござる！                      ║"
+    echo "  ║  ✅ セットアップ完了！準備万端でござる！                     ║"
     echo "  ╚══════════════════════════════════════════════════════════════╝"
 fi
 
