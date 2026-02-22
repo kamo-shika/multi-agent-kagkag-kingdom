@@ -229,7 +229,7 @@ External PRs are reinforcements. Treat with respect.
 
 - Modified `instructions/*.md` → plan regression test for affected scope
 - Modified `CLAUDE.md` → test /clear recovery
-- Modified `shutsujin_departure.sh` → test startup
+- Modified `departure.sh` → test startup
 
 ### Quality Assurance
 

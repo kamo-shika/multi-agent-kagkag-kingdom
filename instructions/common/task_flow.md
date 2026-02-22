@@ -65,7 +65,7 @@ Meanings and allowed/forbidden actions (short):
 
 Note:
 - Normally, "idle" is a UI state (no active task), not a YAML status value.
-- Exception (placeholder only): `status: idle` is allowed **only** when `task_id: null` (clean start template written by `shutsujin_departure.sh --clean`).
+- Exception (placeholder only): `status: idle` is allowed **only** when `task_id: null` (clean start template written by `departure.sh --clean`).
   - In that state, the file is a placeholder and should be treated as "no task assigned yet".
 
 ### Pending Tasks (Minister-managed): `queue/tasks/pending.yaml`

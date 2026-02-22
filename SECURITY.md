@@ -260,7 +260,7 @@ To keep your multi-agent-kagkag-kingdom installation secure:
 3. **Review scripts before running**:
    ```bash
    # Always check what a script does before running it
-   cat shutsujin_departure.sh
+   cat departure.sh
    ```
 
 4. **Limit tmux session access**:
