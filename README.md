@@ -400,7 +400,7 @@ Whichever option you chose, **10 AI agents** are automatically launched:
 
 | Agent | Role | Count |
 |-------|------|-------|
-| 🏯 King | Supreme commander — receives your orders | 1 |
+| 🏰 King | Supreme commander — receives your orders | 1 |
 | 📋 Minister | Manager — distributes tasks, quality checks | 1 |
 | ⚔️ Citizen | Workers — execute implementation tasks in parallel | 7 |
 | 🧠 Priest | Strategist — handles analysis, evaluation, and design | 1 |
@@ -687,7 +687,7 @@ Two-way communication between your phone and the King — no SSH, no Tailscale, 
 | **Minister → Phone (direct)** | When Minister updates `dashboard.md`, it sends push notifications directly via `scripts/ntfy.sh` — **King is bypassed** (King is for human interaction, not progress reporting) |
 
 ```
-📱 You (from bed)          🏯 King
+📱 You (from bed)          🏰 King
     │                          │
     │  "Research React 19"     │
     ├─────────────────────────►│
@@ -720,7 +720,7 @@ Free, no account required, no server to maintain. Uses [ntfy.sh](https://ntfy.sh
 
 ```bash
 # Send a test notification to your phone
-bash scripts/ntfy.sh "Test notification from King 🏯"
+bash scripts/ntfy.sh "Test notification from King 🏰"
 ```
 
 If your phone receives the notification, you're all set. If not, check:
