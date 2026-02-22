@@ -58,7 +58,7 @@
 !AGENTS.md
 
 # Setup and deployment scripts
-!shutsujin_departure.sh
+!departure.sh
 !first_setup.sh
 !setup.sh
 !install.bat
