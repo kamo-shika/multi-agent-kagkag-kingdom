@@ -17,7 +17,7 @@
 | Bloom Level | Bloom's Taxonomy (L1-L6) によるタスク認知レベル分類 |
 | capability_tier | モデルが対応可能なBloomレベル上限の定義 |
 | model_switch | 市民のCLIモデルを動的に切り替えるinbox type |
-| gunshi_analysis | 司祭がタスクを分析し、Bloomレベル+推奨モデルを出力するYAML |
+| priest_analysis | 司祭がタスクを分析し、Bloomレベル+推奨モデルを出力するYAML |
 | bloom_routing | settings.yaml の設定。auto/manual/off |
 
 ### Bloom Taxonomy Levels
@@ -136,9 +136,9 @@ L6    → claude-opus-4-6 (Opus Thinking)
 
 ---
 
-### Phase 2: Karo manual model_switch
+### Phase 2: Minister manual model_switch
 
-#### FR-05: Karo manual model_switch
+#### FR-05: Minister manual model_switch
 
 **概要**: 大臣がタスク内容を見て、手動でmodel_switchを判断・実行
 
@@ -163,7 +163,7 @@ L6    → claude-opus-4-6 (Opus Thinking)
 
 ---
 
-#### FR-06: Karo model_switch判定ロジック
+#### FR-06: Minister model_switch判定ロジック
 
 **概要**: 大臣がタスク配布時にモデル適合性を判定する関数
 
@@ -189,15 +189,15 @@ L6    → claude-opus-4-6 (Opus Thinking)
 
 ---
 
-### Phase 3: Gunshi Bloom analysis layer
+### Phase 3: Priest Bloom analysis layer
 
-#### FR-07: gunshi_analysis.yaml スキーマ（共有インターフェース）
+#### FR-07: priest_analysis.yaml スキーマ（共有インターフェース）
 
 **概要**: 司祭のタスク分析結果を格納するYAML。#53と#48の共有インターフェース。
 
 **スキーマ**:
 ```yaml
-# queue/analysis/gunshi_analysis.yaml
+# queue/analysis/priest_analysis.yaml
 task_id: subtask_xxx
 timestamp: "ISO 8601"
 analysis:
@@ -212,7 +212,7 @@ analysis:
   quality_criteria:
     - "既存テストがパスすること"
     - "変更箇所にユニットテスト追加"
-  qc_method: automated    # automated / gunshi_review / lord_review
+  qc_method: automated    # automated / priest_review / lord_review
   pdca_needed: false      # trueならPDCAループに入る
 ```
 
@@ -240,9 +240,9 @@ analysis:
 1. 大臣がタスクを受領
 2. bloom_routing設定を確認
 3. auto → 司祭にinbox_write（分析依頼）
-4. 司祭がタスクを分析 → gunshi_analysis.yaml を書き込み
+4. 司祭がタスクを分析 → priest_analysis.yaml を書き込み
 5. 司祭が大臣にinbox_write（分析完了通知）
-6. 大臣がgunshi_analysis.yamlを読取
+6. 大臣がpriest_analysis.yamlを読取
 7. recommended_modelに基づきmodel_switch判定（FR-06ロジック）
 8. タスク配布
 ```
@@ -358,7 +358,7 @@ history:
 **受け入れ条件**:
 - [ ] get_capability_tier(), get_recommended_model(), get_cost_group() はsettings.yamlのみに依存
 - [ ] テスト用settings.yamlを注入可能（CLI_ADAPTER_SETTINGS環境変数）
-- [ ] gunshi_analysis.yamlの検証がPythonスクリプトで自動化可能
+- [ ] priest_analysis.yamlの検証がPythonスクリプトで自動化可能
 - [ ] model_performance.yamlの検証がPythonスクリプトで自動化可能
 
 ---
@@ -369,7 +369,7 @@ history:
 
 **受け入れ条件**:
 - [ ] get_recommended_model() に同一bloom_levelを渡すと、常に同一のモデル名を返す
-- [ ] gunshi_analysis.yamlの同一タスクに対する分析結果が安定する（confidenceが閾値以上）
+- [ ] priest_analysis.yamlの同一タスクに対する分析結果が安定する（confidenceが閾値以上）
 - [ ] model_performance.yamlの履歴追加が既存データを破壊しない
 
 ---
@@ -404,9 +404,9 @@ history:
 | 品質基準設計 | 利用しない | **担当** |
 | PDCAループ | 利用しない | **担当** |
 | QCチェック | 利用しない | **担当** |
-| gunshi_analysis.yaml | bloom_level, recommended_model | quality_criteria, qc_method, pdca_needed |
+| priest_analysis.yaml | bloom_level, recommended_model | quality_criteria, qc_method, pdca_needed |
 
-**共有インターフェース**: `queue/analysis/gunshi_analysis.yaml` — 司祭が1回の分析で両Issue向けの出力を生成。
+**共有インターフェース**: `queue/analysis/priest_analysis.yaml` — 司祭が1回の分析で両Issue向けの出力を生成。
 
 ---
 

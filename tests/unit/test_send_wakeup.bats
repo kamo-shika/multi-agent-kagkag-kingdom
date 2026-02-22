@@ -36,10 +36,10 @@
 #   T-CODEX-010: unresolved CLI type falls back to codex-safe path
 #   T-CODEX-011: clear_command処理でauto-recovery task_assignedを自動投入
 #   T-CODEX-012: auto-recovery task_assignedは重複投入しない
-#   T-SHOGUN-001: session_has_client — returns 0 when client attached
-#   T-SHOGUN-002: session_has_client — returns 1 when no client
-#   T-SHOGUN-003: send_wakeup — king + active + attached → display-message only
-#   T-SHOGUN-004: send_wakeup — king + active + detached → send-keys fallthrough
+#   T-KING-001: session_has_client — returns 0 when client attached
+#   T-KING-002: session_has_client — returns 1 when no client
+#   T-KING-003: send_wakeup — king + active + attached → display-message only
+#   T-KING-004: send_wakeup — king + active + detached → send-keys fallthrough
 #   T-COPILOT-001: send_cli_command — copilot /clear → Ctrl-C + restart
 #   T-COPILOT-002: send_cli_command — copilot /model → skip
 
@@ -793,9 +793,9 @@ YAML
     echo "$output" | grep -q "not supported on copilot"
 }
 
-# --- T-SHOGUN-001: session_has_client — client attached ---
+# --- T-KING-001: session_has_client — client attached ---
 
-@test "T-SHOGUN-001: session_has_client returns 0 when client attached" {
+@test "T-KING-001: session_has_client returns 0 when client attached" {
     run bash -c '
         MOCK_LIST_CLIENTS="/dev/pts/1: mock_session [200x50 xterm-256color]"
         source "'"$TEST_HARNESS"'"
@@ -804,9 +804,9 @@ YAML
     [ "$status" -eq 0 ]
 }
 
-# --- T-SHOGUN-002: session_has_client — no client ---
+# --- T-KING-002: session_has_client — no client ---
 
-@test "T-SHOGUN-002: session_has_client returns 1 when no client" {
+@test "T-KING-002: session_has_client returns 1 when no client" {
     run bash -c '
         MOCK_LIST_CLIENTS=""
         source "'"$TEST_HARNESS"'"
@@ -815,9 +815,9 @@ YAML
     [ "$status" -ne 0 ]
 }
 
-# --- T-SHOGUN-003: king + active pane + client attached → display-message only ---
+# --- T-KING-003: king + active pane + client attached → display-message only ---
 
-@test "T-SHOGUN-003: send_wakeup king + active + attached uses display-message only" {
+@test "T-KING-003: send_wakeup king + active + attached uses display-message only" {
     run bash -c '
         MOCK_PANE_ACTIVE="1"
         MOCK_LIST_CLIENTS="/dev/pts/1: mock_session [200x50 xterm-256color]"
@@ -834,9 +834,9 @@ YAML
     ! grep -q "send-keys.*inbox" "$MOCK_LOG"
 }
 
-# --- T-SHOGUN-004: king + active pane + no client → send-keys fallthrough ---
+# --- T-KING-004: king + active pane + no client → send-keys fallthrough ---
 
-@test "T-SHOGUN-004: send_wakeup king + active + detached falls through to send-keys" {
+@test "T-KING-004: send_wakeup king + active + detached falls through to send-keys" {
     run bash -c '
         MOCK_PANE_ACTIVE="1"
         MOCK_LIST_CLIENTS=""

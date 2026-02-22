@@ -2,7 +2,7 @@
 
 # Default target
 help:
-	@echo "Multi-CLI Shogun - Development Commands"
+	@echo "Multi-CLI Kingdom - Development Commands"
 	@echo ""
 	@echo "Available targets:"
 	@echo "  make test          - Run bats unit tests"

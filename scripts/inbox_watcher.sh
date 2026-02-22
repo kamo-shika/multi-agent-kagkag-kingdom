@@ -287,7 +287,7 @@ try:
             raise SystemExit(0)
 
     # Task YAML status guard: skip auto-recovery if task is cancelled or idle.
-    # This prevents restarting a task that Karo intentionally cancelled via clear_command.
+    # This prevents restarting a task that Minister intentionally cancelled via clear_command.
     task_yaml_path = os.path.join(
         os.path.dirname(os.path.dirname(inbox)), "tasks", f"{agent_id}.yaml"
     )
@@ -427,7 +427,7 @@ send_cli_command() {
     effective_cli=$(get_effective_cli_type)
 
     # Safety: never inject CLI commands into the king pane.
-    # Shogun is controlled by the Lord; keystroke injection can clobber human input.
+    # King is controlled by the Lord; keystroke injection can clobber human input.
     if [ "$AGENT_ID" = "king" ]; then
         echo "[$(date)] [SKIP] king: suppressing CLI command injection ($cmd)" >&2
         return 0
@@ -722,7 +722,7 @@ send_wakeup() {
         return 0
     fi
 
-    # Shogun: if the pane is focused AND a human is attached, never inject keys
+    # King: if the pane is focused AND a human is attached, never inject keys
     # (it can clobber the Lord's input). Show a tmux message instead.
     # If session is detached, no human is watching — safe to send-keys normally.
     if [ "$AGENT_ID" = "king" ] && pane_is_active && session_has_client; then
@@ -845,7 +845,7 @@ process_unread() {
         FIRST_UNREAD_SEEN=0
         NEW_CONTEXT_SENT=0
         if ! agent_is_busy; then
-            # Shogun: only clear input when pane is not active (Lord is away)
+            # King: only clear input when pane is not active (Lord is away)
             if [ "$AGENT_ID" = "king" ] && pane_is_active; then
                 : # Lord may be typing — skip C-u
             else
@@ -890,10 +890,10 @@ for s in data.get('specials', []):
 
     # /clear は Codex で /new へ変換される。再起動直後の取りこぼし防止として
     # 追加 task_assigned を自動投入し、次サイクルで確実に wake-up 可能にする。
-    # 案B+待機: Karo がタスク YAML を cancelled に更新するまでの猶予を確保してから
+    # 案B+待機: Minister がタスク YAML を cancelled に更新するまでの猶予を確保してから
     # status チェックを行い、cancelled/idle の場合はスキップする。
     if [ "$clear_seen" -eq 1 ]; then
-        # Wait for Karo to update task YAML status (cancellation race condition mitigation).
+        # Wait for Minister to update task YAML status (cancellation race condition mitigation).
         # send_cli_command already slept 3s for /clear; add 5s more = ~8s total before check.
         sleep 5
         local recovery_id
@@ -1018,7 +1018,7 @@ for s in data.get('specials', []):
         # Clear stale nudge text from input field (Codex CLI prefills last input on idle).
         # Only send C-u when agent is idle — during Working it would be disruptive.
         if ! agent_is_busy; then
-            # Shogun: only clear input when pane is not active (Lord is away)
+            # King: only clear input when pane is not active (Lord is away)
             if [ "$AGENT_ID" = "king" ] && pane_is_active; then
                 : # Lord may be typing — skip C-u
             else

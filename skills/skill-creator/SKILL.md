@@ -83,15 +83,15 @@ description: {いつこのスキルを使うか、具体的なユースケース
 
 ## 使用フロー
 
-このスキルはKaroがKingからの指示を受けて使用する。
+このスキルはMinisterがKingからの指示を受けて使用する。
 
-1. Ashigaruがスキル化候補を発見 → Karoに報告
-2. Karo → Kingに報告
+1. Citizenがスキル化候補を発見 → Ministerに報告
+2. Minister → Kingに報告
 3. **Kingが最新仕様をリサーチし、スキル設計を行う**
 4. Kingが人間に承認を依頼（dashboard.md経由）
 5. 人間が承認
-6. King → Karoに作成を指示（設計書付き）
-7. **Karo がこのskill-creatorを使用してスキルを作成**
+6. King → Ministerに作成を指示（設計書付き）
+7. **Minister がこのskill-creatorを使用してスキルを作成**
 8. 完了報告
 
 ※ Kingがリサーチした最新仕様に基づいて作成すること。

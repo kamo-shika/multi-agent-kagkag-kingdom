@@ -44,7 +44,7 @@ if [ -z "$AGENT_ID" ]; then
     exit 0
 fi
 
-# ─── Shogun: always approve (human-controlled) ───
+# ─── King: always approve (human-controlled) ───
 if [ "$AGENT_ID" = "king" ]; then
     exit 0
 fi

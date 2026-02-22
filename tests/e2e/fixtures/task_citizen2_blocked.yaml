@@ -1,5 +1,5 @@
-# task_ashigaru2_blocked.yaml — Blocked task for ashigaru2
-# Depends on ashigaru1's task completing first
+# task_citizen2_blocked.yaml — Blocked task for citizen2
+# Depends on citizen1's task completing first
 task:
   task_id: subtask_test_002b
   parent_cmd: cmd_test_001
@@ -7,7 +7,7 @@ task:
   blocked_by:
     - subtask_test_001a
   description: |
-    E2E test task for ashigaru2: blocked until ashigaru1 completes.
+    E2E test task for citizen2: blocked until citizen1 completes.
     Mock CLI will process this after blocked_by is resolved.
   status: blocked
   timestamp: "2026-01-01T00:00:00"

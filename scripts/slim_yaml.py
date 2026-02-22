@@ -3,7 +3,7 @@
 YAML Slimming Utility
 
 Removes completed/archived items from YAML queue files to maintain performance.
-- For Karo: Archives done/cancelled commands from king_to_minister.yaml
+- For Minister: Archives done/cancelled commands from king_to_minister.yaml
 - For all agents: Archives read: true messages from inbox files
 """
 
@@ -160,7 +160,7 @@ def main():
     archive_dir = Path(__file__).resolve().parent.parent / 'queue' / 'archive'
     archive_dir.mkdir(parents=True, exist_ok=True)
 
-    # Process king_to_minister if this is Karo
+    # Process king_to_minister if this is Minister
     if agent_id == 'minister':
         if not slim_king_to_minister():
             sys.exit(1)

@@ -104,9 +104,9 @@
 
 ---
 
-## 4. Phase 2 テストケース — Karo manual model_switch
+## 4. Phase 2 テストケース — Minister manual model_switch
 
-### 4.1 FR-05: Karo manual model_switch
+### 4.1 FR-05: Minister manual model_switch
 
 | TC ID | 要件 | レベル | 観点 | 期待値 |
 |---|---|---|---|---|
@@ -115,7 +115,7 @@
 | TC-DMR-102 | FR-05 capability_tiers不在 | L1 | セクションなし | 判定スキップ |
 | TC-DMR-103 | FR-05 bloomフィールドなし | L1 | タスクYAMLにbloom_levelなし | 判定スキップ |
 
-### 4.2 FR-06: Karo model_switch判定ロジック
+### 4.2 FR-06: Minister model_switch判定ロジック
 
 | TC ID | 要件 | レベル | 観点 | 期待値 |
 |---|---|---|---|---|
@@ -148,9 +148,9 @@
 
 ---
 
-## 5. Phase 3 テストケース — Gunshi Bloom analysis layer
+## 5. Phase 3 テストケース — Priest Bloom analysis layer
 
-### 5.1 FR-07: gunshi_analysis.yaml スキーマ
+### 5.1 FR-07: priest_analysis.yaml スキーマ
 
 | TC ID | 要件 | レベル | 観点 | 期待値 |
 |---|---|---|---|---|

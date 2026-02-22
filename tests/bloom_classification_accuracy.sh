@@ -14,8 +14,8 @@ set -euo pipefail
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CORPUS="${1:-${PROJECT_ROOT}/tests/fixtures/bloom_task_corpus.yaml}"
 OUTPUT="${PROJECT_ROOT}/queue/reports/bloom_accuracy_report.yaml"
-GUNSHI_TASK_FILE="${PROJECT_ROOT}/queue/tasks/priest.yaml"
-GUNSHI_REPORT="${PROJECT_ROOT}/queue/reports/priest_bloom_test.yaml"
+PRIEST_TASK_FILE="${PROJECT_ROOT}/queue/tasks/priest.yaml"
+PRIEST_REPORT="${PROJECT_ROOT}/queue/reports/priest_bloom_test.yaml"
 
 # 引数パース
 while [[ $# -gt 0 ]]; do
@@ -46,8 +46,8 @@ from datetime import datetime
 corpus_path = "${CORPUS}"
 output_path = "${OUTPUT}"
 project_root = "${PROJECT_ROOT}"
-priest_task_file = "${GUNSHI_TASK_FILE}"
-priest_report_file = "${GUNSHI_REPORT}"
+priest_task_file = "${PRIEST_TASK_FILE}"
+priest_report_file = "${PRIEST_REPORT}"
 
 with open(corpus_path) as f:
     corpus = yaml.safe_load(f)

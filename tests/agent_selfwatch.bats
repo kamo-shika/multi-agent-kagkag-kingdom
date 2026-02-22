@@ -16,11 +16,11 @@ setup_file() {
 
     export WATCHER_SCRIPT="$PROJECT_ROOT/scripts/inbox_watcher.sh"
     export INBOX_WRITE_SCRIPT="$PROJECT_ROOT/scripts/inbox_write.sh"
-    export ASHIGARU_INSTR="$PROJECT_ROOT/instructions/generated/codex-citizen.md"
+    export CITIZEN_INSTR="$PROJECT_ROOT/instructions/generated/codex-citizen.md"
 
     [ -f "$WATCHER_SCRIPT" ] || return 1
     [ -f "$INBOX_WRITE_SCRIPT" ] || return 1
-    [ -f "$ASHIGARU_INSTR" ] || return 1
+    [ -f "$CITIZEN_INSTR" ] || return 1
     "$VENV_PYTHON" -c "import yaml" 2>/dev/null || return 1
 }
 
@@ -133,7 +133,7 @@ PY
 }
 
 @test "TC-FR-005: post-task inbox check rule is documented for citizen" {
-    grep -q "MANDATORY Post-Task Inbox Check" "$ASHIGARU_INSTR"
+    grep -q "MANDATORY Post-Task Inbox Check" "$CITIZEN_INSTR"
 }
 
 @test "TC-FR-006 [RED]: metrics hooks are defined (unread_latency/read_count/estimated_tokens)" {

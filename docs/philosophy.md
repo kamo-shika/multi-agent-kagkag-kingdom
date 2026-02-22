@@ -6,11 +6,11 @@
 
 ### 1. Autonomous Formation Design
 
-Design task formations based on complexity, not templates. A simple file rename doesn't need 8 Ashigaru. A complex refactor across 20 files does. The Karo analyzes each command and decides the optimal formation — sometimes 1 Ashigaru, sometimes all 8 in parallel with dependency chains.
+Design task formations based on complexity, not templates. A simple file rename doesn't need 8 Citizen. A complex refactor across 20 files does. The Minister analyzes each command and decides the optimal formation — sometimes 1 Citizen, sometimes all 8 in parallel with dependency chains.
 
 ### 2. Parallelization
 
-Use subagents to prevent single-point bottlenecks. The Karo decomposes tasks into independent subtasks and assigns them to multiple Ashigaru simultaneously. Dependent tasks use `blocks`/`blockedBy` in YAML to ensure correct execution order while maximizing parallel throughput.
+Use subagents to prevent single-point bottlenecks. The Minister decomposes tasks into independent subtasks and assigns them to multiple Citizen simultaneously. Dependent tasks use `blocks`/`blockedBy` in YAML to ensure correct execution order while maximizing parallel throughput.
 
 ### 3. Research First
 
@@ -26,14 +26,14 @@ Multi-perspective research with integrated authorization. Important decisions ar
 
 ## Design Decisions
 
-### Why a hierarchy (Shogun → Karo → Ashigaru)?
+### Why a hierarchy (King → Minister → Citizen)?
 
-1. **Instant response**: The Shogun delegates immediately, returning control to you
-2. **Parallel execution**: The Karo distributes to multiple Ashigaru simultaneously
+1. **Instant response**: The King delegates immediately, returning control to you
+2. **Parallel execution**: The Minister distributes to multiple Citizen simultaneously
 3. **Single responsibility**: Each role is clearly separated — no confusion
-4. **Scalability**: Adding more Ashigaru doesn't break the structure
-5. **Fault isolation**: One Ashigaru failing doesn't affect the others
-6. **Unified reporting**: Only the Shogun communicates with you, keeping information organized
+4. **Scalability**: Adding more Citizen doesn't break the structure
+5. **Fault isolation**: One Citizen failing doesn't affect the others
+6. **Unified reporting**: Only the King communicates with you, keeping information organized
 
 ### Why Mailbox System?
 
@@ -45,12 +45,12 @@ Multi-perspective research with integrated authorization. Important decisions ar
 6. **Guaranteed delivery**: File write succeeded = message will be delivered. No delivery verification needed, no false negatives
 7. **Nudge-only delivery**: `send-keys` transmits only a short wake-up signal (timeout 5s), not full message content. Agents read from their inbox files themselves
 
-### Why only the Karo updates dashboard.md
+### Why only the Minister updates dashboard.md
 
 1. **Single writer**: Prevents conflicts by limiting updates to one agent
-2. **Information aggregation**: The Karo receives all Ashigaru reports, so it has the full picture
+2. **Information aggregation**: The Minister receives all Citizen reports, so it has the full picture
 3. **Consistency**: All updates pass through a single quality gate
-4. **No interruptions**: If the Shogun updated it, it could interrupt the Lord's input
+4. **No interruptions**: If the King updated it, it could interrupt the Lord's input
 
 ### Why Skills are not committed to the repo
 
