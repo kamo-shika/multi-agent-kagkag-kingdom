@@ -16,8 +16,8 @@
 |---|---|
 | Bloom Level | Bloom's Taxonomy (L1-L6) によるタスク認知レベル分類 |
 | capability_tier | モデルが対応可能なBloomレベル上限の定義 |
-| model_switch | 足軽のCLIモデルを動的に切り替えるinbox type |
-| gunshi_analysis | 軍師がタスクを分析し、Bloomレベル+推奨モデルを出力するYAML |
+| model_switch | 市民のCLIモデルを動的に切り替えるinbox type |
+| gunshi_analysis | 司祭がタスクを分析し、Bloomレベル+推奨モデルを出力するYAML |
 | bloom_routing | settings.yaml の設定。auto/manual/off |
 
 ### Bloom Taxonomy Levels
@@ -140,24 +140,24 @@ L6    → claude-opus-4-6 (Opus Thinking)
 
 #### FR-05: Karo manual model_switch
 
-**概要**: 家老がタスク内容を見て、手動でmodel_switchを判断・実行
+**概要**: 大臣がタスク内容を見て、手動でmodel_switchを判断・実行
 
 **トリガー**:
 - 殿が明示的に指示（「このタスクはSonnetでやれ」）
-- 家老がタスクのBloomレベルを目視判断
+- 大臣がタスクのBloomレベルを目視判断
 
 **フロー**:
 ```
-1. 家老がタスクYAMLを作成（通常通り）
-2. 家老がget_capability_tier()で現在モデルの能力を確認
+1. 大臣がタスクYAMLを作成（通常通り）
+2. 大臣がget_capability_tier()で現在モデルの能力を確認
 3. タスクのBloomレベルが現在モデルの上限を超えると判断
 4. model_switch inbox + task_assigned inbox を順次送信
-5. 足軽がモデル切替後にタスクを実行
+5. 市民がモデル切替後にタスクを実行
 ```
 
 **受け入れ条件**:
 - [ ] model_switchの既存inbox_watcher.sh処理が正常動作する
-- [ ] Claude Code足軽に対してのみmodel_switchが送信される（Codex/Copilot = スキップ）
+- [ ] Claude Code市民に対してのみmodel_switchが送信される（Codex/Copilot = スキップ）
 - [ ] model_switch後のタスク実行が正常に開始される
 - [ ] capability_tiersが未定義の場合、model_switchは実行されない（現行動作維持）
 
@@ -165,25 +165,25 @@ L6    → claude-opus-4-6 (Opus Thinking)
 
 #### FR-06: Karo model_switch判定ロジック
 
-**概要**: 家老がタスク配布時にモデル適合性を判定する関数
+**概要**: 大臣がタスク配布時にモデル適合性を判定する関数
 
 **入力**: タスクYAML（task_id, bloom_level フィールド）
 
 **ロジック**:
 ```
 1. タスクYAMLの bloom_level を読取（未指定 → 判定スキップ）
-2. 割当先足軽の現在モデルを get_agent_model() で取得
+2. 割当先市民の現在モデルを get_agent_model() で取得
 3. 現在モデルの max_bloom を get_capability_tier() で取得
 4. bloom_level > max_bloom → model_switch が必要
 5. get_recommended_model(bloom_level) で推奨モデルを取得
-6. 推奨モデルのCLI種別が足軽のCLI種別と一致するか確認
-7. CLI種別不一致 → 別の足軽に割当 or スキップ（家老判断）
+6. 推奨モデルのCLI種別が市民のCLI種別と一致するか確認
+7. CLI種別不一致 → 別の市民に割当 or スキップ（大臣判断）
 ```
 
 **受け入れ条件**:
 - [ ] bloom_level=3, 現在model=spark → switch不要
 - [ ] bloom_level=4, 現在model=spark → switch必要、推奨=codex-5.3
-- [ ] bloom_level=5, 現在model=codex → CLI不一致（codex→claude必要）→ Claude足軽に再割当
+- [ ] bloom_level=5, 現在model=codex → CLI不一致（codex→claude必要）→ Claude市民に再割当
 - [ ] bloom_levelフィールドなし → 判定スキップ（現行動作）
 - [ ] capability_tiers未定義 → 判定スキップ（現行動作）
 
@@ -193,7 +193,7 @@ L6    → claude-opus-4-6 (Opus Thinking)
 
 #### FR-07: gunshi_analysis.yaml スキーマ（共有インターフェース）
 
-**概要**: 軍師のタスク分析結果を格納するYAML。#53と#48の共有インターフェース。
+**概要**: 司祭のタスク分析結果を格納するYAML。#53と#48の共有インターフェース。
 
 **スキーマ**:
 ```yaml
@@ -226,33 +226,33 @@ analysis:
 
 ---
 
-#### FR-08: 軍師Bloom分析トリガー
+#### FR-08: 司祭Bloom分析トリガー
 
-**概要**: 家老が軍師にBloom分析を依頼するフロー
+**概要**: 大臣が司祭にBloom分析を依頼するフロー
 
 **トリガー条件**:
-- `bloom_routing: auto` 設定時 → 全タスクで軍師分析を実施
-- `bloom_routing: manual` 設定時 → 家老が必要と判断した場合のみ
-- `bloom_routing: off` 設定時 → 軍師分析なし（Phase 2動作）
+- `bloom_routing: auto` 設定時 → 全タスクで司祭分析を実施
+- `bloom_routing: manual` 設定時 → 大臣が必要と判断した場合のみ
+- `bloom_routing: off` 設定時 → 司祭分析なし（Phase 2動作）
 
 **フロー**:
 ```
-1. 家老がタスクを受領
+1. 大臣がタスクを受領
 2. bloom_routing設定を確認
-3. auto → 軍師にinbox_write（分析依頼）
-4. 軍師がタスクを分析 → gunshi_analysis.yaml を書き込み
-5. 軍師が家老にinbox_write（分析完了通知）
-6. 家老がgunshi_analysis.yamlを読取
+3. auto → 司祭にinbox_write（分析依頼）
+4. 司祭がタスクを分析 → gunshi_analysis.yaml を書き込み
+5. 司祭が大臣にinbox_write（分析完了通知）
+6. 大臣がgunshi_analysis.yamlを読取
 7. recommended_modelに基づきmodel_switch判定（FR-06ロジック）
 8. タスク配布
 ```
 
 **受け入れ条件**:
-- [ ] bloom_routing=auto → 全タスクで軍師分析が発火
-- [ ] bloom_routing=manual → 家老の明示的判断時のみ発火
-- [ ] bloom_routing=off → 軍師分析なし
+- [ ] bloom_routing=auto → 全タスクで司祭分析が発火
+- [ ] bloom_routing=manual → 大臣の明示的判断時のみ発火
+- [ ] bloom_routing=off → 司祭分析なし
 - [ ] bloom_routing未定義 → off扱い（後方互換）
-- [ ] 軍師が未起動の場合 → 分析スキップ、Phase 2動作にフォールバック
+- [ ] 司祭が未起動の場合 → 分析スキップ、Phase 2動作にフォールバック
 
 ---
 
@@ -266,8 +266,8 @@ bloom_routing: off   # auto | manual | off
 ```
 
 **受け入れ条件**:
-- [ ] "auto" → 全タスクで軍師Bloom分析を自動実施
-- [ ] "manual" → 家老が個別判断（タスクYAMLにbloom_analysis_required: trueで依頼）
+- [ ] "auto" → 全タスクで司祭Bloom分析を自動実施
+- [ ] "manual" → 大臣が個別判断（タスクYAMLにbloom_analysis_required: trueで依頼）
 - [ ] "off" → Bloom分析なし、Phase 2の手動switch or 固定モデル
 - [ ] 未定義 → "off" 扱い（後方互換）
 - [ ] 不正値 → "off" + stderr警告
@@ -309,7 +309,7 @@ history:
 
 **受け入れ条件**:
 - [ ] capability_tiers未定義 → 全関数がデフォルト値を返し、既存動作に変化なし
-- [ ] bloom_routing未定義 → off扱い、軍師分析なし
+- [ ] bloom_routing未定義 → off扱い、司祭分析なし
 - [ ] Phase 1コード追加後、既存テスト（test_cli_adapter.bats）が全PASS
 - [ ] settings.yaml に capability_tiers を追加しても、追加しなくても startup が正常起動
 
@@ -317,25 +317,25 @@ history:
 
 ### NFR-02: モデル切替レイテンシ
 
-**概要**: model_switch発行→足軽がタスク開始までの時間が許容範囲内
+**概要**: model_switch発行→市民がタスク開始までの時間が許容範囲内
 
 **受け入れ条件**:
 - [ ] get_capability_tier() の応答時間: 500ms以内
 - [ ] get_recommended_model() の応答時間: 500ms以内
-- [ ] model_switch inbox → 足軽のモデル変更完了: 10秒以内（Claude Code /model コマンド）
-- [ ] 軍師Bloom分析（FR-08のStep 3-5）: 60秒以内
+- [ ] model_switch inbox → 市民のモデル変更完了: 10秒以内（Claude Code /model コマンド）
+- [ ] 司祭Bloom分析（FR-08のStep 3-5）: 60秒以内
 
 ---
 
 ### NFR-03: CLI互換性
 
-**概要**: model_switchはClaude Code足軽でのみ動作。他CLIではサイレントスキップ。
+**概要**: model_switchはClaude Code市民でのみ動作。他CLIではサイレントスキップ。
 
 **受け入れ条件**:
-- [ ] Codex CLI足軽: model_switchが送信されてもエラーにならない（既存の動作維持）
-- [ ] Copilot CLI足軽: 同上
+- [ ] Codex CLI市民: model_switchが送信されてもエラーにならない（既存の動作維持）
+- [ ] Copilot CLI市民: 同上
 - [ ] CLI種別不一致時のフォールバック動作が定義されている
-- [ ] get_recommended_model() の結果がCLI種別を考慮（chatgpt_pro→codex足軽、claude_max→claude足軽）
+- [ ] get_recommended_model() の結果がCLI種別を考慮（chatgpt_pro→codex市民、claude_max→claude市民）
 
 ---
 
@@ -397,7 +397,7 @@ history:
 
 | 領域 | #53 (本Issue) | #48 |
 |------|--------------|-----|
-| Bloom判定 | **担当** | 利用（軍師分析結果を読むだけ） |
+| Bloom判定 | **担当** | 利用（司祭分析結果を読むだけ） |
 | モデル選定 | **担当** | 利用しない |
 | model_switch実行 | **担当** | 利用しない |
 | capability_tiers定義 | **担当** | 利用しない |
@@ -406,7 +406,7 @@ history:
 | QCチェック | 利用しない | **担当** |
 | gunshi_analysis.yaml | bloom_level, recommended_model | quality_criteria, qc_method, pdca_needed |
 
-**共有インターフェース**: `queue/analysis/gunshi_analysis.yaml` — 軍師が1回の分析で両Issue向けの出力を生成。
+**共有インターフェース**: `queue/analysis/gunshi_analysis.yaml` — 司祭が1回の分析で両Issue向けの出力を生成。
 
 ---
 

@@ -931,7 +931,7 @@ find_agent_for_model() {
 
     local settings="${CLI_ADAPTER_SETTINGS:-${CLI_ADAPTER_PROJECT_ROOT}/config/settings.yaml}"
 
-    # settings.yaml の cli.agents から recommended_model を使用する足軽を抽出
+    # settings.yaml の cli.agents から recommended_model を使用する市民を抽出
     local candidates
     candidates=$("$CLI_ADAPTER_PROJECT_ROOT/.venv/bin/python3" -c "
 import yaml, sys

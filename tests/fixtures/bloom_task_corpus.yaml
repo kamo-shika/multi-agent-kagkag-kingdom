@@ -173,8 +173,8 @@ bloom_tasks:
     description: |
       find_agent_for_model(recommended_model) 関数の実装方法として以下の3案を評価し、
       最善案を推奨せよ:
-      案A: settings.yaml の cli.agents を全件スキャンしてモデル一致の足軽を探す
-      案B: capability_tiers を逆引きして対象モデルの足軽リストを事前構築しキャッシュ
+      案A: settings.yaml の cli.agents を全件スキャンしてモデル一致の市民を探す
+      案B: capability_tiers を逆引きして対象モデルの市民リストを事前構築しキャッシュ
       案C: tmux @model_name オプションをリアルタイムスキャン（設定ファイル非依存）
       評価基準: 実装コスト、正確性、パフォーマンス、障害耐性
     expected_output_type: comparative_evaluation
@@ -238,7 +238,7 @@ bloom_tasks:
       "Shadow Mode" アーキテクチャを設計せよ。
       Shadow Mode の要件:
       - 全タスクをbloom routing判定するが、実際の配布は従来通り行う
-      - bloom routing が選ぶ予定だった足軽 vs 実際に使われた足軽を記録する
+      - bloom routing が選ぶ予定だった市民 vs 実際に使われた市民を記録する
       - 品質差を記録して統計的有意差を計算する基盤を含む
       - 本番タスクの遅延を一切増やさない
     expected_output_type: architecture_design

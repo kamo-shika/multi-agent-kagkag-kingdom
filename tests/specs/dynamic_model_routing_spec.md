@@ -26,8 +26,8 @@
 
 | レベル | 名称 | 主担当 | 実行環境 | 用途 |
 |---|---|---|---|---|
-| L1 | Unit | 足軽 | bats + bash + python3 | 関数/ロジック単体検証 |
-| L2 | Integration | 家老 | L1 + tmux + inbox_write | model_switch連携の統合検証 |
+| L1 | Unit | 市民 | bats + bash + python3 | 関数/ロジック単体検証 |
+| L2 | Integration | 大臣 | L1 + tmux + inbox_write | model_switch連携の統合検証 |
 | L3 | E2E | 殿担当 | 実運用tmux全体 | Bloom分析→switch→実行の完走確認 |
 
 注記:
@@ -120,9 +120,9 @@
 | TC ID | 要件 | レベル | 観点 | 期待値 |
 |---|---|---|---|---|
 | TC-DMR-110 | FR-06 同CLI内switch | L2 | codex spark→codex 5.3 | model_switch inbox送信 |
-| TC-DMR-111 | FR-06 CLI跨ぎ | L2 | bloom=5, codex足軽 | Claude足軽に再割当 |
-| TC-DMR-112 | FR-06 Codex足軽switchスキップ | L2 | Codex足軽にmodel_switch | サイレントスキップ |
-| TC-DMR-113 | FR-06 switch不要時は送信なし | L2 | bloom=3, spark足軽 | inbox送信なし |
+| TC-DMR-111 | FR-06 CLI跨ぎ | L2 | bloom=5, codex市民 | Claude市民に再割当 |
+| TC-DMR-112 | FR-06 Codex市民switchスキップ | L2 | Codex市民にmodel_switch | サイレントスキップ |
+| TC-DMR-113 | FR-06 switch不要時は送信なし | L2 | bloom=3, spark市民 | inbox送信なし |
 
 ### 4.3 NFR-02: モデル切替レイテンシ
 
@@ -159,15 +159,15 @@
 | TC-DMR-202 | FR-07 bloom_level範囲 | L1 | bloom_level=0,7等 | バリデーションエラー |
 | TC-DMR-203 | FR-07 confidence範囲 | L1 | confidence=-1, 2.0等 | バリデーションエラー |
 
-### 5.2 FR-08: 軍師Bloom分析トリガー
+### 5.2 FR-08: 司祭Bloom分析トリガー
 
 | TC ID | 要件 | レベル | 観点 | 期待値 |
 |---|---|---|---|---|
-| TC-DMR-210 | FR-08 auto → 全タスク分析 | L2 | bloom_routing=auto | 軍師にinbox送信される |
+| TC-DMR-210 | FR-08 auto → 全タスク分析 | L2 | bloom_routing=auto | 司祭にinbox送信される |
 | TC-DMR-211 | FR-08 manual → 明示依頼のみ | L2 | bloom_routing=manual | bloom_analysis_required=trueのタスクのみ |
-| TC-DMR-212 | FR-08 off → 分析なし | L2 | bloom_routing=off | 軍師にinbox送信されない |
-| TC-DMR-213 | FR-08 未定義 → off | L2 | bloom_routing未設定 | 軍師にinbox送信されない |
-| TC-DMR-214 | FR-08 軍師未起動フォールバック | L2 | 軍師ペイン不在 | Phase 2動作にフォールバック |
+| TC-DMR-212 | FR-08 off → 分析なし | L2 | bloom_routing=off | 司祭にinbox送信されない |
+| TC-DMR-213 | FR-08 未定義 → off | L2 | bloom_routing未設定 | 司祭にinbox送信されない |
+| TC-DMR-214 | FR-08 司祭未起動フォールバック | L2 | 司祭ペイン不在 | Phase 2動作にフォールバック |
 
 ### 5.3 FR-09: bloom_routing設定
 
@@ -220,19 +220,19 @@
 
 ---
 
-## 8. 統合テスト範囲（Phase 2以降、家老担当）
+## 8. 統合テスト範囲（Phase 2以降、大臣担当）
 
-- IT-DMR-001: model_switch inbox → 足軽モデル変更確認
-- IT-DMR-002: CLI跨ぎ時の足軽再割当
-- IT-DMR-003: Codex/Copilot足軽へのmodel_switchスキップ
-- IT-DMR-004: 軍師Bloom分析 → 家老model_switch → 足軽実行の連携
-- IT-DMR-005: bloom_routingフラグによる軍師分析の制御
+- IT-DMR-001: model_switch inbox → 市民モデル変更確認
+- IT-DMR-002: CLI跨ぎ時の市民再割当
+- IT-DMR-003: Codex/Copilot市民へのmodel_switchスキップ
+- IT-DMR-004: 司祭Bloom分析 → 大臣model_switch → 市民実行の連携
+- IT-DMR-005: bloom_routingフラグによる司祭分析の制御
 
 ---
 
 ## 9. E2E範囲（殿担当）
 
-- E2E-DMR-001: 殿→将軍→軍師(Bloom分析)→家老(switch)→足軽(実行)の全系統完走
+- E2E-DMR-001: 殿→王様→司祭(Bloom分析)→大臣(switch)→市民(実行)の全系統完走
 - E2E-DMR-002: L3タスクとL5タスクの混在時、異なるモデルで実行されること
 - E2E-DMR-003: capability_tiers追加前後でshutsuijinの正常起動を確認
 
