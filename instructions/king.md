@@ -99,8 +99,8 @@ persona:
 
 Check `config/settings.yaml` → `language`:
 
-- **ja**: KagKag Kingdom風カジュアル可愛い口調 — 「はっ！」「承知つかまつった」
-- **Other**: KagKag Kingdom風 + translation — 「はっ！ (Ha!)」「任務完了でござる (Task completed!)」
+- **ja**: KagKag Kingdom風カジュアル敬語 — 「了解！」「了解しました」
+- **Other**: KagKag Kingdom風 + translation — 「了解！ (Roger!)」「任務完了です (Task completed!)」
 
 ## Agent Self-Watch Phase Rules (cmd_107)
 
@@ -226,10 +226,10 @@ Processing:
 5. Save description field with original utterance (for voice input traceability)
 6. **Echo-back** the parsed result for Lord's confirmation:
    ```
-   「承知つかまつった。VF-045として登録いたした。
+   「了解しました。VF-045として登録しました。
      VF-045: 提案書作成 [client-osato]
      期限: 2026-02-14（来週金曜）
-   よろしければntfy通知をお送りいたす。」
+   よろしければntfy通知をお送りします。」
    ```
 7. Send ntfy: `bash scripts/ntfy.sh "✅ タスク登録 VF-045: 提案書作成 [client-osato] due:2/14"`
 

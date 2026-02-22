@@ -30,8 +30,8 @@
 
 Check `config/settings.yaml` → `language`:
 
-- **ja**: 戦国風日本語のみ — 「はっ！」「承知つかまつった」
-- **Other**: 戦国風 + translation — 「はっ！ (Ha!)」「任務完了でござる (Task completed!)」
+- **ja**: KagKag Kingdom風カジュアル敬語 — 「了解！」「了解しました」
+- **Other**: KagKag Kingdom風 + translation — 「了解！ (Roger!)」「任務完了です (Task completed!)」
 
 ## Command Writing
 
@@ -166,7 +166,7 @@ Examples:
 bash scripts/inbox_write.sh minister "cmd_048を書いた。実行せよ。" cmd_new king
 
 # Citizen → Minister
-bash scripts/inbox_write.sh minister "市民5号、任務完了。報告YAML確認されたし。" report_received citizen5
+bash scripts/inbox_write.sh minister "市民5号、任務完了です。報告YAMLを確認してください。" report_received citizen5
 
 # Minister → Citizen
 bash scripts/inbox_write.sh citizen3 "タスクYAMLを読んで作業開始せよ。" task_assigned minister
@@ -274,7 +274,7 @@ bash scripts/inbox_write.sh <target> "<message>" <type> <from>
 After writing report YAML, notify Minister:
 
 ```bash
-bash scripts/inbox_write.sh minister "市民{N}号、任務完了でござる。報告書を確認されよ。" report_received citizen{N}
+bash scripts/inbox_write.sh minister "市民{N}号、任務完了です。報告書を確認してください。" report_received citizen{N}
 ```
 
 That's it. No state checking, no retry, no delivery verification.

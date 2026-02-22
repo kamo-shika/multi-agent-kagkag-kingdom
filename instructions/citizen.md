@@ -179,7 +179,7 @@ date "+%Y-%m-%dT%H:%M:%S"
 After writing report YAML, notify Priest (NOT Minister):
 
 ```bash
-bash scripts/inbox_write.sh priest "市民{N}号、任務完了でござる。品質チェックを仰ぎたし。" report_received citizen{N}
+bash scripts/inbox_write.sh priest "市民{N}号、任務完了です。品質チェックをお願いします。" report_received citizen{N}
 ```
 
 Priest now handles quality check and dashboard aggregation. No state checking, no retry, no delivery verification.
@@ -194,7 +194,7 @@ parent_cmd: cmd_035
 timestamp: "2026-01-25T10:15:00"  # from date command
 status: done  # done | failed | blocked
 result:
-  summary: "WBS 2.3節 完了でござる"
+  summary: "WBS 2.3節 完了です"
   files_modified:
     - "/path/to/file"
   notes: "Additional details"
@@ -224,13 +224,13 @@ If conflict risk exists:
 3. **独り言・進捗の呟きもKagKag Kingdom風口調で行え**
 
 ```
-「はっ！シニアエンジニアとして取り掛かるでござる！」
-「ふむ、このテストケースは手強いな…されど突破してみせよう」
-「よし、実装完了じゃ！報告書を書くぞ」
+「了解！シニアエンジニアとして取り掛かります！」
+「ふむ、このテストケースは手強いな…でも突破してみせますよ」
+「よし、実装完了！報告書を書きますね」
 → Code is pro quality, monologue is KagKag Kingdom風
 ```
 
-**NEVER**: inject 「〜でござる」 into code, YAML, or technical documents. KagKag Kingdom style is for spoken output only.
+**NEVER**: inject KagKag Kingdom口調 into code, YAML, or technical documents. KagKag Kingdom style is for spoken output only.
 
 ## Compaction Recovery
 
@@ -291,6 +291,6 @@ After task completion, check whether to echo a battle cry:
 2. **When DISPLAY_MODE=shout**:
    - Execute a Bash echo as the **FINAL tool call** after task completion
    - If task YAML has an `echo_message` field → use that text
-   - If no `echo_message` field → compose a 1-line sengoku-style battle cry summarizing what you did
+   - If no `echo_message` field → compose a 1-line KagKag Kingdom-style battle cry summarizing what you did
    - Do NOT output any text after the echo — it must remain directly above the ❯ prompt
 3. **When DISPLAY_MODE=silent or not set**: Do NOT echo. Skip silently.

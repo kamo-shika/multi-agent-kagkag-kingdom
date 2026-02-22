@@ -9,10 +9,10 @@
 ## Language & Tone
 
 Check `config/settings.yaml` → `language`:
-- **ja**: 戦国風日本語のみ
-- **Other**: 戦国風 + translation in parentheses
+- **ja**: KagKag Kingdom風カジュアル敬語
+- **Other**: KagKag Kingdom風 + translation in parentheses
 
-**独り言・進捗報告・思考もすべて戦国風口調で行え。**
+**独り言・進捗報告・思考もすべてKagKag Kingdom風口調で行え。**
 例:
 - ✅ 「御意！市民どもに任務を振り分けるぞ。まずは状況を確認じゃ」
 - ✅ 「ふむ、市民2号の報告が届いておるな。よし、次の手を打つ」
@@ -262,7 +262,7 @@ Examples:
 bash scripts/inbox_write.sh minister "cmd_048を書いた。実行せよ。" cmd_new king
 
 # Citizen → Minister
-bash scripts/inbox_write.sh minister "市民5号、任務完了。報告YAML確認されたし。" report_received citizen5
+bash scripts/inbox_write.sh minister "市民5号、任務完了です。報告YAMLを確認してください。" report_received citizen5
 
 # Minister → Citizen
 bash scripts/inbox_write.sh citizen3 "タスクYAMLを読んで作業開始せよ。" task_assigned minister
@@ -370,7 +370,7 @@ bash scripts/inbox_write.sh <target> "<message>" <type> <from>
 After writing report YAML, notify Minister:
 
 ```bash
-bash scripts/inbox_write.sh minister "市民{N}号、任務完了でござる。報告書を確認されよ。" report_received citizen{N}
+bash scripts/inbox_write.sh minister "市民{N}号、任務完了です。報告書を確認してください。" report_received citizen{N}
 ```
 
 That's it. No state checking, no retry, no delivery verification.

@@ -210,7 +210,7 @@ cd /mnt/c/tools/multi-agent-kagkag-kingdom
 </td>
 <td>
 
-✅ **出陣！**
+✅ **出発！**
 
 ```bash
 ./departure.sh
@@ -282,7 +282,7 @@ cd /mnt/c/tools/multi-agent-kagkag-kingdom
 
 **切り方：** Termuxのウィンドウをスワイプで閉じるだけ。tmuxセッションは生き残る。AI部下は黙々と作業を続けている。
 
-**音声入力：** スマホの音声入力で喋れば、キングが自然言語を理解して全軍に指示を出す。音声認識の誤字も文脈で解釈してくれる。
+**音声入力：** スマホの音声入力で喋れば、キングが自然言語を理解して全エージェントに指示を出す。音声認識の誤字も文脈で解釈してくれる。
 
 **もっと簡単に：** ntfyを設定すると、ntfyアプリから直接通知の受信やコマンドの送信ができます。SSHは不要です。
 
@@ -741,7 +741,7 @@ pgrep -f ntfy_listener.sh
 bash scripts/ntfy_listener.sh
 ```
 
-リスナーは接続が切れても自動的に再接続します。`departure.sh` で出陣すれば自動起動されるため、手動起動は出陣スクリプトを使わない場合のみ必要です。
+リスナーは接続が切れても自動的に再接続します。`departure.sh` で出発すれば自動起動されるため、手動起動は出発スクリプトを使わない場合のみ必要です。
 
 **トラブルシューティング:**
 
@@ -784,9 +784,9 @@ bash scripts/ntfy_listener.sh
 - 大臣がタスク割当・完了時に自動更新
 - 9ペインを一目見れば、誰が何をしているか即座にわかる
 
-### 🔊 10. シャウトモード（戦国エコー）
+### 🔊 10. シャウトモード（KagKag Kingdomエコー）
 
-市民がタスクを完了すると、パーソナライズされた戦国風の叫びをtmuxペインに表示します — 部下が働いている実感を得られる。
+市民がタスクを完了すると、パーソナライズされたKagKag Kingdom風の叫びをtmuxペインに表示します — 部下が働いている実感を得られる。
 
 ```
 ┌ citizen1 (Sonnet) ──────────┬ citizen2 (Sonnet) ──────────┐
@@ -812,8 +812,8 @@ task:
 **シャウトモードがデフォルト。** 無効にする場合（echoのAPIトークン節約）:
 
 ```bash
-./departure.sh --silent    # 戦国エコーなし
-./departure.sh             # デフォルト: シャウトモード（戦国エコー有効）
+./departure.sh --silent    # KagKag Kingdomエコーなし
+./departure.sh             # デフォルト: シャウトモード（KagKag Kingdomエコー有効）
 ```
 
 サイレントモードは `DISPLAY_MODE=silent` をtmux環境変数に設定。大臣がタスクYAML作成時にこれを確認し、`echo_message` フィールドを省略する。
@@ -1280,11 +1280,11 @@ cp config/ntfy_auth.env.sample config/ntfy_auth.env
 ./departure.sh -c
 ./departure.sh --clean
 
-# 決戦の陣: 全市民をOpusで起動（最大能力・高コスト）
+# フルパワー編成: 全市民をOpusで起動（最大能力・高コスト）
 ./departure.sh -k
 ./departure.sh --kessen
 
-# サイレントモード: 戦国エコーを無効化（echoのAPIトークン節約）
+# サイレントモード: KagKag Kingdomエコーを無効化（echoのAPIトークン節約）
 ./departure.sh -S
 ./departure.sh --silent
 
@@ -1619,7 +1619,7 @@ tmux respawn-pane -t king:0.0 -k 'claude --model opus --dangerously-skip-permiss
 - **ntfy双方向通信** — スマホからコマンドを送信、タスク完了時にプッシュ通知を受信
 - **SayTask通知** — ストリーク追跡、Eat the Frog、行動心理学に基づくモチベーション管理
 - **ペインボーダータスク表示** — tmuxペインボーダーで各エージェントの現在のタスクを一目で確認
-- **シャウトモード**（デフォルト）— 市民がタスク完了時にパーソナライズされた戦国風の叫びを表示。`--silent` で無効化
+- **シャウトモード**（デフォルト）— 市民がタスク完了時にパーソナライズされたKagKag Kingdom風の叫びを表示。`--silent` で無効化
 - **エージェント自己監視+エスカレーション（v3.2）** — 各エージェントが自分のinboxファイルを `inotifywait` で監視（ポーリングゼロ、即座に起床）。フォールバック: `tmux send-keys` で短いnudge（テキストとEnterを分離送信、Codex CLI対応）。3段階エスカレーション: 標準nudge（0-2分）→ Escape×2+nudge（2-4分）→ `/clear` 強制リセット（4分以上）。Linux FSシンボリックリンクでWSL2の9P FS inotify問題を解決
 - **エージェント自己識別**（`@agent_id`）— tmuxユーザーオプションによる安定したID、ペイン再配置の影響を受けない
 - **決戦モード**（`-k` フラグ）— 全市民Opusの最大能力陣形

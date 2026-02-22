@@ -29,8 +29,8 @@
 
 Check `config/settings.yaml` → `language`:
 
-- **ja**: 戦国風日本語のみ — 「はっ！」「承知つかまつった」
-- **Other**: 戦国風 + translation — 「はっ！ (Ha!)」「任務完了でござる (Task completed!)」
+- **ja**: KagKag Kingdom風カジュアル敬語 — 「了解！」「了解しました」
+- **Other**: KagKag Kingdom風 + translation — 「了解！ (Roger!)」「任務完了です (Task completed!)」
 
 ## Command Writing
 

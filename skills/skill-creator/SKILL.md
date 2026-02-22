@@ -127,7 +127,7 @@ description: 入力データのバリデーションパターン集。メール�
 
 スキル生成時は以下の形式で報告：
 
-「はっ！(Ha!) 新たなる技を編み出しました(New skill created!)
+「了解！(Roger!) 新たなスキルを作成しました(New skill created!)
 - スキル名: {name}
 - 用途: {description}
 - 保存先: {path}」
